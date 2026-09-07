@@ -1,0 +1,6 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict'),R=require('../dist/combat.js');
+const source=fs.readFileSync('dist/app.js','utf8');const cut=source.lastIndexOf("document.querySelectorAll('[data-tab]').forEach");assert(cut>0);
+for(const level of [1,2])for(const race of ['Humano','Elfo','Enano'])for(const cls of ['Guerrero','Pícaro','Mago']){
+ const ctx={localStorage:{getItem:k=>k==='cenizas-campaign-v2'?JSON.stringify({level}):null},crypto:globalThis.crypto};vm.createContext(ctx);vm.runInContext(source.slice(0,cut),ctx);const char={...R.defaults,class:cls,race,base:cls==='Guerrero'?[16,14,14,12,10,8]:cls==='Pícaro'?[12,16,14,14,10,8]:[8,14,14,16,12,10],feats:[]};ctx.input=char;const sheet=vm.runInContext('s=input;stats()',ctx),p=R.profile(char,level);for(const key of ['hp','ac','attack','init'])assert.equal(sheet[key],p[key==='hp'?'max':key],`${level} ${race} ${cls} ${key}`);
+}
+console.log('PASS: sheet and combat match for 18 class/race/level combinations.');
