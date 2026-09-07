@@ -18,7 +18,7 @@ function fresh(){return {v:2,place:'plaza',flags:{},branch:null,level:1,hp:null,
 function valid(s){return s&&s.v===2&&['plaza','taller','criptas','bosque'].includes(s.place)&&[1,2].includes(s.level)&&s.flags&&typeof s.flags==='object'&&Array.isArray(s.items)&&Array.isArray(s.log)&&Number.isFinite(s.potions)&&Number.isFinite(s.gold);}
 const distance=(a,b)=>Math.abs(a.x-b.x)+Math.abs(a.y-b.y),inside=(x,y)=>x>=0&&x<7&&y>=0&&y<5;
 class Battle{
- constructor(kind,p,save={},rng){this.rng=rng||null;this.events=[];
+ constructor(kind,p,save={},rng){this.rng=rng||null;this.events=[];this.rolls=[];
  if(save.combat){this.s=JSON.parse(JSON.stringify(save.combat));return;}
  const h={...p,hp:save.hp??p.max,x:1,y:3,team:'party'},e={...enemies[kind],id:'enemy',kind,hp:enemies[kind].max,x:kind==='custodian'?3:4,y:kind==='custodian'?1:2,team:'enemy'};
  this.s={kind,units:[h,e],round:1,index:0,order:[],action:true,movement:h.move,acted:[],wheels:[],valve:false,exposed:false,spellArmor:false,spells:save.spells??p.spells,potions:save.potions??2,warning:null,history:[],result:null,opening:true};
@@ -26,7 +26,7 @@ class Battle{
  this.s.order=this.s.units.map(u=>{const die=this.die();this.log(`${u.name} · iniciativa ${die} ${sign(u.init)} = ${die+u.init}`);return {id:u.id,n:die+u.init,dex:u.init}}).sort((a,b)=>b.n-a.n||b.dex-a.dex).map(x=>x.id);
  this.begin();
  }
- die(n=20){if(this.rng)return this.rng(n);const a=new Uint32Array(1),limit=Math.floor(4294967296/n)*n;do{crypto.getRandomValues(a)}while(a[0]>=limit);return a[0]%n+1;}
+ die(n=20){let value;if(this.rng)value=this.rng(n);else{const a=new Uint32Array(1),limit=Math.floor(4294967296/n)*n;do{crypto.getRandomValues(a)}while(a[0]>=limit);value=a[0]%n+1;}this.rolls.push({sides:n,value});return value;}
  log(s){this.s.history.push(s);this.s.history=this.s.history.slice(-60);this.events.push(s)}
  get actor(){return this.s.units.find(u=>u.id===this.s.order[this.s.index])}
  get hero(){return this.s.units.find(u=>u.id==='hero')}

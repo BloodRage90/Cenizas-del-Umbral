@@ -1,0 +1,5 @@
+const assert=require('node:assert/strict'),Nav=require('../dist/navigation.js');
+const room={start:[770,770],obstacles:[{x:730,y:640,rx:155,ry:90}],poly:[[420,470],[930,450],[1200,675],[1000,870],[530,900],[340,690]]};
+assert(!Nav.walkable(room,730,640),'fountain water is blocked');assert(!Nav.walkable(room,850,660),'fountain rim is blocked');assert(Nav.walkable(room,770,770),'arrival remains on pavement');assert(!Nav.clear(room,{x:920,y:640},{x:520,y:610}),'cannot talk through fountain');
+const safe=Nav.safe(room,{x:730,y:640});assert(Nav.walkable(room,safe.x,safe.y),'old saves in water move to dry ground');
+const queue=[{x:770,y:770}],seen=new Set(['770,770']);let found=false;for(let i=0;i<queue.length;i++){const p=queue[i];if(Math.hypot(p.x-520,p.y-610)<100&&Nav.clear(room,p,{x:520,y:610})){found=true;break;}for(const [dx,dy]of [[10,0],[-10,0],[0,10],[0,-10]]){const q={x:p.x+dx,y:p.y+dy},key=q.x+','+q.y;if(!seen.has(key)&&Nav.walkable(room,q.x,q.y)){seen.add(key);queue.push(q);}}}assert(found,'Maela is reachable around fountain');console.log('PASS: fountain, rim, conversation obstruction, saved position recovery and route to Maela.');
