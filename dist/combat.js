@@ -34,15 +34,16 @@ class Battle{
  begin(){const a=this.actor;this.s.action=true;this.s.movement=a.move;this.s.guard=false;this.log(`Turno de ${a.name} · ronda ${this.s.round}`)}
  occupied(x,y){return this.s.units.some(u=>u.hp>0&&u.x===x&&u.y===y)}
  move(dx,dy){if(this.s.result||this.actor.team!=='party'||Math.abs(dx)+Math.abs(dy)!==1||this.s.movement<1)return false;const a=this.actor,x=a.x+dx,y=a.y+dy;if(!inside(x,y)||this.occupied(x,y))return false;a.x=x;a.y=y;this.s.movement--;return true;}
- hit(a,b,power=0){const ac=(!this.s.acted.includes(b.id)?b.flat:b.ac)+(b.guard?4:0),d=this.die(),bonus=a.attack-power;this.log(`${a.name}: d20 ${d} ${sign(bonus)} = ${d+bonus} contra CA ${ac}`);if(d===1||(d!==20&&d+bonus<ac)){this.log('Fallo.');return 0;}
+ hit(a,b,power=0){const ac=(!this.s.acted.includes(b.id)?b.flat:b.ac)+(b.guard?4:0),d=this.die(),bonus=a.attack-power+(a.team==='party'&&this.precision?2:0);this.log(`${a.name}: d20 ${d} ${sign(bonus)} = ${d+bonus} contra CA ${ac}`);if(d===1||(d!==20&&d+bonus<ac)){this.log('Fallo.');return 0;}
  let crit=false;if(d>=a.threat&&!b.construct){const q=this.die();crit=q!==1&&(q===20||q+bonus>=ac);this.log(`Confirmación: ${q} ${sign(bonus)} = ${q+bonus} · ${crit?'crítico':'impacto normal'}`)}
  let dmg=Math.max(1,this.die(a.damage)+a.bonus+power*(a.class==='Mago'?2:1));if(crit)dmg+=Math.max(1,this.die(a.damage)+a.bonus+power*(a.class==='Mago'?2:1));
  const ally=this.s.units.find(u=>u.team==='party'&&u.id!==a.id&&u.hp>0);const flank=ally&&distance(a,b)===1&&distance(ally,b)===1&&a.x+ally.x===2*b.x&&a.y+ally.y===2*b.y;
  if(a.class==='Pícaro'&&(!b.construct||this.s.exposed)&&(!this.s.acted.includes(b.id)||flank||this.s.exposed)){const sneak=this.die(6);dmg+=sneak;this.log(`Ataque furtivo +${sneak} (1d6).`)}
- b.hp=Math.max(0,b.hp-dmg);this.log(`${b.name} recibe ${dmg} de daño${crit?' crítico':''}.`);return dmg;}
- act(kind){if(this.s.result||this.actor.team!=='party'||!this.s.action)return false;const a=this.actor,e=this.enemy;
- if(kind==='attack'||kind==='power'){if(distance(a,e)!==1)return this.fail('Acércate con el joystick: alcance 1 casilla.');if(kind==='power'&&!a.power)return false;this.hit(a,e,kind==='power'?a.bab:0);}
- else if(kind==='missile'){if(a.class!=='Mago'||this.s.spells<1)return false;const d=this.die(4)+1;e.hp=Math.max(0,e.hp-d);this.s.spells--;this.log(`Proyectil mágico: 1d4+1 = ${d}. Impacta sin tirada de ataque.`);}
+ dmg=this.mitigate(b,dmg);b.hp=Math.max(0,b.hp-dmg);this.log(`${b.name} recibe ${dmg} de daño${crit?' crítico':''}.`);return dmg;}
+ mitigate(target,damage){if(target.team!=='party'||!this.reaction)return damage;const n=this.reaction==='parry'?0:Math.floor(damage/2);this.log(`${target.name}: ${this.reaction==='parry'?'parada':'esquiva'} reduce ${damage} a ${n} PG.`);return n;}
+ act(kind,options={}){this.precision=!!options.precision;if(this.s.result||this.actor.team!=='party'||!this.s.action)return false;const a=this.actor,e=this.enemy;
+ if(kind==='attack'||kind==='power'){if(distance(a,e)!==1)return this.fail('Acércate con las flechas: alcance 1 casilla.');if(kind==='power'&&!a.power)return false;this.hit(a,e,kind==='power'?a.bab:0);}
+ else if(kind==='missile'){if(a.class!=='Mago'||this.s.spells<1)return false;const d=this.die(4)+1+(this.precision?1:0);e.hp=Math.max(0,e.hp-d);this.s.spells--;this.log(`Proyectil mágico: 1d4+1${this.precision?' +1 de precisión':''} = ${d}. Impacta sin tirada de ataque.`);}
  else if(kind==='armor'){if(a.class!=='Mago'||this.s.spells<1||this.s.spellArmor)return false;this.s.spells--;a.ac+=4;a.flat+=4;this.s.spellArmor=true;this.log('Armadura de mago: +4 CA durante este encuentro.');}
  else if(kind==='potion'){if(!this.s.potions||a.hp===a.max)return false;const d=this.die(8)+1,healed=Math.min(d,a.max-a.hp);a.hp+=healed;this.s.potions--;this.log(`${a.name} bebe una poción: 1d8+1 = ${d}; recupera ${healed} PG.`);}
  else if(kind==='guard'){a.guard=true;this.log(`${a.name} adopta defensa total: +4 CA hasta su siguiente turno.`);}
@@ -55,15 +56,15 @@ class Battle{
  fail(msg){this.log(msg);return false;}
  check(){if(this.hero.hp<=0){this.s.result='defeat';this.log('Has caído. Puedes volver al punto seguro.');}else if(this.enemy.hp<=0){this.s.result='victory';this.log('Encuentro resuelto.');}}
  end(){if(this.s.result)return;const a=this.actor;if(!this.s.acted.includes(a.id))this.s.acted.push(a.id);let tries=0;do{this.s.index=(this.s.index+1)%this.s.order.length;if(this.s.index===0)this.s.round++;tries++;}while(this.actor.hp<=0&&tries<4);this.actor.guard=false;this.begin();}
- enemyTurn(){if(this.s.result||this.actor.team!=='enemy')return;const e=this.enemy;const targets=this.s.units.filter(u=>u.team==='party'&&u.hp>0).sort((a,b)=>distance(e,a)-distance(e,b));
+ enemyTurn(options={}){this.reaction=options.defense||null;if(this.s.result||this.actor.team!=='enemy')return;const e=this.enemy;const targets=this.s.units.filter(u=>u.team==='party'&&u.hp>0).sort((a,b)=>distance(e,a)-distance(e,b));
  if(this.s.kind==='custodian'){
   if(this.s.cancelNext){this.log('El conducto roto cancela el golpe anunciado.');this.s.cancelNext=false;}
-  else if(this.s.warning){const w=this.s.warning;for(const t of targets){if(w.type==='strike'&&t.x===w.x&&t.y===w.y)this.hit(e,t);if(w.type==='pulse'&&t.y===w.y){const d=this.die(),dmg=this.die(4),ok=d===20||(d!==1&&d+t.ref>=12);const actual=ok?(t.class==='Pícaro'&&t.level>=2?0:Math.floor(dmg/2)):dmg;t.hp=Math.max(0,t.hp-actual);this.log(`${t.name}: Reflejos ${d} ${sign(t.ref)} contra CD 12; descarga ${actual} PG.`);}}}
+  else if(this.s.warning){const w=this.s.warning;for(const t of targets){if(w.type==='strike'&&t.x===w.x&&t.y===w.y)this.hit(e,t);if(w.type==='pulse'&&t.y===w.y){const d=this.die(),dmg=this.die(4),ok=d===20||(d!==1&&d+t.ref>=12);let actual=ok?(t.class==='Pícaro'&&t.level>=2?0:Math.floor(dmg/2)):dmg;actual=this.mitigate(t,actual);t.hp=Math.max(0,t.hp-actual);this.log(`${t.name}: Reflejos ${d} ${sign(t.ref)} contra CD 12; descarga ${actual} PG.`);}}}
   else this.log('El Custodio arranca. Ordan señala las dos ruedas.');
   const t=targets[0];this.s.warning=this.s.warning?.type==='strike'?{type:'pulse',y:t.y}:{type:'strike',x:t.x,y:t.y};this.log(this.s.warning.type==='pulse'?`Próximo turno: descarga sobre la fila ${this.s.warning.y+1}. Sal de la zona roja.`:'Próximo turno: puño en la casilla roja. Muévete antes del golpe.');
  }else if(this.s.opening){this.s.opening=false;this.log(this.s.kind==='echo'?'El eco reúne ceniza. Tienes tiempo para llegar a la válvula.':'El eco imita el silbato. Elara reconoce la falsificación.');}
  else{const t=targets[0];for(let n=0;n<e.move&&distance(e,t)>1;n++){const steps=[[1,0],[-1,0],[0,1],[0,-1]].map(([dx,dy])=>({x:e.x+dx,y:e.y+dy})).filter(p=>inside(p.x,p.y)&&!this.occupied(p.x,p.y)).sort((a,b)=>distance(a,t)-distance(b,t));if(!steps.length||distance(steps[0],t)>=distance(e,t))break;Object.assign(e,steps[0]);}if(distance(e,t)===1)this.hit(e,t);else this.log('El eco se acerca.');}
- this.check();if(!this.s.result)this.end();}
+ this.reaction=null;this.check();if(!this.s.result)this.end();}
  auto(tactic){if(this.actor.id!=='elara'||this.s.result)return;const a=this.actor,e=this.enemy;
  if(a.hp<=5&&this.s.potions){this.act('potion');this.end();return;}
  const hero=this.hero;
