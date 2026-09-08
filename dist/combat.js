@@ -73,5 +73,5 @@ class Battle{
  options.sort((p,q)=>score(p)-score(q));if(!options.length||score(options[0])>=score(a))break;this.move(options[0].dx,options[0].dy);}
  if(distance(a,e)===1&&tactic!=='distance')this.act('attack');else this.act('guard');if(!this.s.result)this.end();}
 }
-const api={profile,fresh,valid,Battle,defaults,distance};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.CenizasRules=api;
+const api={profile,fresh,valid,Battle,defaults,distance,elara:Object.freeze({...elara})};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.CenizasRules=api;
 })(typeof window!=='undefined'?window:globalThis);
