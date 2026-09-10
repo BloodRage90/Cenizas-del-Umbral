@@ -7,6 +7,26 @@ class Follower{
  this.x=this.points[0].x;this.y=this.points[0].y;return travel;
  }
 }
-function frame(sprite,dx,dy){const distance=Math.hypot(dx,dy);sprite.anims?.stop();if(distance>.005){sprite.walkDirection=Math.abs(dx)>Math.abs(dy)?(dx>0?2:1):(dy>0?0:3);sprite.walkDistance=(sprite.walkDistance||0)+distance;sprite.setFrame((sprite.walkDirection||0)*4+Math.floor(sprite.walkDistance/9)%4);}else sprite.setFrame((sprite.walkDirection??2)*4+1);}
+// A full walk cycle spans 112 world pixels. Advance by actual movement,
+// with a cadence ceiling so catch-up motion never turns into frantic footsteps.
+function frame(sprite,dx,dy,dt=1000/60){
+ const distance=Math.hypot(dx,dy),elapsed=Math.max(0,Math.min(dt,50));
+ if(sprite.anims?.isPlaying)sprite.anims.stop();
+ let direction=sprite.walkDirection??2;
+ if(distance>.005){
+  sprite.walkIdle=0;
+  const horizontal=direction===1||direction===2,ax=Math.abs(dx),ay=Math.abs(dy);
+  const useHorizontal=horizontal?ax*1.3>=ay:ax>ay*1.3;
+  direction=useHorizontal?(dx>=0?2:1):(dy>=0?0:3);
+  sprite.walkDirection=direction;
+  sprite.walkPhase=((sprite.walkPhase??1)+Math.min(distance/28,elapsed/140))%4;
+ }else{
+  sprite.walkIdle=(sprite.walkIdle||0)+elapsed;
+  if(sprite.walkIdle>=80)sprite.walkPhase=1;
+ }
+ const index=direction*4+Math.floor(sprite.walkPhase??1);
+ if(sprite.walkFrame!==index){sprite.setFrame(index);sprite.walkFrame=index;}
+}
+
 const api={Follower,frame};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.CenizasLocomotion=api;
 })(typeof window!=='undefined'?window:globalThis);
