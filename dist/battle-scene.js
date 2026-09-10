@@ -6,7 +6,7 @@ function show({title,room,kind,party='hero',defense=false,optional=false,resolve
  return new Promise(done=>{
  const dialog=$('duel'),stage=$('duel-stage'),go=$('duel-go'),exit=$('duel-exit'),tap=$('duel-tap'),mode=$('duel-mode');
  let phase='ready',elapsed=0,last=0,raf=0,result=null,advanceTimer=null;
- $('duel-title').textContent=title;stage.style.backgroundImage=`linear-gradient(#07191270,#071912b0),url(scenes/${room}.png)`;
+ $('duel-title').textContent=title;stage.style.backgroundImage=`linear-gradient(#07191270,#071912b0),url(scenes/${room==='plaza'?'plaza-forest':room}.png)`;
  stage.className=defense?'defensive':'';const actor=$('duel-party');actor.replaceChildren();
  const art=document.createElement(party==='hero'?'div':'img');if(party==='hero')art.className='hero-sprite';else{art.src='guard.png';art.alt='Elara';}actor.append(art);
  $('duel-enemy').src=kind==='custodian'?'custodian.png':'echo.png';

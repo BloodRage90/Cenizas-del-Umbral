@@ -15,7 +15,7 @@ function profile(c=defaults,level=1){
 const enemies={echo:{name:'Eco incipiente',max:4,ac:12,flat:11,attack:1,damage:3,bonus:-1,init:1,ref:1,move:4,threat:20},custodian:{name:'Custodio de la compuerta',max:16,ac:13,flat:13,attack:2,damage:4,bonus:1,init:-1,ref:0,move:0,threat:20,construct:true},whisper:{name:'Eco del murmullo',max:12,ac:13,flat:11,attack:3,damage:4,bonus:0,init:2,ref:2,move:6,threat:20}};
 const elara={id:'elara',name:'Elara',max:16,ac:16,flat:15,attack:4,damage:8,bonus:2,threat:19,init:1,ref:1,move:6};
 function fresh(){return {v:2,place:'plaza',flags:{},branch:null,level:1,hp:null,spells:null,potions:2,gold:0,items:[],log:[],combat:null,elaraHP:16,elaraMode:'manual',tactic:'protect',position:null};}
-function valid(s){return s&&s.v===2&&['plaza','taller','criptas','bosque'].includes(s.place)&&[1,2].includes(s.level)&&s.flags&&typeof s.flags==='object'&&Array.isArray(s.items)&&Array.isArray(s.log)&&Number.isFinite(s.potions)&&Number.isFinite(s.gold);}
+function valid(s){return s&&s.v===2&&['plaza','taller','criptas','bosque','lindero'].includes(s.place)&&[1,2].includes(s.level)&&s.flags&&typeof s.flags==='object'&&Array.isArray(s.items)&&Array.isArray(s.log)&&Number.isFinite(s.potions)&&Number.isFinite(s.gold);}
 const distance=(a,b)=>Math.abs(a.x-b.x)+Math.abs(a.y-b.y),inside=(x,y)=>x>=0&&x<7&&y>=0&&y<5;
 class Battle{
  constructor(kind,p,save={},rng){this.rng=rng||null;this.events=[];this.rolls=[];
@@ -48,6 +48,7 @@ class Battle{
  else if(kind==='potion'){if(!this.s.potions||a.hp===a.max)return false;const d=this.die(8)+1,healed=Math.min(d,a.max-a.hp);a.hp+=healed;this.s.potions--;this.log(`${a.name} bebe una poción: 1d8+1 = ${d}; recupera ${healed} PG.`);}
  else if(kind==='guard'){a.guard=true;this.log(`${a.name} adopta defensa total: +4 CA hasta su siguiente turno.`);}
  else if(kind==='mechanism'){if(this.s.kind==='echo'){if(distance(a,{x:5,y:1})>1)return this.fail('Acércate a la válvula, marcada en verde.');this.s.valve=true;e.hp=0;this.log('La válvula queda cerrada. El eco se disipa.');}
+ else if(this.s.kind==='whisper'){if(distance(a,{x:5,y:1})>1)return this.fail('Acércate al foco verde para envolver el fragmento con el paño.');e.hp=0;this.log('Aíslas el foco con el paño. El eco se deshace.');}
  else if(this.s.kind==='custodian'){const i=[{x:0,y:1},{x:6,y:1}].findIndex((p,j)=>distance(a,p)<=1&&!this.s.wheels.includes(j));if(i<0)return this.fail('Acércate a una rueda que todavía esté encendida.');this.s.wheels.push(i);this.log(`Rueda ${i+1} cerrada (${this.s.wheels.length}/2).`);if(this.s.wheels.length===2){e.hp=0;this.log('Ambas ruedas cerradas: el Custodio se apaga.');}}
  else return false;}
  else if(kind==='conduit'){if(this.s.kind!=='custodian'||this.s.exposed||distance(a,e)!==1)return false;const d=this.die();this.log(`Conducto: d20 ${d} ${sign(a.attack)} contra CA 10.`);if(d!==1&&(d===20||d+a.attack>=10)){const dmg=Math.max(1,this.die(a.damage)+a.bonus);this.s.conduitHP=(this.s.conduitHP??3)-dmg;this.log(`Conducto recibe ${dmg} de daño.`);if(this.s.conduitHP<=0){e.hp=Math.max(0,e.hp-4);this.s.exposed=true;this.s.cancelNext=true;this.log('Carga interrumpida. Núcleo expuesto; Custodio pierde 4 PG.');}}}
