@@ -66,6 +66,12 @@ class Battle{
  }else if(this.s.opening){this.s.opening=false;this.log(this.s.kind==='echo'?'El eco reúne ceniza. Tienes tiempo para llegar a la válvula.':'El eco imita el silbato. Elara reconoce la falsificación.');}
  else{const t=targets[0];for(let n=0;n<e.move&&distance(e,t)>1;n++){const steps=[[1,0],[-1,0],[0,1],[0,-1]].map(([dx,dy])=>({x:e.x+dx,y:e.y+dy})).filter(p=>inside(p.x,p.y)&&!this.occupied(p.x,p.y)).sort((a,b)=>distance(a,t)-distance(b,t));if(!steps.length||distance(steps[0],t)>=distance(e,t))break;Object.assign(e,steps[0]);}if(distance(e,t)===1)this.hit(e,t);else this.log('El eco se acerca.');}
  this.reaction=null;this.check();if(!this.s.result)this.end();}
+ autoPlan(tactic){const a=this.actor,e=this.enemy;if(a.id!=='elara'||this.s.result)return {action:'guard'};
+ if(a.hp<=5&&this.s.potions)return {action:'potion'};
+ const score=p=>tactic==='distance'?-distance(p,e):tactic==='protect'?distance(p,e)+Math.max(0,distance(p,this.hero)-2):distance(p,e);
+ if(this.s.movement>0){const options=[[1,0],[-1,0],[0,1],[0,-1]].map(([dx,dy])=>({dx,dy,x:a.x+dx,y:a.y+dy})).filter(p=>inside(p.x,p.y)&&!this.occupied(p.x,p.y)).sort((p,q)=>score(p)-score(q));if(options.length&&score(options[0])<score(a))return {move:[options[0].dx,options[0].dy]};}
+ return {action:distance(a,e)===1&&tactic!=='distance'?'attack':'guard'};
+ }
  auto(tactic){if(this.actor.id!=='elara'||this.s.result)return;const a=this.actor,e=this.enemy;
  if(a.hp<=5&&this.s.potions){this.act('potion');this.end();return;}
  const hero=this.hero;

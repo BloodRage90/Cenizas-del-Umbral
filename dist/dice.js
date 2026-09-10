@@ -8,7 +8,7 @@ window.CenizasDice=(()=>{
    const preview=document.createElement('div');preview.className='die preview';preview.textContent='?';$('dice-tray').append(preview);
    const go=$('dice-roll'),exit=$('dice-exit');go.hidden=false;go.disabled=false;go.textContent='Tirar dados';exit.hidden=!optional;exit.textContent='Salir sin tirar';
    function finish(value){window.removeEventListener('battle-auto-change',scheduleAdvance);clearTimeout(timer);dialog.classList.remove('rolling');phase='closed';dialog.close();active=false;done(value);}
-   function scheduleAdvance(){if(phase!=='result')return;clearTimeout(timer);go.hidden=false;if(combat?window.CenizasPreferences.auto:autoAdvance)timer=setTimeout(()=>finish(outcome),3000);else go.focus();}
+   function scheduleAdvance(){if(phase!=='result')return;clearTimeout(timer);go.hidden=false;if(combat?window.CenizasPreferences.auto:autoAdvance)timer=setTimeout(()=>finish(outcome),combat?5000:3000);else go.focus();}
    window.addEventListener('battle-auto-change',scheduleAdvance);
    function reveal(){if(phase!=='rolling')return;clearTimeout(timer);phase='result';dialog.classList.remove('rolling');$('dice-tray').replaceChildren();
     for(const d of outcome.dice||[]){const wrap=document.createElement('div');wrap.className='die-wrap';const cube=document.createElement('div');cube.className='die';cube.textContent=d.value;const caption=document.createElement('small');caption.textContent=d.label||'d'+d.sides;wrap.append(cube,caption);$('dice-tray').append(wrap);}
