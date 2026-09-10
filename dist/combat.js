@@ -12,7 +12,7 @@ function profile(c=defaults,level=1){
  const hp=Math.max(1,hd+m[2])+(has('Dureza')?3:0)+(cls==='Mago'?3:0)+(lvl>1?Math.max(1,hd/2+1+m[2]):0);
  return {id:'hero',name:String(c.name||'Viajero').slice(0,40),class:cls,level:lvl,max:hp,ac:10+armor+Math.min(m[1],cls==='Guerrero'?4:cls==='Pícaro'?6:99),flat:10+armor+Math.min(0,m[1]),attack:bab+m[0]+(has('Soltura con el arma')?1:0),damage:cls==='Guerrero'?8:6,bonus:m[0]<0?m[0]:Math.floor(m[0]*(cls==='Mago'?1.5:1)),threat:cls==='Mago'?20:19,init:m[1]+(has('Iniciativa mejorada')?4:0),ref:(cls==='Pícaro'?(lvl===2?3:2):0)+m[1]+(has('Reflejos rápidos')?2:0),move:c.race==='Enano'?4:6,spells:cls==='Mago'&&base[3]>=11?(lvl+(m[3]>=1?1:0)):0,power:has('Ataque poderoso')&&m[0]>=1,bab};
 }
-const enemies={echo:{name:'Eco incipiente',max:4,ac:12,flat:11,attack:1,damage:3,bonus:-1,init:1,ref:1,move:4,threat:20},custodian:{name:'Custodio de la compuerta',max:16,ac:13,flat:13,attack:2,damage:4,bonus:1,init:-1,ref:0,move:0,threat:20,construct:true},whisper:{name:'Eco del murmullo',max:12,ac:13,flat:11,attack:3,damage:4,bonus:0,init:2,ref:2,move:6,threat:20}};
+const enemies={sentinel:{name:'Centinela del claro',max:22,ac:14,flat:14,attack:3,damage:4,bonus:1,init:0,ref:0,move:0,threat:20,construct:true},echo:{name:'Eco incipiente',max:4,ac:12,flat:11,attack:1,damage:3,bonus:-1,init:1,ref:1,move:4,threat:20},custodian:{name:'Custodio de la compuerta',max:16,ac:13,flat:13,attack:2,damage:4,bonus:1,init:-1,ref:0,move:0,threat:20,construct:true},whisper:{name:'Eco del murmullo',max:12,ac:13,flat:11,attack:3,damage:4,bonus:0,init:2,ref:2,move:6,threat:20}};
 const elara={id:'elara',name:'Elara',max:16,ac:16,flat:15,attack:4,damage:8,bonus:2,threat:19,init:1,ref:1,move:6};
 function fresh(){return {v:2,place:'plaza',flags:{},branch:null,level:1,hp:null,spells:null,potions:2,gold:0,items:[],log:[],combat:null,elaraHP:16,elaraMode:'manual',tactic:'protect',position:null};}
 function valid(s){return s&&s.v===2&&['plaza','taller','criptas','bosque','lindero'].includes(s.place)&&[1,2].includes(s.level)&&s.flags&&typeof s.flags==='object'&&Array.isArray(s.items)&&Array.isArray(s.log)&&Number.isFinite(s.potions)&&Number.isFinite(s.gold);}
@@ -20,9 +20,9 @@ const distance=(a,b)=>Math.abs(a.x-b.x)+Math.abs(a.y-b.y),inside=(x,y)=>x>=0&&x<
 class Battle{
  constructor(kind,p,save={},rng){this.rng=rng||null;this.events=[];this.rolls=[];
  if(save.combat){this.s=JSON.parse(JSON.stringify(save.combat));return;}
- const h={...p,hp:save.hp??p.max,x:1,y:3,team:'party'},e={...enemies[kind],id:'enemy',kind,hp:enemies[kind].max,x:kind==='custodian'?3:4,y:kind==='custodian'?1:2,team:'enemy'};
+ const h={...p,hp:save.hp??p.max,x:1,y:3,team:'party'},e={...enemies[kind],id:'enemy',kind,hp:enemies[kind].max,x:['custodian','sentinel'].includes(kind)?3:4,y:['custodian','sentinel'].includes(kind)?1:2,team:'enemy'};
  this.s={kind,units:[h,e],round:1,index:0,order:[],action:true,movement:h.move,acted:[],wheels:[],valve:false,exposed:false,spellArmor:false,spells:save.spells??p.spells,potions:save.potions??2,warning:null,history:[],result:null,opening:true};
- if(kind==='whisper'&&save.flags?.elara)this.s.units.push({...elara,hp:save.elaraHP??16,x:1,y:2,team:'party'});
+ if(['whisper','sentinel'].includes(kind)&&save.flags?.elara)this.s.units.push({...elara,hp:save.elaraHP??16,x:1,y:2,team:'party'});
  this.s.order=this.s.units.map(u=>{const die=this.die();this.log(`${u.name} · iniciativa ${die} ${sign(u.init)} = ${die+u.init}`);return {id:u.id,n:die+u.init,dex:u.init}}).sort((a,b)=>b.n-a.n||b.dex-a.dex).map(x=>x.id);
  this.begin();
  }
@@ -58,10 +58,10 @@ class Battle{
  check(){if(this.hero.hp<=0){this.s.result='defeat';this.log('Has caído. Puedes volver al punto seguro.');}else if(this.enemy.hp<=0){this.s.result='victory';this.log('Encuentro resuelto.');}}
  end(){if(this.s.result)return;const a=this.actor;if(!this.s.acted.includes(a.id))this.s.acted.push(a.id);let tries=0;do{this.s.index=(this.s.index+1)%this.s.order.length;if(this.s.index===0)this.s.round++;tries++;}while(this.actor.hp<=0&&tries<4);this.actor.guard=false;this.begin();}
  enemyTurn(options={}){this.reaction=options.defense||null;if(this.s.result||this.actor.team!=='enemy')return;const e=this.enemy;const targets=this.s.units.filter(u=>u.team==='party'&&u.hp>0).sort((a,b)=>distance(e,a)-distance(e,b));
- if(this.s.kind==='custodian'){
+ if(['custodian','sentinel'].includes(this.s.kind)){
   if(this.s.cancelNext){this.log('El conducto roto cancela el golpe anunciado.');this.s.cancelNext=false;}
   else if(this.s.warning){const w=this.s.warning;for(const t of targets){if(w.type==='strike'&&t.x===w.x&&t.y===w.y)this.hit(e,t);if(w.type==='pulse'&&t.y===w.y){const d=this.die(),dmg=this.die(4),ok=d===20||(d!==1&&d+t.ref>=12);let actual=ok?(t.class==='Pícaro'&&t.level>=2?0:Math.floor(dmg/2)):dmg;actual=this.mitigate(t,actual);t.hp=Math.max(0,t.hp-actual);this.log(`${t.name}: Reflejos ${d} ${sign(t.ref)} contra CD 12; descarga ${actual} PG.`);}}}
-  else this.log('El Custodio arranca. Ordan señala las dos ruedas.');
+  else this.log(this.s.kind==='sentinel'?'El Centinela despierta. Observa la casilla marcada y prepárate para moverte.':'El Custodio arranca. Ordan señala las dos ruedas.');
   const t=targets[0];this.s.warning=this.s.warning?.type==='strike'?{type:'pulse',y:t.y}:{type:'strike',x:t.x,y:t.y};this.log(this.s.warning.type==='pulse'?`Próximo turno: descarga sobre la fila ${this.s.warning.y+1}. Sal de la zona roja.`:'Próximo turno: puño en la casilla roja. Muévete antes del golpe.');
  }else if(this.s.opening){this.s.opening=false;this.log(this.s.kind==='echo'?'El eco reúne ceniza. Tienes tiempo para llegar a la válvula.':'El eco imita el silbato. Elara reconoce la falsificación.');}
  else{const t=targets[0];for(let n=0;n<e.move&&distance(e,t)>1;n++){const steps=[[1,0],[-1,0],[0,1],[0,-1]].map(([dx,dy])=>({x:e.x+dx,y:e.y+dy})).filter(p=>inside(p.x,p.y)&&!this.occupied(p.x,p.y)).sort((a,b)=>distance(a,t)-distance(b,t));if(!steps.length||distance(steps[0],t)>=distance(e,t))break;Object.assign(e,steps[0]);}if(distance(e,t)===1)this.hit(e,t);else this.log('El eco se acerca.');}

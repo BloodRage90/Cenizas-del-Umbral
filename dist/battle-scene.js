@@ -9,7 +9,7 @@ function show({title,room,kind,party='hero',defense=false,optional=false,automat
  $('duel-title').textContent=title;stage.style.backgroundImage=`linear-gradient(#07191270,#071912b0),url(scenes/${room==='plaza'?'plaza-forest':room}.png)`;
  stage.className=defense?'defensive':'';const actor=$('duel-party');actor.replaceChildren();
  const art=document.createElement(party==='hero'?'div':'img');if(party==='hero')art.className='hero-sprite';else{art.src='guard.png';art.alt='Elara';}actor.append(art);
- $('duel-enemy').src=kind==='custodian'?'custodian.png':'echo.png';
+ $('duel-enemy').src=['custodian','sentinel'].includes(kind)?'custodian.png':'echo.png';
  $('duel-feedback').textContent=defense?'Esquivar: ventana amplia, mitad del daño. Parar: ventana estrecha, evita el daño. Si fallas, se aplican las tiradas normales.':'Pulsa al cruzar la franja dorada: +2 al ataque; el proyectil mágico obtiene +1 de daño. Fallar no penaliza la tirada.';
  mode.hidden=!defense;mode.value='dodge';go.hidden=false;go.textContent=defense?'Prepararme':'Tirar dados y atacar';exit.hidden=!optional;tap.hidden=true;$('timing').hidden=true;
  function finish(value){window.removeEventListener('battle-auto-change',scheduleAdvance);clearTimeout(advanceTimer);cancelAnimationFrame(raf);document.removeEventListener('keydown',key);dialog.close();busy=false;done(value);}
