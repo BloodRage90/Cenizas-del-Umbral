@@ -30,3 +30,13 @@ body.fighting #joystick{display:none}#combat-arrows{position:absolute;bottom:25p
 .map-marker.destination svg{width:25px;height:25px}
 .map-legend{display:flex;align-items:center;gap:8px;font-size:14px}
 .legend-avatar{display:inline-block;width:28px;height:28px;border:2px solid #325b54;border-radius:50%;background:#183e39 url('hero-walk-v2.png') -24px -2px / 300px 300px no-repeat}
+
+.map-marker.current{width:40px;height:40px;border:2px solid #e0c287;box-shadow:0 0 0 2px #352a19,0 3px 6px #0009}
+.map-avatar{width:100%;height:100%;background:url('traveler-portrait.png') center / cover no-repeat}
+.map-marker.destination{width:30px;height:36px;border-radius:8px 8px 12px 12px;background:linear-gradient(#ffe6a0,#d4a044);border:2px solid #62441b;color:#372607;box-shadow:0 2px 5px #0009}
+.quest-glyph{font:bold 28px/1 Georgia;transform:translateY(-1px)}
+.legend-avatar{background:#183e39 url('traveler-portrait.png') center / cover no-repeat;border-color:#b38b4d}
+.legend-quest{background:#e5bb60;border:1px solid #62441b;color:#372607;border-radius:4px;padding:0 5px;font-weight:bold}
+#paper.map-paper h2{font-size:1.4rem;margin:0 0 12px}
+#paper.map-paper .map-summary{font-size:.9rem;line-height:1.5;margin:0 0 12px}
+#paper.map-paper .map-legend{font-size:.85rem;margin:10px 0}
