@@ -15,7 +15,7 @@ function profile(c=defaults,level=1){
 const enemies={sentinel:{name:'Centinela del claro',max:22,ac:14,flat:14,attack:3,damage:4,bonus:1,init:0,ref:0,move:0,threat:20,construct:true},echo:{name:'Eco incipiente',max:4,ac:12,flat:11,attack:1,damage:3,bonus:-1,init:1,ref:1,move:4,threat:20},custodian:{name:'Custodio de la compuerta',max:16,ac:13,flat:13,attack:2,damage:4,bonus:1,init:-1,ref:0,move:0,threat:20,construct:true},whisper:{name:'Eco del murmullo',max:12,ac:13,flat:11,attack:3,damage:4,bonus:0,init:2,ref:2,move:6,threat:20}};
 const elara={id:'elara',name:'Elara',max:16,ac:16,flat:15,attack:4,damage:8,bonus:2,threat:19,init:1,ref:1,move:6};
 function fresh(){return {v:2,place:'plaza',flags:{},branch:null,level:1,hp:null,spells:null,potions:2,gold:0,items:[],log:[],combat:null,elaraHP:16,elaraMode:'manual',tactic:'protect',position:null};}
-function valid(s){return s&&s.v===2&&['plaza','taller','criptas','bosque','lindero','embarcadero'].includes(s.place)&&[1,2].includes(s.level)&&s.flags&&typeof s.flags==='object'&&Array.isArray(s.items)&&Array.isArray(s.log)&&Number.isFinite(s.potions)&&Number.isFinite(s.gold);}
+function valid(s){return s&&s.v===2&&['plaza','taller','criptas','bosque','lindero','embarcadero','molino'].includes(s.place)&&[1,2].includes(s.level)&&s.flags&&typeof s.flags==='object'&&Array.isArray(s.items)&&Array.isArray(s.log)&&Number.isFinite(s.potions)&&Number.isFinite(s.gold);}
 const distance=(a,b)=>Math.abs(a.x-b.x)+Math.abs(a.y-b.y),inside=(x,y)=>x>=0&&x<7&&y>=0&&y<5;
 class Battle{
  constructor(kind,p,save={},rng){this.rng=rng||null;this.events=[];this.rolls=[];
