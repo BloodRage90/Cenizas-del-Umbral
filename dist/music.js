@@ -10,5 +10,5 @@ function update(){button.setAttribute('aria-label',enabled?'Música activada: aj
 button.onclick=()=>{dialog.showModal();update();};$('music-close').onclick=()=>dialog.close();$('music-enabled').onchange=e=>{enabled=e.target.checked;unlocked=true;persist();update();};$('music-volume').oninput=e=>{audio.volume=Number(e.target.value)/100;persist();};
 function unlock(){if(unlocked)return;unlocked=true;update();}document.addEventListener('pointerdown',unlock);document.addEventListener('keydown',unlock);document.addEventListener('visibilitychange',update);window.addEventListener('pagehide',()=>audio.pause());
 audio.addEventListener('error',()=>{$('music-status').textContent='No se pudo cargar la música. Desactiva y activa para reintentar.';playing='';});
-window.CenizasMusic={set(place,battle){const next=battle?'battle':['criptas','bosque','lindero','taller'].includes(place)?'mystery':'exploration';if(next!==context){context=next;update();}}};update();
+window.CenizasMusic={set(place,battle){const next=battle?'battle':['criptas','bosque','lindero','taller','archivo'].includes(place)?'mystery':'exploration';if(next!==context){context=next;update();}}};update();
 })();
