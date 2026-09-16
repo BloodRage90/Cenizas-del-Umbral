@@ -1,0 +1,12 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm'),R=require('../dist/combat.js'),Nav=require('../dist/navigation.js'),Equipment=require('../dist/equipment.js');
+const source=fs.readFileSync('dist/chapter.js','utf8'),rooms=vm.runInNewContext('('+source.split('const rooms=')[1].split('\n};')[0]+'\n})');
+for(const [x,y]of [[1330,760],[450,310],[820,320],[1150,400],[600,850],[110,470]])assert(!Nav.walkable(rooms.archivo,x,y),'archive furniture/wall: '+x+','+y);
+const repaired=Nav.safe(rooms.archivo,{x:1330,y:760});assert(Nav.walkable(rooms.archivo,repaired.x,repaired.y),'old save relocated off door');assert(repaired.x<1260);
+for(const [x,y]of [[350,310],[1000,180],[1320,720],[1300,180]])assert(!Nav.walkable(rooms.enfermeria,x,y),'infirmary bed/arch/mechanism blocked');
+let choices=[],reveals=0;const state={...R.fresh(),place:'enfermeria',level:3,hp:15,flags:{archiveCompared:true,elara:true}},ctx={state,R,character:R.defaults,heroProfile:R.profile(R.defaults,3),window:{CenizasEquipment:Equipment},note:t=>state.log.push(t),hud(){},say(_who,_text,opts=[]){choices=opts;},revealEncounter(e){assert.equal(e.flag,'infirmaryEcho');reveals++;},travel:place=>state.place=place,item:name=>{if(!state.items.includes(name))state.items.push(name);},inventory(){},journal(){}};
+vm.createContext(ctx);vm.runInContext(source.slice(source.indexOf('function darienTalk(){'),source.indexOf('function mirador(){')),ctx);
+ctx.infirmaryBell();assert.equal(reveals,0,'must speak to Darien');ctx.disconnectInfirmary('reproche');assert(!state.flags.captivesFreed);
+ctx.darienTalk();assert(state.flags.darienMet);ctx.infirmaryBell();assert.equal(reveals,1);ctx.disconnectInfirmary('reproche');assert(!state.flags.captivesFreed,'eco must be resolved first');
+state.flags.infirmaryEcho=true;ctx.infirmaryBell();assert.equal(choices.length,4);choices[1][1]();assert(state.flags.captivesFreed);assert.equal(state.flags.ordanResponse,'confianza');assert.equal(state.level,4);assert(R.valid(JSON.parse(JSON.stringify(state))));
+const hp=state.hp,count=state.log.length;ctx.disconnectInfirmary('reproche');assert.equal(state.hp,hp);assert.equal(state.log.length,count);assert.equal(state.flags.ordanResponse,'confianza');ctx.darienTalk();assert(state.flags.darienDebrief);
+console.log('PASS: archive collisions, old-save recovery, infirmary obstacles, rescue gates, response persistence, level 4 reload and one-time rewards.');
