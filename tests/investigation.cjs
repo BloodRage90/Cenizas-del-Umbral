@@ -1,0 +1,14 @@
+const assert=require('node:assert/strict'),I=require('../dist/investigation.js');
+const s={flags:{}};
+assert.equal(I.deduce(s,'substitution','consent'),'incomplete');
+for(const id of Object.keys(I.documents))I.read(s,id);
+assert(!s.flags.archiveCompared,'reading alone never completes investigation');
+assert.equal(I.deduce(s,'substitution','rations'),'contradiction','correct conclusion needs supporting evidence');
+assert.equal(I.deduce(s,'substitution','consent'),'review','cannot cycle answers without revisiting a source');
+const saved=JSON.parse(JSON.stringify(s));assert(saved.flags.archiveReviewRequired);
+I.read(saved,'captives');assert.equal(I.deduce(saved,'clerical','consent'),'contradiction','right evidence cannot support the wrong claim');
+I.read(saved,'copies');assert.equal(I.deduce(saved,'substitution','consent'),'solved');assert(saved.flags.archiveCompared);
+assert.equal(I.deduce(saved,'clerical','rations'),'complete','completed progress cannot be reset');
+const old={flags:{archiveCompared:true}};assert.equal(I.deduce(old,'',''),'complete','existing completed saves remain valid');
+assert(!I.hint({flags:{}}).includes('firma'),'early hints do not reveal later clues');
+console.log('PASS: incomplete evidence, deduction and support, review gate, persisted state, old saves and contextual hints.');
