@@ -49,3 +49,5 @@ body.fighting #joystick{display:none}#combat-arrows{position:absolute;bottom:25p
 @media(prefers-reduced-motion:reduce){.rest-cinema,.rest-cinema::backdrop{transition:none}}
 
 body.wearing-vigilia .hero-sprite{background-image:url('hero-vigilia.png')!important;background-size:400% 400%;background-position:0 66.666%}.equipment{border-bottom:1px solid #bba46d;padding:10px 0 18px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}.equipment-preview{width:96px;height:96px;flex-shrink:0;background:url('hero-walk-v2.png') 0 66.666% / 400% 400%}
+
+.story-stage{position:fixed;z-index:100;left:50%;bottom:max(18px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(620px,90vw);padding:14px 20px;background:#142321ed;color:#fff5d7;border:1px solid #c3ac70;border-radius:8px;box-shadow:0 6px 30px #0009}.story-stage p{font-size:17px;line-height:1.45;margin:0 0 12px}.story-stage button{min-height:44px;float:right}.story-stage::after{content:"";display:block;clear:both}
