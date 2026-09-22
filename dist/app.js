@@ -1,6 +1,6 @@
 'use strict';
 const KEY='cenizas-character-v1';
-let campaignCape=false;let campaignLevel=1;try{const progress=JSON.parse(localStorage.getItem('cenizas-campaign-v2'));if([2,3,4].includes(progress?.level))campaignLevel=progress.level;campaignCape=progress?.equipped==='vigilia'&&progress.items?.includes('Capa de la Vigilia');}catch{}
+let campaignCape=false;let campaignLevel=1;try{const progress=JSON.parse(localStorage.getItem('cenizas-campaign-v2'));if([2,3,4,5].includes(progress?.level))campaignLevel=progress.level;campaignCape=progress?.equipped==='vigilia'&&progress.items?.includes('Capa de la Vigilia');}catch{}
 const level=()=>campaignLevel;const skillCap=i=>inClass(i)?level()+3:(level()+3)/2;const combatSlot=i=>s.class==='Guerrero'&&i>=1+Math.floor(level()/3)+(s.race==='Humano'?1:0);
 
 const names=['Fuerza','Destreza','Constitución','Inteligencia','Sabiduría','Carisma'];

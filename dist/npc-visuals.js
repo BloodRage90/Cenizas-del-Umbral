@@ -1,7 +1,7 @@
 /* Persistent NPC identities: protagonist textures are never a fallback. */
 window.CenizasNPCs=(()=>{
  const rows={darien:0,darienChapel:0,attendant:1,patientA:2,patientB:3,patientC:4,courier:5,apprentice:6,pilgrim:7};
- const clergy={nurse:0,sereth:1,serethChapel:1,mara:2,novice:3};
+ const clergy={nurse:0,sereth:1,serethChapel:1,serethFinal:1,mara:2,novice:3};
  function register(scene){const t=scene.textures.get('npc-citizens');const ys=[[13,190],[198,378],[388,559],[567,749],[757,947],[952,1128],[1136,1322],[1328,1519]],xs=[204,359,514,669];for(let row=0;row<8;row++)for(let col=0;col<4;col++)t.add(row*4+col,0,xs[col],ys[row][0],140,ys[row][1]-ys[row][0]);const c=scene.textures.get('npc-clergy'),cy=[[8,370],[387,757],[770,1141],[1154,1525]];for(let row=0;row<4;row++)for(let col=0;col<4;col++)c.add(row*4+col,0,32+col*256,cy[row][0],224,cy[row][1]-cy[row][0]);}
 
  function create(scene,id,x,y,legacy){

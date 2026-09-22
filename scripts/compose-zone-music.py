@@ -1,9 +1,11 @@
 from pathlib import Path
-import numpy as np, wave, subprocess, shutil
+import numpy as np, wave, subprocess, shutil, sys
 root=Path('/workspace/sites/cenizas-del-umbral'); (root/'scripts').mkdir(exist_ok=True)
 # Original, deterministic chamber-like sketches. No sampled or third-party melodies.
 sr=22050; dur=48; N=sr*dur
 zones={'plaza':(62,[0,4,7,9,7,4,2,0],.65),'taller':(50,[0,7,3,10,7,3,2,7],.45),'criptas':(45,[0,1,7,3,0,6,3,1],.18),'bosque':(57,[0,3,7,10,9,7,3,2],.4),'lindero':(60,[0,7,9,4,2,7,4,0],.55),'embarcadero':(55,[0,4,9,7,4,2,0,7],.65),'molino':(50,[0,3,2,7,0,10,7,2],.28),'monasterio':(48,[0,7,3,2,7,10,3,0],.24),'archivo':(53,[0,2,3,7,5,3,2,0],.35),'enfermeria':(60,[0,4,7,4,9,7,2,0],.75),'capilla':(46,[0,7,1,3,7,6,3,0],.22)}
+zones.update({'montana':(52,[0,7,2,3,10,7,2,0],.3),'antesala':(48,[0,2,7,3,2,0,5,7],.2),'umbral':(43,[0,1,7,6,3,1,7,0],.1)})
+if len(sys.argv)>1: zones={z:v for z,v in zones.items() if z in sys.argv[1:]}
 def hz(m):return 440*2**((m-69)/12)
 for z,(base,motif,warm) in zones.items():
  out=np.zeros((N,2),dtype=np.float64)
@@ -26,4 +28,4 @@ for z,(base,motif,warm) in zones.items():
  with wave.open(str(tmp),'wb') as w:w.setnchannels(2);w.setsampwidth(2);w.setframerate(sr);w.writeframes((out*32767).astype('<i2').tobytes())
  subprocess.run(['ffmpeg','-v','error','-y','-i',str(tmp),'-codec:a','libmp3lame','-b:a','96k',str(root/'dist/music'/f'{z}.mp3')],check=True)
  print(z,flush=True)
-shutil.copy2(__file__,root/'scripts/compose-zone-music.py')
+

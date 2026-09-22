@@ -1,14 +1,14 @@
 /* One timing attempt per action. Timing uses active foreground time. */
 window.CenizasBattleScene=(()=>{
 const $=id=>document.getElementById(id);let busy=false;
-function show({title,room,kind,party='hero',defense=false,optional=false,automatic=false,action='attack',resolve}){
+function show({title,room,kind,party='hero',target='enemy',defense=false,optional=false,automatic=false,action='attack',resolve}){
  if(busy)return Promise.resolve(null);busy=true;
  return new Promise(done=>{
  const dialog=$('duel'),stage=$('duel-stage'),go=$('duel-go'),exit=$('duel-exit'),tap=$('duel-tap'),mode=$('duel-mode');
  let phase='ready',elapsed=0,last=0,raf=0,result=null,advanceTimer=null;
  $('duel-title').textContent=title;stage.style.backgroundImage=`linear-gradient(#07191270,#071912b0),url(scenes/${room==='plaza'?'plaza-forest':room}.png)`;
  stage.className=defense?'defensive':'';const actor=$('duel-party');actor.replaceChildren();
- actor.append(window.CenizasBattleVisuals.art(party,kind));const enemy=$('duel-enemy');enemy.replaceChildren(window.CenizasBattleVisuals.art('enemy',kind));
+ actor.append(window.CenizasBattleVisuals.art(party,kind));const enemy=$('duel-enemy');enemy.replaceChildren(window.CenizasBattleVisuals.art(target,kind));
  $('duel-feedback').textContent=defense?'Esquivar: ventana amplia, mitad del daño. Parar: ventana estrecha, evita el daño. Si fallas, se aplican las tiradas normales.':'Pulsa al cruzar la franja dorada: +2 al ataque; el proyectil mágico obtiene +1 de daño. Fallar no penaliza la tirada.';
  mode.hidden=!defense;mode.value='dodge';go.hidden=false;go.textContent=defense?'Prepararme':'Tirar dados y atacar';exit.hidden=!optional;tap.hidden=true;$('timing').hidden=true;
  function finish(value){window.removeEventListener('battle-auto-change',scheduleAdvance);clearTimeout(advanceTimer);cancelAnimationFrame(raf);document.removeEventListener('keydown',key);dialog.close();busy=false;done(value);}
