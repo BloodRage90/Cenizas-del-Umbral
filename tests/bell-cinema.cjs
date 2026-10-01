@@ -17,3 +17,7 @@ const source=fs.readFileSync('dist/chapter.js','utf8'),code=source.slice(source.
  const html=fs.readFileSync('dist/chapter.html','utf8');assert(html.indexOf('bell-cinema.js')<html.indexOf('chapter.js'));
  console.log('PASS: animated cart, break/landing/echo sequence; v34 completed-encounter save, replay, cancel, lock cleanup and battle protection.');
 })().catch(e=>{console.error(e);process.exitCode=1});
+// Shot boundaries keep the camera continuous; no teleport when pressing Continue.
+for(let i=0;i<4;i++){const end=frame(i,beats[i].duration),start=frame(i+1,0);for(const k of ['camX','camY','zoom'])assert(Math.abs(end[k]-start[k])<.001,`continuous ${k} at shot ${i}`);}
+const {soundEvents}=require('../dist/bell-cinema.js');assert.deepEqual(soundEvents(2,0,6200),['bounce','bounce','impact']);assert.deepEqual(soundEvents(2,5084,6200),[],'impact cannot play twice');
+const air=frame(2,beats[2].duration*.18);assert(air.groundY-air.by>40,'bell rises clear of its contact shadow');assert(frame(1,beats[1].duration).detached,'wheel separates after axle breaks');assert(frame(0,beats[0].duration*.5).wheel>0,'wheel spin follows cart travel');
