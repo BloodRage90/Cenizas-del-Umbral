@@ -1,0 +1,7 @@
+const fs=require('fs'),vm=require('vm'),assert=require('assert/strict');
+const src=fs.readFileSync('dist/chapter.js','utf8');
+async function run(point,fail=false){const data={},button={hidden:true,focus(){},set onclick(fn){fn();}},label={textContent:''},dialog={classList:{add(){},remove(){}},setAttribute(){},addEventListener(){},showModal(){},close(){},remove(){},querySelector(q){return q==='button'?button:label;}};
+const c={battle:null,encounterBusy:false,stop(){},scene:{cameras:{main:{zoom:1,zoomTo(){}}},hero:{x:1100,y:680}},matchMedia:()=>({matches:false}),document:{createElement:()=>dialog,body:{append(){}}},state:{place:'embarcadero',hp:1,elaraHP:2,spells:0},heroProfile:{max:12,spells:3},save(){},hud(){},rooms:{embarcadero:{name:'Embarcadero'}},localStorage:{setItem(k,v){if(fail)throw Error();data[k]=JSON.parse(v)}},setTimeout:fn=>fn(),REST_KEY:'rest'};
+vm.createContext(c);vm.runInContext(src.slice(src.indexOf('async function restCinema('),src.indexOf('\nfunction restoreRest')),c);await c.restCinema(point);assert.equal(c.state.hp,12);assert.equal(c.encounterBusy,false);assert.equal(c.scene.cameras.main.zoom,1);assert.equal(!!data.rest,point&&!fail);if(data.rest){c.state.hp=1;assert.equal(data.rest.state.hp,12)}
+}
+(async()=>{await run(true);await run(false);await run(true,true);console.log('PASS: recovery, independent save point, non-save rest, storage failure, controls restored');})();
