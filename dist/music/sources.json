@@ -1,59 +1,302 @@
-[
-  {
-    "uuid": "59fcbc19-202f-4da8-857f-c4937cb67ec5",
-    "title": "Five Armies",
-    "filename": "Five Armies.mp3",
-    "length": "00:02:33",
-    "instruments": "Cellos, French Horns, Trombones, Violins, Marimba, Trumpets, Percussion, Oboes, Clarinets, Flutes, Basses",
-    "genre": "22",
-    "bpm": "238",
-    "description": "Big giant building piece starting in 6/4 alternating to 4/4 and back. Soaring ending with a lot of brass.",
-    "feel": "Action, Aggressive, Dark, Driving, Epic, Intense",
-    "uploaded": "2011-11-06",
-    "isrc": "USUAN1100875",
-    "collection": "33",
-    "sheetmusic": "Five Armies Brass Band Score.pdf",
-    "video": null,
-    "itunes": "https://itunes.apple.com/us/album/five-armies/id942772858?i=942772870",
-    "wav": null,
-    "filmmusicURL": ""
-  },
-  {
-    "uuid": "28e0e5f9-0d5a-40ae-b3f8-d73dd41b35b4",
-    "title": "Long Note Three",
-    "filename": "Long Note Three.mp3",
-    "length": "00:03:12",
-    "instruments": "Strings, Synths",
-    "genre": "22",
-    "bpm": "0",
-    "description": "A very long dark note. Use under dialog, or to kill site noise.",
-    "feel": "Dark, Mysterious, Somber, Suspenseful",
-    "uploaded": "2008-03-07",
-    "isrc": "USUAN1100424",
-    "collection": "37",
-    "sheetmusic": null,
-    "video": null,
-    "itunes": "https://itunes.apple.com/us/album/long-note-three/id945458254?i=945458264",
-    "wav": null,
-    "filmmusicURL": "https://incompetech.filmmusic.io/song/3993-long-note-three/"
-  },
-  {
-    "uuid": "0EF18283-774F-34E8-9444-CFD901015022",
-    "title": "Celtic Impulse",
-    "filename": "Celtic Impulse.mp3",
-    "length": "00:02:38",
-    "instruments": "Hammer Dulcimer, Harp, Bouzouki, Tin Whistle",
-    "genre": "25",
-    "bpm": "144",
-    "description": "Simple, easy-to-play folk-influenced tune in the D Dorian mode (related to D Minor). ",
-    "feel": "Dark, Driving, Mystical",
-    "uploaded": "2007-01-01",
-    "isrc": "USUAN1100297",
-    "collection": "3",
-    "sheetmusic": null,
-    "video": null,
-    "itunes": "",
-    "wav": null,
-    "filmmusicURL": "https://incompetech.filmmusic.io/song/3484-celtic-impulse/"
-  }
-]
+{
+  "edition": "Resonancias · 2026-11",
+  "composition": "Original melodies, arrangements and synthesized instruments; no third-party samples.",
+  "generator": "scripts/compose-soundtrack.cjs",
+  "tracks": [
+    {
+      "id": "plaza",
+      "title": "Valdara · los nombres al sol",
+      "bpm": 100,
+      "seconds": 76.8,
+      "theme": "city",
+      "instruments": [
+        "flute",
+        "pluck",
+        "pad",
+        "bass",
+        "percussion"
+      ],
+      "peakDb": -6.307498226872033,
+      "rmsDb": -18.786043192927767
+    },
+    {
+      "id": "exploration",
+      "title": "La carta y el camino",
+      "bpm": 108,
+      "seconds": 71.111125,
+      "theme": "city",
+      "instruments": [
+        "flute",
+        "pluck",
+        "pad",
+        "bass",
+        "percussion"
+      ],
+      "peakDb": -6.024255454832429,
+      "rmsDb": -18.786043192927767
+    },
+    {
+      "id": "taller",
+      "title": "Ordan · madera y bronce",
+      "bpm": 84,
+      "seconds": 91.42858333333334,
+      "theme": "bond",
+      "instruments": [
+        "pluck",
+        "pluck",
+        "pad",
+        "bass"
+      ],
+      "peakDb": -4.125491231095159,
+      "rmsDb": -18.786043192927767
+    },
+    {
+      "id": "criptas",
+      "title": "El río guarda nombres",
+      "bpm": 76,
+      "seconds": 101.052625,
+      "theme": "forest",
+      "instruments": [
+        "bell",
+        "pluck",
+        "pad",
+        "bass"
+      ],
+      "peakDb": -4.377007186697805,
+      "rmsDb": -18.786043192927767
+    },
+    {
+      "id": "bosque",
+      "title": "Susurros entre las hojas",
+      "bpm": 94,
+      "seconds": 81.702125,
+      "theme": "forest",
+      "instruments": [
+        "flute",
+        "pluck",
+        "pad",
+        "bass",
+        "percussion"
+      ],
+      "peakDb": -6.61984868079481,
+      "rmsDb": -18.786043192927767
+    },
+    {
+      "id": "lindero",
+      "title": "Antes de cruzar",
+      "bpm": 112,
+      "seconds": 68.57141666666666,
+      "theme": "city",
+      "instruments": [
+        "pluck",
+        "pluck",
+        "pad",
+        "bass",
+        "percussion"
+      ],
+      "peakDb": -5.4007735421577765,
+      "rmsDb": -18.786043192927767
+    },
+    {
+      "id": "embarcadero",
+      "title": "Agua de regreso",
+      "bpm": 88,
+      "seconds": 87.27270833333333,
+      "theme": "bond",
+      "instruments": [
+        "flute",
+        "pluck",
+        "pad",
+        "bass"
+      ],
+      "peakDb": -5.86925934489053,
+      "rmsDb": -18.786043192927767
+    },
+    {
+      "id": "molino",
+      "title": "Ruedas sobre la garganta",
+      "bpm": 116,
+      "seconds": 66.20691666666667,
+      "theme": "forest",
+      "instruments": [
+        "pluck",
+        "pluck",
+        "pad",
+        "bass",
+        "percussion"
+      ],
+      "peakDb": -5.3400711434581085,
+      "rmsDb": -18.786043192927767
+    },
+    {
+      "id": "monasterio",
+      "title": "Hospitalidad de ceniza",
+      "bpm": 78,
+      "seconds": 98.46154166666666,
+      "theme": "city",
+      "instruments": [
+        "reed",
+        "pluck",
+        "pad",
+        "bass"
+      ],
+      "peakDb": -5.487432520497433,
+      "rmsDb": -18.786043192927767
+    },
+    {
+      "id": "archivo",
+      "title": "La tinta recuerda",
+      "bpm": 86,
+      "seconds": 89.30233333333334,
+      "theme": "forest",
+      "instruments": [
+        "pluck",
+        "pluck",
+        "pad",
+        "bass"
+      ],
+      "peakDb": -5.030186839112604,
+      "rmsDb": -18.786043192927767
+    },
+    {
+      "id": "enfermeria",
+      "title": "Elara y Darien · volver",
+      "bpm": 80,
+      "seconds": 96,
+      "theme": "bond",
+      "instruments": [
+        "flute",
+        "pluck",
+        "pad",
+        "bass"
+      ],
+      "peakDb": -6.023584372084718,
+      "rmsDb": -18.786043192927767
+    },
+    {
+      "id": "capilla",
+      "title": "Mara · memoria prestada",
+      "bpm": 72,
+      "seconds": 106.66666666666667,
+      "theme": "bond",
+      "instruments": [
+        "bell",
+        "pluck",
+        "pad",
+        "bass"
+      ],
+      "peakDb": -2.9047377816938384,
+      "rmsDb": -18.786043192927767
+    },
+    {
+      "id": "montana",
+      "title": "La deuda que no elegimos",
+      "bpm": 104,
+      "seconds": 73.84616666666666,
+      "theme": "city",
+      "instruments": [
+        "reed",
+        "pluck",
+        "pad",
+        "bass",
+        "percussion"
+      ],
+      "peakDb": -5.552428186131923,
+      "rmsDb": -18.786043192927767
+    },
+    {
+      "id": "antesala",
+      "title": "Nadie ocupa tu lugar",
+      "bpm": 76,
+      "seconds": 101.052625,
+      "theme": "bond",
+      "instruments": [
+        "reed",
+        "pluck",
+        "pad",
+        "bass"
+      ],
+      "peakDb": -5.915410625452251,
+      "rmsDb": -18.786043192927767
+    },
+    {
+      "id": "umbral",
+      "title": "El Coro Vacío",
+      "bpm": 92,
+      "seconds": 83.47825,
+      "theme": "forest",
+      "instruments": [
+        "bell",
+        "pluck",
+        "pad",
+        "bass",
+        "percussion"
+      ],
+      "peakDb": -4.586439185855842,
+      "rmsDb": -18.786043192927767
+    },
+    {
+      "id": "mystery",
+      "title": "La voz bajo el agua",
+      "bpm": 74,
+      "seconds": 103.78379166666667,
+      "theme": "bond",
+      "instruments": [
+        "bell",
+        "pluck",
+        "pad",
+        "bass"
+      ],
+      "peakDb": -4.109170278275064,
+      "rmsDb": -18.786043192927767
+    },
+    {
+      "id": "battle",
+      "title": "Resonancia · luchar juntos",
+      "bpm": 144,
+      "seconds": 53.333333333333336,
+      "theme": "battle",
+      "instruments": [
+        "reed",
+        "pluck",
+        "pad",
+        "bass",
+        "percussion"
+      ],
+      "peakDb": -6.597871449648736,
+      "rmsDb": -18.786043192927767
+    },
+    {
+      "id": "finale",
+      "title": "El último tañido",
+      "bpm": 132,
+      "seconds": 58.18183333333333,
+      "theme": "battle",
+      "instruments": [
+        "reed",
+        "pluck",
+        "pad",
+        "bass",
+        "percussion"
+      ],
+      "peakDb": -6.684534635566891,
+      "rmsDb": -18.786043192927767
+    },
+    {
+      "id": "epilogue",
+      "title": "La ciudad vuelve a nombrar",
+      "bpm": 92,
+      "seconds": 83.47825,
+      "theme": "bond",
+      "instruments": [
+        "flute",
+        "pluck",
+        "pad",
+        "bass",
+        "percussion"
+      ],
+      "peakDb": -6.431030342974164,
+      "rmsDb": -18.786043192927764
+    }
+  ]
+}
