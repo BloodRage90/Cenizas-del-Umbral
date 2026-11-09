@@ -1,5 +1,5 @@
 {
-  "edition": "Resonancias · 2026-11",
+  "edition": "Resonancias · combate rock 16 bits",
   "composition": "Original melodies, arrangements and synthesized instruments; no third-party samples.",
   "generator": "scripts/compose-soundtrack.cjs",
   "tracks": [
@@ -251,38 +251,6 @@
       "rmsDb": -18.786043192927767
     },
     {
-      "id": "battle",
-      "title": "Resonancia · luchar juntos",
-      "bpm": 144,
-      "seconds": 53.333333333333336,
-      "theme": "battle",
-      "instruments": [
-        "reed",
-        "pluck",
-        "pad",
-        "bass",
-        "percussion"
-      ],
-      "peakDb": -6.597871449648736,
-      "rmsDb": -18.786043192927767
-    },
-    {
-      "id": "finale",
-      "title": "El último tañido",
-      "bpm": 132,
-      "seconds": 58.18183333333333,
-      "theme": "battle",
-      "instruments": [
-        "reed",
-        "pluck",
-        "pad",
-        "bass",
-        "percussion"
-      ],
-      "peakDb": -6.684534635566891,
-      "rmsDb": -18.786043192927767
-    },
-    {
       "id": "epilogue",
       "title": "La ciudad vuelve a nombrar",
       "bpm": 92,
@@ -297,6 +265,125 @@
       ],
       "peakDb": -6.431030342974164,
       "rmsDb": -18.786043192927764
+    },
+    {
+      "id": "battle",
+      "title": "Acero y voluntad",
+      "bpm": 156,
+      "seconds": 73.84616666666666,
+      "theme": "battle",
+      "instruments": [
+        "guitar",
+        "rhythm guitar",
+        "bass",
+        "pad",
+        "bell",
+        "drums"
+      ],
+      "peakDb": -6.726737400358845,
+      "rmsDb": -18.786043192927767
+    },
+    {
+      "id": "forest-battle",
+      "title": "Raíces en fuga",
+      "bpm": 168,
+      "seconds": 68.57141666666666,
+      "theme": "forest-battle",
+      "instruments": [
+        "fm",
+        "rhythm guitar",
+        "bass",
+        "pad",
+        "bell",
+        "drums"
+      ],
+      "peakDb": -6.561209522682875,
+      "rmsDb": -18.786043192927767
+    },
+    {
+      "id": "vigilia-battle",
+      "title": "La marcha de las firmas",
+      "bpm": 132,
+      "seconds": 87.27270833333333,
+      "theme": "vigilia-battle",
+      "instruments": [
+        "guitar",
+        "rhythm guitar",
+        "bass",
+        "pad",
+        "bell",
+        "drums"
+      ],
+      "peakDb": -5.950556220409072,
+      "rmsDb": -18.786043192927767
+    },
+    {
+      "id": "custodian",
+      "title": "Piedra contra el río",
+      "bpm": 128,
+      "seconds": 90,
+      "theme": "custodian",
+      "instruments": [
+        "guitar",
+        "rhythm guitar",
+        "bass",
+        "pad",
+        "bell",
+        "drums"
+      ],
+      "peakDb": -5.79164650883982,
+      "rmsDb": -18.786043192927767
+    },
+    {
+      "id": "ash",
+      "title": "Ceniza bajo el martillo",
+      "bpm": 148,
+      "seconds": 77.83783333333334,
+      "theme": "ash",
+      "instruments": [
+        "guitar",
+        "rhythm guitar",
+        "bass",
+        "pad",
+        "bell",
+        "drums"
+      ],
+      "peakDb": -6.042783359952627,
+      "rmsDb": -18.786043192927767
+    },
+    {
+      "id": "finale",
+      "title": "Romper el Coro",
+      "bpm": 160,
+      "seconds": 72,
+      "theme": "finale",
+      "instruments": [
+        "fm",
+        "rhythm guitar",
+        "bass",
+        "pad",
+        "bell",
+        "drums"
+      ],
+      "peakDb": -6.599327684404798,
+      "rmsDb": -18.786043192927767
+    },
+    {
+      "id": "training-battle",
+      "title": "Dos pulsos, un paso",
+      "bpm": 140,
+      "seconds": 82.28570833333333,
+      "theme": "training-battle",
+      "instruments": [
+        "guitar",
+        "rhythm guitar",
+        "bass",
+        "pad",
+        "bell",
+        "drums"
+      ],
+      "peakDb": -6.546418026702197,
+      "rmsDb": -18.786043192927767
     }
   ]
 }

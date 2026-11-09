@@ -35,7 +35,7 @@ const scores=[
  ['epilogue','La ciudad vuelve a nombrar',92,62,major,'bond','flute',1,[0,5,3,4,0,2,3,4]]
 ];
 function render(s){
- const [id,title,bpm,key,scale,theme,lead,drums,progression]=s,beat=60/bpm,bars=32,N=Math.round(bars*4*beat*SR);
+ const [id,title,bpm,key,scale,theme,lead,drums,progression,rock]=s,beat=60/bpm,bars=rock?48:32,N=Math.round(bars*4*beat*SR);
  const L=new Float32Array(N),R=new Float32Array(N),cache=new Map();let seed=123456789;
  const rand=()=>{seed^=seed<<13;seed^=seed>>>17;seed^=seed<<5;return (seed>>>0)/4294967296;};
  const pitch=d=>key+12*Math.floor(d/7)+scale[((d%7)+7)%7];
@@ -46,6 +46,7 @@ function render(s){
    const t=i/SR,p=TAU*f*t,tail=Math.max(0,1-Math.max(0,t-duration)/release);let y=0,env;
    if(type==='pluck'){y=Math.sin(p)+.38*Math.sin(p*2)+.16*Math.sin(p*3)+.08*Math.sin(p*4);env=(1-Math.exp(-t*400))*Math.exp(-t*3.4)*tail;}
    else if(type==='bell'){y=Math.sin(p)*Math.exp(-t*1.6)+.45*Math.sin(p*2.76)*Math.exp(-t*3.2)+.2*Math.sin(p*5.4)*Math.exp(-t*5);env=(1-Math.exp(-t*250))*tail;}
+   else if(type==='guitar'||type==='rhythm'||type==='fm'){const v=.065*Math.sin(TAU*5.7*t)*Math.min(1,t/.2);const raw=Math.sin(p+v)+.55*Math.sin(2*p)+.32*Math.sin(3*p)+.18*Math.sin(4*p)+.1*Math.sin(5*p);y=type==='fm'?Math.sin(p+1.7*Math.sin(2*p)*Math.exp(-t*2)):Math.tanh(raw*(type==='rhythm'?2.8:1.7))*.75;env=Math.min(1,t/.006)*Math.exp(-t*(type==='rhythm'?9:.8))*tail;}
    else if(type==='bass'){y=Math.sin(p)+.3*Math.sin(p*2)+.12*Math.sin(p*3);env=Math.min(1,t/.012)*Math.exp(-t*.7)*tail;}
    else if(type==='pad'){y=(Math.sin(p)+Math.sin(p*1.0018+.4)+.3*Math.sin(p*2)+.12*Math.sin(p*3))*.45;env=Math.min(1,t/.24)*tail;}
    else {const vibrato=.045*Math.sin(TAU*5.1*t)*Math.min(1,t/.35);y=Math.sin(p+vibrato)+(type==='reed'?.38:.1)*Math.sin(2*p+vibrato)+.14*Math.sin(3*p+vibrato);env=Math.min(1,t/.035)*(.93+.07*Math.sin(TAU*3*t))*tail;}
@@ -61,16 +62,24 @@ function render(s){
   for(const [j,d]of [chord-7,chord+2,chord+4].entries())note('pad',d,start,3.8,.042*energy,(j-1)*.65);
   for(let b=0;b<4;b+=drums>=2?1:2)note('bass',chord-14+(b===2?4:0),start+b,drums>=2?.65:1.7,.16*energy,-.05);
   const arp=bridge?[0,4,2,6]:[0,2,4,2,6,4,2,4],step=bridge?1:.5;
-  for(let j=0;j<4/step;j++)note('pluck',chord+arp[j%arp.length]+(id==='archivo'?7:0),start+j*step,.55,.065*energy,j%2?-.48:.48);
-  let cursor=0;const phrase=themes[theme][bar%8];
+  for(let j=0;j<(rock?0:4/step);j++)note('pluck',chord+arp[j%arp.length]+(id==='archivo'?7:0),start+j*step,.55,.065*energy,j%2?-.48:.48);
+  let cursor=0;const phrase=rock?(bridge?rock.bridge:rock.melody)[bar%4]:themes[theme][bar%8];
   for(const [d,len]of phrase){
-   if(d!==null){let degree=d+7+(bridge?2:0);if(id==='capilla'&&section===2)degree-=7;
-    note(bridge&&lead!=='bell'?'pluck':lead,degree,start+cursor,len*.86,.17*energy,bridge?-.2:.14);
+   if(d!==null){let degree=d+7+(!rock&&bridge?2:0);if(id==='capilla'&&section===2)degree-=7;
+    note(!rock&&bridge&&lead!=='bell'?'pluck':lead,degree,start+cursor,len*.86,.17*energy,bridge?-.2:.14);
     if(section===3&&bar%2===0)note('flute',d,start+cursor+.12,len*.7,.055,-.45);
    }cursor+=len;
   }
   if((bar%4===3)&&drums<2)note('bell',chord+14,start+2,1.8,.035,.65);
-  if(drums&&(!bridge||drums>=3)){
+  if(rock){
+   for(const b of rock.riff){note('rhythm',chord-7,start+b,.3,.12,-.7);note('rhythm',chord-3,start+b+.012,.3,.10,.7);note('bass',chord-14+(b%1?0:4),start+b,.35,.12);}
+   for(const b of rock.kicks)hit('kick',start+b,.3);
+   for(const b of (bridge?[2]:[1,3]))hit('snare',start+b,.20);
+   for(let j=0;j<8;j++)hit('hat',start+j*.5,j%2?.048:.028);
+   if(bar%8===7)for(let j=0;j<6;j++)hit('snare',start+2.5+j*.25,.07+j*.014);
+   if(bar%8===0)note('bell',chord+14,start,2,.045,.4);
+  }
+  if(!rock&&drums&&(!bridge||drums>=3)){
    for(let b=0;b<4;b++){if(b%2===0)hit('kick',start+b,drums>=2?.2:.085);else if(drums>=2)hit('snare',start+b,.105);hit('hat',start+b+.5,drums>=2?.032:.015);}
    if(drums>=3){hit('kick',start+2.75,.13);for(let j=0;j<8;j++)hit('hat',start+j*.5,.018);if(bar%8===7)for(let j=0;j<4;j++)hit('snare',start+3+j*.25,.06+j*.015);}
   }
@@ -83,7 +92,10 @@ function render(s){
  for(let i=0;i<N;i++){wav.writeInt16LE(Math.round(L[i]*gain*32767),44+i*4);wav.writeInt16LE(Math.round(R[i]*gain*32767),46+i*4);}
  const file=path.join(tmp,id+'.wav');fs.writeFileSync(file,wav);
  execFileSync('ffmpeg',['-v','error','-y','-i',file,'-ar','44100','-c:a','libmp3lame','-b:a','160k','-metadata','title='+title,'-metadata','artist=Cenizas del Umbral · composición original',path.join(out,id+'.mp3')]);
- fs.unlinkSync(file);const data={id,title,bpm,seconds:N/SR,theme,instruments:[lead,'pluck','pad','bass',...(drums?['percussion']:[])],peakDb:20*Math.log10(peak*gain),rmsDb:20*Math.log10(rms*gain)};console.log(JSON.stringify(data));return data;
+ fs.unlinkSync(file);const data={id,title,bpm,seconds:N/SR,theme,instruments:rock?[lead,'rhythm guitar','bass','pad','bell','drums']:[lead,'pluck','pad','bass',...(drums?['percussion']:[])],peakDb:20*Math.log10(peak*gain),rmsDb:20*Math.log10(rms*gain)};console.log(JSON.stringify(data));return data;
 }
-const selected=process.argv.slice(2),results=scores.filter(s=>!selected.length||selected.includes(s[0])).map(render);
-if(!selected.length)fs.writeFileSync(path.join(out,'sources.json'),JSON.stringify({edition:'Resonancias · 2026-11',composition:'Original melodies, arrangements and synthesized instruments; no third-party samples.',generator:'scripts/compose-soundtrack.cjs',tracks:results},null,2)+'\n');
+const selected=process.argv.slice(2),all=[...scores.filter(s=>!['battle','finale'].includes(s[0])),...require('./combat-score.cjs')];
+const results=all.filter(s=>!selected.length||selected.includes(s[0])).map(render);
+const previous=selected.length?JSON.parse(fs.readFileSync(path.join(out,'sources.json'))).tracks:[];
+const tracks=[...previous.filter(t=>!results.some(r=>r.id===t.id)),...results];
+fs.writeFileSync(path.join(out,'sources.json'),JSON.stringify({edition:'Resonancias · combate rock 16 bits',composition:'Original melodies, arrangements and synthesized instruments; no third-party samples.',generator:'scripts/compose-soundtrack.cjs',tracks},null,2)+'\n');

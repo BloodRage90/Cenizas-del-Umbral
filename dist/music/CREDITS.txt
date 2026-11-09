@@ -1,5 +1,7 @@
 Resonancias — Cenizas del Umbral
-19 composiciones y arreglos originales, noviembre de 2026.
+24 composiciones y arreglos originales, noviembre de 2026.
 Síntesis instrumental sin muestras ni melodías de terceros.
 Fuente reproducible: scripts/compose-soundtrack.cjs (Node y FFmpeg).
 Esta edición sustituye la música anterior, incluidas las tres pistas de Kevin MacLeod.
+
+Edición combate: siete temas independientes con guitarras sintetizadas, bajo y batería. Melodías originales; no incluye música ni muestras de Mega Man X3.
