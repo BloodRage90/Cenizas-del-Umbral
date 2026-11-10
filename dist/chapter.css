@@ -78,3 +78,5 @@ body.wearing-vigilia .hero-sprite{background-image:url('hero-vigilia.png')!impor
 @keyframes die-preview{0%{transform:translateX(-50%) rotateX(-18deg) rotateY(28deg) rotateZ(-8deg)}100%{transform:translateX(-50%) rotateX(342deg) rotateY(388deg) rotateZ(352deg)}}
 @media(max-width:650px){#dice-tray{gap:10px;min-height:126px}.die-wrap{transform:scale(.9)}#dice-tray .die-3d{--die-size:48px}#dice-tray .die-face{font-size:20px}}
 @media(prefers-reduced-motion:reduce){#dice-tray .die-3d,#dice-tray .die-3d.preview{animation:none;transform:translateX(-50%) rotateX(-18deg) rotateY(28deg) rotateZ(-8deg);opacity:1}}
+
+.shop-items{display:grid;gap:8px}.shop-items button{text-align:left;background:#e7dcc0}.shop-items button small{display:block;margin-top:3px;color:#695f48;font:12px system-ui}.shop-items button:disabled{opacity:.5}
