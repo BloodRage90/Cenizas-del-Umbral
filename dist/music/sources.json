@@ -384,6 +384,22 @@
       ],
       "peakDb": -6.546418026702197,
       "rmsDb": -18.786043192927767
+    },
+    {
+      "id": "intro",
+      "title": "Cenizas del Umbral · El llamado",
+      "bpm": 118,
+      "seconds": 65.08475,
+      "theme": "battle",
+      "instruments": [
+        "reed",
+        "pluck",
+        "pad",
+        "bass",
+        "percussion"
+      ],
+      "peakDb": -6.265163657711086,
+      "rmsDb": -18.786043192927764
     }
   ]
 }

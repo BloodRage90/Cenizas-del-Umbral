@@ -32,7 +32,8 @@ const scores=[
  ['mystery','La voz bajo el agua',74,50,minor,'bond','bell',0,[0,6,5,4,0,3,5,4]],
  ['battle','Resonancia · luchar juntos',144,50,minor,'battle','reed',3,[0,5,3,4,0,6,3,4]],
  ['finale','El último tañido',132,50,minor,'battle','reed',3,[0,6,5,4,3,5,2,4]],
- ['epilogue','La ciudad vuelve a nombrar',92,62,major,'bond','flute',1,[0,5,3,4,0,2,3,4]]
+ ['epilogue','La ciudad vuelve a nombrar',92,62,major,'bond','flute',1,[0,5,3,4,0,2,3,4]],
+ ['intro','Cenizas del Umbral · El llamado',118,50,minor,'battle','reed',3,[0,6,5,4,0,3,5,4]],
 ];
 function render(s){
  const [id,title,bpm,key,scale,theme,lead,drums,progression,rock]=s,beat=60/bpm,bars=rock?48:32,N=Math.round(bars*4*beat*SR);

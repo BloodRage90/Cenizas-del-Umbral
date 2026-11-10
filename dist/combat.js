@@ -2,15 +2,16 @@
 (function(root){
 'use strict';
 const mod=n=>Math.floor((n-10)/2),sign=n=>n>=0?'+'+n:String(n);
+const raceMods={Humano:[0,0,0,0,0,0],Elfo:[0,2,-2,0,0,0],Enano:[0,0,2,0,0,-2],Orco:[4,0,0,-2,0,-2],Mediano:[-2,2,0,0,0,0],Gnomo:[-2,0,2,0,0,0],Semielfo:[0,0,0,0,0,0],Semiorco:[2,0,0,-2,0,0]},raceSpeed={Humano:6,Elfo:6,Enano:4,Orco:6,Mediano:4,Gnomo:4,Semielfo:6,Semiorco:6};
 const defaults={name:'Viajero',race:'Humano',class:'Guerrero',base:[16,14,14,12,10,8],feats:['Dureza','Iniciativa mejorada','Soltura con el arma'],ranks:{}};
 function profile(c=defaults,level=1){
  const cls=['Guerrero','Pícaro','Mago'].includes(c.class)?c.class:'Guerrero';
  const base=Array.isArray(c.base)&&c.base.length===6&&c.base.every(n=>Number.isFinite(n)&&n>=8&&n<=18)?c.base:defaults.base;
- const m=base.map((v,i)=>mod(v+(c.race==='Elfo'?(i===1?2:i===2?-2:0):c.race==='Enano'?(i===2?2:i===5?-2:0):0)));
+ const m=base.map((v,i)=>mod(v+(raceMods[c.race]?.[i]||0)));
  const feats=Array.isArray(c.feats)?c.feats:[],has=f=>feats.includes(f),lvl=Math.max(1,Math.min(5,level));
  const hd={Guerrero:10,'Pícaro':6,Mago:4}[cls],bab=cls==='Guerrero'?lvl:cls==='Pícaro'?Math.floor(lvl*.75):Math.floor(lvl/2),armor={Guerrero:5,'Pícaro':2,Mago:0}[cls];
  const hp=Math.max(1,hd+m[2])+(has('Dureza')?3:0)+(cls==='Mago'?3:0)+(lvl-1)*Math.max(1,hd/2+1+m[2]);
- return {id:'hero',name:String(c.name||'Viajero').slice(0,40),class:cls,level:lvl,max:hp,ac:10+armor+Math.min(m[1],cls==='Guerrero'?4:cls==='Pícaro'?6:99),flat:10+armor+Math.min(0,m[1]),attack:bab+m[0]+(has('Soltura con el arma')?1:0),damage:cls==='Guerrero'?8:6,bonus:m[0]<0?m[0]:Math.floor(m[0]*(cls==='Mago'?1.5:1)),threat:cls==='Mago'?20:19,init:m[1]+(has('Iniciativa mejorada')?4:0),ref:(cls==='Pícaro'?(2+Math.floor(lvl/2)):Math.floor(lvl/3))+m[1]+(has('Reflejos rápidos')?2:0),strength:m[0],move:c.race==='Enano'?4:6,spells:cls==='Mago'&&base[3]>=11?(lvl+(m[3]>=1?1:0)):0,power:has('Ataque poderoso')&&m[0]>=1,bab};
+ return {id:'hero',name:String(c.name||'Viajero').slice(0,40),class:cls,level:lvl,max:hp,ac:10+armor+Math.min(m[1],cls==='Guerrero'?4:cls==='Pícaro'?6:99),flat:10+armor+Math.min(0,m[1]),attack:bab+m[0]+(has('Soltura con el arma')?1:0),damage:cls==='Guerrero'?8:6,bonus:m[0]<0?m[0]:Math.floor(m[0]*(cls==='Mago'?1.5:1)),threat:cls==='Mago'?20:19,init:m[1]+(has('Iniciativa mejorada')?4:0),ref:(cls==='Pícaro'?(2+Math.floor(lvl/2)):Math.floor(lvl/3))+m[1]+(has('Reflejos rápidos')?2:0),strength:m[0],move:raceSpeed[c.race]??6,spells:cls==='Mago'&&base[3]>=11?(lvl+(m[3]>=1?1:0)):0,power:has('Ataque poderoso')&&m[0]>=1,bab};
 }
 const enemies={ash:{name:"Guardián de ceniza",max:42,ac:16,flat:15,attack:8,damage:6,bonus:3,init:1,ref:2,move:4,threat:20,construct:true},sentinel:{name:'Centinela del claro',max:22,ac:14,flat:14,attack:3,damage:4,bonus:1,init:0,ref:0,move:0,threat:20,construct:true},echo:{name:'Eco incipiente',max:4,ac:12,flat:11,attack:1,damage:3,bonus:-1,init:1,ref:1,move:4,threat:20},custodian:{name:'Custodio de la compuerta',max:16,ac:13,flat:13,attack:2,damage:4,bonus:1,init:-1,ref:0,move:0,threat:20,construct:true},whisper:{name:'Eco del murmullo',max:12,ac:13,flat:11,attack:3,damage:4,bonus:0,init:2,ref:2,move:6,threat:20}};
 const elara={id:'elara',name:'Elara',max:16,ac:16,flat:15,attack:4,damage:8,bonus:2,threat:19,init:1,ref:1,move:6};
