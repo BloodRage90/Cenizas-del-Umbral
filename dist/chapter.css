@@ -63,16 +63,19 @@ body.wearing-vigilia .hero-sprite{background-image:url('hero-vigilia.png')!impor
 /* Faceted d20: a real polyhedral silhouette falls, tumbles, then settles on its value. */
 #dice-tray{perspective:760px;overflow:visible;gap:18px;min-height:154px;align-items:flex-end}
 #dice-tray .die-wrap{position:relative;min-width:76px;height:126px;justify-content:flex-end;perspective:760px}
-#dice-tray .die-3d{--die-size:78px;position:absolute;left:50%;top:2px;width:var(--die-size);height:var(--die-size);transform-style:preserve-3d;transform:translateX(-50%) rotateZ(-4deg);animation:d20-drop 940ms cubic-bezier(.18,.85,.25,1.05) var(--roll-delay,0ms) both;filter:drop-shadow(0 10px 5px #06140dcc)}
+#dice-tray .die-wrap::after{content:'';position:absolute;left:50%;bottom:13px;width:66px;height:13px;transform:translateX(-50%);border-radius:50%;background:#06140d99;filter:blur(4px);z-index:0}
+#dice-tray .die-3d{--die-size:78px;position:absolute;left:50%;top:2px;width:var(--die-size);height:var(--die-size);z-index:1;transform-style:preserve-3d;transform:translateX(-50%) rotateZ(var(--settle-rotation,-4deg));animation:d20-drop 940ms cubic-bezier(.18,.85,.25,1.05) var(--roll-delay,0ms) both;filter:drop-shadow(0 10px 5px #06140dcc)}
+#dice-tray .die-3d::before{content:'';position:absolute;inset:-12px;border-radius:50%;background:radial-gradient(circle,#e9b75a42 0%,#b5762b1c 42%,transparent 72%);filter:blur(4px);z-index:-1}
 #dice-tray .die-3d.preview{--die-size:82px;top:8px;animation:d20-preview 1.2s linear infinite;opacity:.98}
-#dice-tray .d20-svg{display:block;width:100%;height:100%;overflow:visible}
+#dice-tray .d20-svg{display:block;width:100%;height:100%;overflow:visible;filter:saturate(1.08)}
 #dice-tray .d20-facet{stroke:#604019;stroke-width:2;stroke-linejoin:round}.d20-facet.facet-a{fill:#f2d58d}.d20-facet.facet-b{fill:#d6ac5e}.d20-facet.facet-c{fill:#c29146}.d20-facet.facet-d{fill:#e5bd70}.d20-facet.facet-e{fill:#f8e1a4}.d20-facet.facet-f{fill:#a97736}.d20-facet.facet-g{fill:#c08b3f}
 #dice-tray .d20-edge{fill:none;stroke:#4b2d12;stroke-width:2.8;stroke-linejoin:round;stroke-linecap:round;opacity:.95}
 #dice-tray .d20-number{fill:#213e30;font:bold 30px Georgia,serif;paint-order:stroke;stroke:#fff3c4;stroke-width:1.8px}
+#dice-tray .d20-face-number{fill:#fff0c1;font:bold 8px system-ui,sans-serif;paint-order:stroke;stroke:#4d2e12;stroke-width:1.1px;opacity:.9}
 #dice-tray .die-wrap small{font:12px system-ui;color:#e1d09e;letter-spacing:.04em;text-shadow:0 1px 3px #000;z-index:2}
-@keyframes d20-drop{0%{opacity:0;transform:translate(-50%,-110px) rotateZ(-140deg) scale(.72)}45%{opacity:1;transform:translate(-50%,12px) rotateZ(130deg) scale(1.06)}68%{transform:translate(-50%,-8px) rotateZ(246deg) scale(.98)}84%{transform:translate(-50%,4px) rotateZ(330deg)}100%{opacity:1;transform:translate(-50%,0) rotateZ(-4deg) scale(1)}}
-@keyframes d20-preview{0%{transform:translateX(-50%) rotateZ(-4deg)}100%{transform:translateX(-50%) rotateZ(356deg)}}
+@keyframes d20-drop{0%{opacity:0;transform:translate(-50%,-110px) rotateZ(-140deg) scale(.72)}45%{opacity:1;transform:translate(-50%,12px) rotateZ(130deg) scale(1.06)}68%{transform:translate(-50%,-8px) rotateZ(246deg) scale(.98)}84%{transform:translate(-50%,4px) rotateZ(330deg)}100%{opacity:1;transform:translate(-50%,0) rotateZ(var(--settle-rotation,-4deg)) scale(1)}}
+@keyframes d20-preview{0%{transform:translateX(-50%) rotateZ(var(--settle-rotation,-4deg))}100%{transform:translateX(-50%) rotateZ(calc(var(--settle-rotation,-4deg) + 360deg))}}
 @media(max-width:650px){#dice-tray{gap:10px;min-height:126px}.die-wrap{transform:scale(.9)}#dice-tray .die-3d{--die-size:64px}#dice-tray .die-3d.preview{--die-size:70px}#dice-tray .d20-number{font-size:24px}}
-@media(prefers-reduced-motion:reduce){#dice-tray .die-3d,#dice-tray .die-3d.preview{animation:none;transform:translateX(-50%) rotateZ(-4deg);opacity:1}}
+@media(prefers-reduced-motion:reduce){#dice-tray .die-3d,#dice-tray .die-3d.preview{animation:none;transform:translateX(-50%) rotateZ(var(--settle-rotation,-4deg));opacity:1}}
 
 .shop-items{display:grid;gap:8px}.shop-items button{text-align:left;background:#e7dcc0}.shop-items button small{display:block;margin-top:3px;color:#695f48;font:12px system-ui}.shop-items button:disabled{opacity:.5}
