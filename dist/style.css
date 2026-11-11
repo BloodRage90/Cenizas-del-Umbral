@@ -135,3 +135,5 @@
 @container (max-width:359px){.preview-character-stage.pixel-combat{left:65%;bottom:30px;width:146px;height:146px}}
 @keyframes pixelBattleCycle{0%,19%{background-position:0 0}20%,39%{background-position:100% 0}40%,64%{background-position:0 100%}65%,100%{background-position:100% 100%}}
 @media(prefers-reduced-motion:reduce){.preview-character-stage.pixel-combat .preview-player-sprite.pixel-sprite{animation:none;background-position:0 0}}
+.preview-character-stage.pixel-combat .preview-player-sprite.pixel-sprite{transform:scale(1.42);transform-origin:50% 92%}
+@container (min-width:360px){.preview-character-stage.pixel-combat .preview-player-sprite.pixel-sprite{transform:scale(1.34);transform-origin:50% 92%}}
