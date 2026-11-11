@@ -128,3 +128,10 @@
 }
 .preview-character-stage{overflow:visible}
 @container (min-width:360px){.preview-character-stage{left:73%;bottom:22px;width:164px;height:180px;transform:translateX(-50%)}}
+.preview-character-stage.pixel-combat{width:164px;height:164px;bottom:25px}
+.preview-character-stage.pixel-combat .preview-player-sprite.pixel-sprite{inset:0;background-image:var(--identity-sprite);background-size:200% 200%;background-position:0 0;background-repeat:no-repeat;filter:drop-shadow(0 9px 6px #000d) saturate(1.05);image-rendering:auto;animation:pixelBattleCycle 3.4s steps(1,end) infinite}
+.preview-character-stage.pixel-combat .preview-player-weapon,.preview-character-stage.pixel-combat .preview-attack-flash,.preview-character-stage.pixel-combat .preview-impact-sparks,.preview-character-stage.pixel-combat .preview-race-feature{display:none}
+@container (min-width:360px){.preview-character-stage.pixel-combat{left:73%;bottom:20px;width:186px;height:186px}}
+@container (max-width:359px){.preview-character-stage.pixel-combat{left:65%;bottom:30px;width:146px;height:146px}}
+@keyframes pixelBattleCycle{0%,19%{background-position:0 0}20%,39%{background-position:100% 0}40%,64%{background-position:0 100%}65%,100%{background-position:100% 100%}}
+@media(prefers-reduced-motion:reduce){.preview-character-stage.pixel-combat .preview-player-sprite.pixel-sprite{animation:none;background-position:0 0}}
