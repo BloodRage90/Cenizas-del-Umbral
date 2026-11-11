@@ -98,3 +98,11 @@
 @keyframes playerSpriteStride{0%,100%{transform:translateY(0) rotate(-.4deg)}50%{transform:translateY(-3px) rotate(.4deg)}}
 @keyframes playerImpactSparks{0%,52%,100%{opacity:0;transform:scale(.4)}60%{opacity:.15;transform:scale(.7)}64%{opacity:1;transform:scale(1.25)}74%{opacity:0;transform:scale(1.6)}}
 @media(prefers-reduced-motion:reduce){.preview-player-sprite{animation:none}.preview-impact-sparks{display:none}}
+.preview-player-portrait{position:absolute;left:58px;top:38px;z-index:3;width:37px;height:47px;border-radius:47% 44% 46% 43%;background-size:215% 215%;background-position:50% 10%;background-repeat:no-repeat;transform:rotateY(-18deg) rotate(-3deg);filter:saturate(1.12) contrast(1.06) drop-shadow(0 2px 2px #0008);clip-path:polygon(18% 0,78% 2%,100% 27%,94% 77%,75% 100%,20% 94%,0 62%,4% 22%)}
+.preview-player-portrait::after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(90deg,#07120f44,transparent 58%,#fff2)}
+.preview-character-stage.orco .preview-player-portrait,.preview-character-stage.semiorco .preview-player-portrait{filter:saturate(.82) sepia(.12) hue-rotate(30deg) drop-shadow(0 2px 2px #0008);transform:rotateY(-18deg) rotate(-3deg) scale(1.08)}
+.preview-character-stage.enano .preview-player-portrait,.preview-character-stage.gnomo .preview-player-portrait,.preview-character-stage.mediano .preview-player-portrait{transform:rotateY(-18deg) rotate(-3deg) scale(.86);transform-origin:50% 100%}
+.preview-character-stage.woman .preview-player-portrait{left:57px;top:37px;width:39px;height:51px}
+.preview-character-stage.arcane .preview-player-portrait,.preview-character-stage.ash-weaver .preview-player-portrait{box-shadow:0 0 0 1px color-mix(in srgb,var(--accent),#fff 20%),0 0 12px color-mix(in srgb,var(--accent),transparent 42%)}
+.preview-character-stage.shadow .preview-player-portrait,.preview-character-stage.scout .preview-player-portrait{width:36px;height:45px}
+.sheet-identity .preview-player-portrait{left:43px;top:28px;width:29px;height:36px}
