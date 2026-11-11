@@ -126,3 +126,5 @@
   .preview-character-kicker{left:10px;right:auto;top:10px;font-size:8px}
   .preview-raster-copy{left:66px;right:10px;bottom:10px}
 }
+.preview-character-stage{overflow:visible}
+@container (min-width:360px){.preview-character-stage{left:73%;bottom:22px;width:164px;height:180px;transform:translateX(-50%)}}
