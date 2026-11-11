@@ -62,14 +62,47 @@ const subclassData = literal('subclassData');
 const genderData = literal('genderData');
 const portraitAssets = literal('portraitAssets');
 
+function buildRuntimeAudit() {
+  const cut = app.lastIndexOf("document.querySelectorAll('[data-tab]').forEach");
+  if (cut < 0) {
+    fail('No se pudo aislar el runtime de creación de personajes.');
+    return null;
+  }
+  const context = {
+    localStorage: { getItem: () => null, setItem: () => {} },
+    crypto: crypto.webcrypto,
+  };
+  vm.createContext(context);
+  try {
+    vm.runInContext(`${app.slice(0, cut)}
+globalThis.__identityAudit={
+  classes,raceData,subclassData,genderData,portraitAssets,
+  setState(next){s=next;normalizeCharacter();normalize()},
+  visualProfile,portraitSource,identitySprite,stats
+};`, context, { timeout: 3000 });
+    return context.__identityAudit;
+  } catch (error) {
+    fail(`El runtime de creación de personajes no pudo iniciar: ${error.message}`);
+    return null;
+  }
+}
+
 if (classData) {
   for (const name of classes) if (!Object.prototype.hasOwnProperty.call(classData, name)) fail(`Falta la clase ${name}.`);
   for (const name of Object.keys(classData)) if (!classes.includes(name)) note(`Clase no contemplada por la matriz: ${name}.`);
+  for (const name of classes) {
+    if (!classData[name]?.weapon || !classData[name]?.gear) fail(`La clase ${name} no tiene arma o equipo inicial.`);
+    if (!Array.isArray(classData[name]?.pres) || classData[name].pres.length !== 6) fail(`La clase ${name} no tiene seis atributos recomendados.`);
+  }
 }
 
 if (raceData) {
   for (const name of races) if (!Object.prototype.hasOwnProperty.call(raceData, name)) fail(`Falta la raza ${name}.`);
   for (const name of Object.keys(raceData)) if (!races.includes(name)) note(`Raza no contemplada por la matriz: ${name}.`);
+  for (const name of races) {
+    if (!Array.isArray(raceData[name]?.mods) || raceData[name].mods.length !== 6) fail(`La raza ${name} no tiene seis modificadores.`);
+    if (!Number.isFinite(raceData[name]?.speed) || raceData[name].speed <= 0) fail(`La raza ${name} no tiene velocidad jugable.`);
+  }
 }
 
 if (subclassData) {
@@ -146,9 +179,35 @@ for (const names of Object.values(subclasses)) for (const name of names) {
 }
 for (const visual of ['guardian', 'berserker', 'shadow', 'scout', 'arcane', 'ash-weaver']) if (!css.includes(`.${visual}`)) fail(`Falta el tratamiento visual de subclase .${visual}.`);
 
+const runtime = buildRuntimeAudit();
+if (runtime) {
+  for (const { race, className, subclass, gender } of matrix) {
+    try {
+      runtime.setState({
+        name: 'QA', race, class: className, subclass, gender,
+        alignment: 'Neutral bueno', base: [...runtime.classes[className].pres],
+        levelBonuses: {}, progressionLevel: 1, ranks: {}, feats: [],
+      });
+      const profile = runtime.visualProfile();
+      const expectedSubclass = runtime.subclassData[className].find(entry => entry[0] === subclass);
+      const expectedGender = runtime.genderData.find(entry => entry[0] === gender);
+      const expectedPortrait = runtime.portraitAssets[race][gender];
+      if (profile.subclass !== subclass || profile.visual !== expectedSubclass?.[3]) fail(`Perfil inconsistente: ${race} · ${className} · ${subclass} · ${gender}.`);
+      if (profile.gender !== gender || profile.genderClass !== expectedGender?.[1]) fail(`Género inconsistente: ${race} · ${className} · ${subclass} · ${gender}.`);
+      if (profile.raceClass !== token(race)) fail(`Raza inconsistente: ${race} · ${className} · ${subclass} · ${gender}.`);
+      if (runtime.portraitSource() !== expectedPortrait) fail(`El retrato no resuelve correctamente: ${race} · ${gender}.`);
+      const stats = runtime.stats();
+      for (const key of ['hp', 'ac', 'attack', 'init']) if (!Number.isFinite(stats[key])) fail(`Estadística inválida (${key}): ${race} · ${className} · ${subclass} · ${gender}.`);
+    } catch (error) {
+      fail(`Personaje no ejecutable (${race} · ${className} · ${subclass} · ${gender}): ${error.message}`);
+    }
+  }
+}
+
 console.log('IDENTITY REVIEW · Cenizas del Umbral');
 console.log(`Matriz revisada: ${matrix.length} combinaciones (${races.length} razas × ${classes.length} clases × 2 subclases × ${genders.length} géneros).`);
 console.log(`Retratos revisados: ${portraitAssets ? Object.values(portraitAssets).reduce((sum, group) => sum + Object.keys(group).length, 0) : 0}.`);
+console.log(`Personajes jugables ejecutados: ${runtime ? matrix.length : 0}.`);
 if (notes.length) for (const message of notes) console.log(`NOTE: ${message}`);
 if (errors.length) {
   console.error(`BLOQUEOS: ${errors.length}`);
