@@ -192,3 +192,9 @@
   .preview-raster-copy strong{font-size:12px}
   .preview-raster-copy small{font-size:8px}
 }
+
+/* Keep race accents readable at small sizes; never paint a flat mask over the face. */
+.preview-character-stage.pixel-combat .preview-race-feature.orco::before,.preview-character-stage.pixel-combat .preview-race-feature.semiorco::before,.preview-character-stage.pixel-combat .preview-race-feature.enano::before{display:none}
+.preview-character-stage.pixel-combat.orco .preview-player-sprite.pixel-sprite{filter:drop-shadow(0 9px 6px #000d) saturate(.86) sepia(.14) hue-rotate(23deg) brightness(.98)}
+.preview-character-stage.pixel-combat.semiorco .preview-player-sprite.pixel-sprite{filter:drop-shadow(0 9px 6px #000d) saturate(.9) sepia(.1) hue-rotate(18deg) brightness(1)}
+.preview-character-stage.pixel-combat .preview-race-feature.orco::after,.preview-character-stage.pixel-combat .preview-race-feature.semiorco::after{left:44%;top:27%;width:12%;height:11%;background:linear-gradient(125deg,transparent 0 28%,#f8e7b9 29% 45%,transparent 46% 55%,#f8e7b9 56% 72%,transparent 73%);filter:drop-shadow(0 0 2px #fff0bd);opacity:.9}
