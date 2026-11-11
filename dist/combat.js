@@ -6,7 +6,7 @@ const raceMods={Humano:[0,0,0,0,0,0],Elfo:[0,2,-2,0,0,0],Enano:[0,0,2,0,0,-2],Or
 const defaults={name:'Viajero',race:'Humano',class:'Guerrero',base:[16,14,14,12,10,8],feats:['Dureza','Iniciativa mejorada','Soltura con el arma'],ranks:{}};
 function profile(c=defaults,level=1){
  const cls=['Guerrero','Pícaro','Mago'].includes(c.class)?c.class:'Guerrero';
- const base=Array.isArray(c.base)&&c.base.length===6&&c.base.every(n=>Number.isFinite(n)&&n>=8&&n<=18)?c.base:defaults.base;
+ const base=Array.isArray(c.base)&&c.base.length===6&&c.base.every(n=>Number.isFinite(n)&&n>=8&&n<=18)?c.base.map((n,i)=>n+(Number(c.levelBonuses?.[i])||0)):defaults.base;
  const m=base.map((v,i)=>mod(v+(raceMods[c.race]?.[i]||0)));
  const feats=Array.isArray(c.feats)?c.feats:[],has=f=>feats.includes(f),lvl=Math.max(1,Math.min(5,level));
  const hd={Guerrero:10,'Pícaro':6,Mago:4}[cls],bab=cls==='Guerrero'?lvl:cls==='Pícaro'?Math.floor(lvl*.75):Math.floor(lvl/2),armor={Guerrero:5,'Pícaro':2,Mago:0}[cls];
