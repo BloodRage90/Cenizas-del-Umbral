@@ -106,3 +106,4 @@
 .preview-character-stage.arcane .preview-player-portrait,.preview-character-stage.ash-weaver .preview-player-portrait{box-shadow:0 0 0 1px color-mix(in srgb,var(--accent),#fff 20%),0 0 12px color-mix(in srgb,var(--accent),transparent 42%)}
 .preview-character-stage.shadow .preview-player-portrait,.preview-character-stage.scout .preview-player-portrait{width:36px;height:45px}
 .sheet-identity .preview-player-portrait{left:43px;top:28px;width:29px;height:36px}
+.preview-player-sprite{background-repeat:no-repeat}
