@@ -107,3 +107,22 @@
 .preview-character-stage.shadow .preview-player-portrait,.preview-character-stage.scout .preview-player-portrait{width:36px;height:45px}
 .sheet-identity .preview-player-portrait{left:43px;top:28px;width:29px;height:36px}
 .preview-player-sprite{background-repeat:no-repeat}
+.character-visual-preview{container-type:inline-size}
+.preview-player-portrait{display:none}
+.preview-identity-stamp::before{content:"RETRATO ACTUAL";position:absolute;left:7px;top:6px;z-index:2;color:#f4ead3;font-size:7px;letter-spacing:1.15px;text-shadow:0 1px 5px #000;background:#07120fb8;padding:2px 3px}
+@container (min-width:360px){
+  .preview-identity-stamp{left:22px;top:35px;width:156px;height:174px;border-radius:11px;box-shadow:0 8px 22px #0009,0 0 15px color-mix(in srgb,var(--accent),transparent 62%)}
+  .preview-identity-stamp img{object-position:50% 17%;filter:saturate(1.08) contrast(1.04)}
+  .preview-identity-stamp span{left:7px;right:7px;bottom:7px;font-size:9px;letter-spacing:.5px;background:#07120fc7;padding:3px 2px}
+  .preview-character-stage{left:73%;bottom:19px;width:205px;height:212px;transform:translateX(-50%) scale(1.02)}
+  .preview-character-kicker{left:auto;right:18px;top:14px;font-size:9px}
+  .preview-raster-copy{left:22px;right:23px;bottom:8px}
+  .preview-raster-copy strong{font-size:14px}
+  .preview-raster-copy small{font-size:9px}
+}
+@container (max-width:359px){
+  .preview-identity-stamp{left:9px;top:38px;width:47px;height:64px}
+  .preview-character-stage{left:59%;bottom:28px;width:154px;height:178px}
+  .preview-character-kicker{left:10px;right:auto;top:10px;font-size:8px}
+  .preview-raster-copy{left:66px;right:10px;bottom:10px}
+}
