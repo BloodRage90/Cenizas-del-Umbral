@@ -1,21 +1,17 @@
-name: Identity visual review
+name: Release preflight review
 
 on:
   push:
     paths:
-      - 'dist/app.js'
-      - 'dist/style.css'
-      - 'dist/portraits/**'
-      - 'dist/identity-*.png'
-      - 'scripts/identity-review.cjs'
+      - 'dist/**'
+      - 'tests/**'
+      - 'scripts/**'
       - '.github/workflows/identity-review.yml'
   pull_request:
     paths:
-      - 'dist/app.js'
-      - 'dist/style.css'
-      - 'dist/portraits/**'
-      - 'dist/identity-*.png'
-      - 'scripts/identity-review.cjs'
+      - 'dist/**'
+      - 'tests/**'
+      - 'scripts/**'
       - '.github/workflows/identity-review.yml'
   workflow_dispatch:
 
@@ -23,11 +19,11 @@ permissions:
   contents: read
 
 jobs:
-  identity-matrix:
-    name: Review playable identity matrix
+  release-preflight:
+    name: Test playable identities and prologue before release
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Review race, class, subclass and gender coverage
-        run: node scripts/identity-review.cjs
+      - name: Run complete preflight
+        run: node scripts/release-preflight.cjs
