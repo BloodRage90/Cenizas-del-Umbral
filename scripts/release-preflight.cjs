@@ -9,6 +9,8 @@ const root=path.resolve(__dirname,'..');
 function assertPrologueAssets(){
   const html=fs.readFileSync(path.join(root,'dist','index.html'),'utf8');
   for(const marker of ['id="intro-cinema"','id="intro-video"','src="intro.mp4"','id="skip-intro"'])if(!html.includes(marker))throw new Error(`Falta el ancla del prólogo: ${marker}`);
+  const menu=fs.readFileSync(path.join(root,'dist','menu.js'),'utf8');
+  for(const marker of ['PREMISA · CENIZAS DEL UMBRAL','id="start-intro-video"','intro.dataset.stage=\'premise\'','intro.dataset.stage=\'video\''])if(!menu.includes(marker))throw new Error(`Falta la transición narrativa del prólogo: ${marker}`);
   const video=path.join(root,'dist','intro.mp4');
   if(!fs.existsSync(video)||fs.statSync(video).size<100000)throw new Error('dist/intro.mp4 no existe o es demasiado pequeño para la introducción publicada.');
   console.log(`PROLOGUE ASSETS · intro.mp4 ${(fs.statSync(video).size/1048576).toFixed(1)} MiB`);
