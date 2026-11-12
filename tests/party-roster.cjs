@@ -1,0 +1,10 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
+const source=fs.readFileSync('dist/chapter.js','utf8');
+const start=source.indexOf('function knownAllies()'),end=source.indexOf('function journal()');
+assert(start>=0&&end>start,'party roster helper exists');
+const ctx={state:{flags:{ordanMet:true,iriaMet:true,darienMet:true,lioraMet:true,tovinMet:true,maelaMet:true}},esc:value=>String(value)};
+vm.createContext(ctx);vm.runInContext(source.slice(start,end),ctx);
+const html=ctx.knownAllies();
+for(const name of ['Elara','Ordan','Iria','Darien','Liora','Tovin','Maela'])assert(html.includes(name),`${name} appears in the ally roster`);
+for(const marker of ['iriaJoined','ensembleCamp','councilSeen','groupCouncil'])assert(source.includes(marker),`${marker} is wired into the ensemble story`);
+console.log('PASS: ensemble roster exposes the recurring cast and optional companion beats.');

@@ -106,9 +106,9 @@ if(id==='ordanChapel'&&['montana','antesala','umbral'].includes(state.place)){if
 if(id==='chapelDoor'){if(Math.hypot(scene.hero.x-1420,scene.hero.y-510)>80){toast('Acércate al umbral de la puerta iluminada.');return;}if(!state.flags.captivesFreed){say('La capilla','Una voz canta al otro lado. Darien y los cautivos siguen necesitando ayuda.');return;}travel('capilla');return;}
 if(id==='serethChapel'){chapelTalk();return;}
 if(id==='ordanChapel'&&state.flags.chapelWon){chapelAfter();return;}
-if(id==='chapelAfter'){chapelAfter();return;}
-if(castNames[id]&&id!=='darien'){say(castNames[id],id==='nurse'?'La campana los debilita. Estoy cuidando de quienes todavía no pueden sostenerse.':id==='attendant'?'Llevo agua y vendas. Cuando Darien dé la señal, acompañaremos a los enfermos al patio.':id.startsWith('patient')?(state.flags.captivesFreed?'Por fin puedo respirar sin escuchar mi nombre en esas tuberías.':'Cada golpe de la campana me quita las fuerzas. Darien nos mantiene despiertos.'):id==='ordanRescue'?'El conducto está junto a la campana. Yo me ocuparé de liberar su abrazadera.':id==='ordanChapel'?'Esos dos soportes alimentan al guardián. Después de apagarlos podremos accionar la palanca central.':'Aquí estoy. No es la voz de una tubería.');return;}
-if(id==='boatman'){millQuest();return;}
+ if(id==='chapelAfter'){chapelAfter();return;}
+ if(castNames[id]&&id!=='darien'){if(id==='nurse'){state.flags.lioraMet=true;save();}say(castNames[id],id==='nurse'?'La campana los debilita. Estoy cuidando de quienes todavía no pueden sostenerse.':id==='attendant'?'Llevo agua y vendas. Cuando Darien dé la señal, acompañaremos a los enfermos al patio.':id.startsWith('patient')?(state.flags.captivesFreed?'Por fin puedo respirar sin escuchar mi nombre en esas tuberías.':'Cada golpe de la campana me quita las fuerzas. Darien nos mantiene despiertos.'):id==='ordanRescue'?'El conducto está junto a la campana. Yo me ocuparé de liberar su abrazadera.':id==='ordanChapel'?'Esos dos soportes alimentan al guardián. Después de apagarlos podremos accionar la palanca central.':'Aquí estoy. No es la voz de una tubería.');return;}
+ if(id==='boatman'){state.flags.tovinMet=true;save();millQuest();return;}
 if(id==='boatmanLegacy'){
  if(state.flags.dockManifest&&!state.flags.dockReward){state.flags.dockReward=true;state.potions++;note('Tovin reconoció el cargamento del monasterio y entregó una poción.');hud();say('Tovin','Sí, es mi registro. La Vigilia pagó por alimentos y ropa para más personas de las que viven en el monasterio. Guarda la copia: puede servirte como prueba. Esta poción es por ayudarme.',[['Comprar suministros',()=>showShop('tovin')],['Volver al camino',()=>{}]]);return;}
  if(state.flags.dockReward){say('Tovin','El sendero de arriba vuelve al puente. Desde allí puedes subir al monasterio o regresar a Valdara. Mi banco está disponible si necesitas descansar.',[['Comprar suministros',()=>showShop('tovin')],['Volver al camino',()=>{}]]);return;}
@@ -124,10 +124,10 @@ if(id==='riverRest'){rest();return;}
 if(id==='chest'){await openChest();return;}
 if(id==='signpost'){say('Señal del camino',waySigns[state.place].text,[['Seguir caminando',()=>{}],['Ver mapa regional',map]]);return;}
 if(villagers[id]){const v=villagers[id],changed=state.flags[v.place==='bosque'?'forest':v.place==='taller'?'workshop':'branchDone'];const n=scene.npcs.find(n=>n.npcId===id);if(n){n.walkDirection=scene.hero.x<n.x?1:2;NPCs.step(n,0,0);}say(v.name,changed?v.after:v.text,[['Conversar un poco más',()=>say(v.name,v.place==='plaza'?'Si necesitas orientación, busca a Maela junto a la fuente. Yo tengo que seguir con las entregas.':v.place==='taller'?'Mi maestro deja descansar a los viajeros aquí. No desperdicies una poción si puedes recuperarte en el taller.':'Cruza el puente de piedra. El río parece tranquilo desde arriba, pero no perdona un mal paso.')],['Hasta luego',()=>{}]]);return;}
-if(id==='ranger'){say('Iria, guardabosques',state.flags.forest?'El bosque vuelve a sonar como debe. Vi una comitiva con faroles azules marchar hacia el monasterio. Crucen el puente y sigan el sendero de la derecha.':'No sigan una voz fuera del camino. El río ha socavado las orillas y las raíces ocultan barrancos. Hace un momento escuché a alguien llamar desde la curva del sendero.',[['Preguntar por los desaparecidos',()=>say('Iria','La Orden pasó con varias personas. Una llevaba una campanilla envuelta en tela; la hacía sonar cada vez que cruzaban el agua. No parecían viajeros libres.',[['Anotar el testimonio',()=>{if(!state.flags.iriaHeard){state.flags.iriaHeard=true;note('Iria vio a la Orden llevar personas hacia el monasterio; una transportaba una campanilla envuelta.');}toast('Testimonio de Iria añadido al diario.');}],['Volver al sendero',()=>{}]])],['Seguir explorando',()=>{}]]);return;}
+ if(id==='ranger'){state.flags.iriaMet=true;save();const join=state.flags.iriaJoined?['Recordar la ruta compartida',()=>say('Iria','El mapa sigue marcando la misma bifurcación: el monasterio arriba, el río abajo. Si escuchan una voz, esperen a que responda algo nuevo.')]:['Pedir a Iria que guíe el cruce',()=>{state.flags.iriaJoined=true;item('Mapa de Iria');note('Iria aceptó acompañarte hasta el monasterio.');hud();say('Iria','No prometo que el camino sea fácil. Prometo que nadie del grupo seguirá una voz a solas.',[['Continuar al mirador',mirador],['Hablar con Elara',()=>{}]]);}];say('Iria, guardabosques',state.flags.forest?'El bosque vuelve a sonar como debe. Vi una comitiva con faroles azules marchar hacia el monasterio. Crucen el puente y sigan el sendero de la derecha.':'No sigan una voz fuera del camino. El río ha socavado las orillas y las raíces ocultan barrancos. Hace un momento escuché a alguien llamar desde la curva del sendero.',[['Preguntar por los desaparecidos',()=>say('Iria','La Orden pasó con varias personas. Una llevaba una campanilla envuelta en tela; la hacía sonar cada vez que cruzaban el agua. No parecían viajeros libres.',[['Anotar el testimonio',()=>{if(!state.flags.iriaHeard){state.flags.iriaHeard=true;note('Iria vio a la Orden llevar personas hacia el monasterio; una transportaba una campanilla envuelta.');}toast('Testimonio de Iria añadido al diario.');}],['Volver al sendero',()=>{}]])],join,['Seguir explorando',()=>{}]]);return;}
 if(id==='bridge'){save();location.href='index.html';return;}
 if(['plaza','taller','bosque','lindero','embarcadero','molino','monasterio'].includes(id)){travel(id);return;}
-if(id==='maela'){
+ if(id==='maela'){state.flags.maelaMet=true;save();
  if(state.flags.custodian){if(!state.flags.elara)reunion();else say('Maela','Los documentos están a salvo. Elara te espera para continuar hacia el bosque.',[['Ir al bosque',()=>travel('bosque')],['Comprar en la plaza',()=>showShop('maela')],['Quedarme en Valdara',()=>{}]]);return;}
  if(!state.branch){say('Maela','Otra familia busca a alguien que la Orden dice que nunca vivió aquí. Necesito reunir a quienes lo recuerdan. El escriba está llevando los avisos al depósito: si lo sigues ahora, quizá encuentres pruebas.',[['Proteger a los testigos con Maela',()=>{state.branch='maela';save();interact('maela');}],['Seguir los documentos al depósito',()=>{state.branch='depot';save();toast('Investiga el depósito al este de la plaza.');hud();}]]);return;}
  if(state.flags.branchDone){say('Maela','Ordan, el campanero, puede reconocer ese sello. Su taller está al fondo de la plaza.',[['Comprar en la plaza',()=>showShop('maela')],['Seguir explorando',()=>{}]]);return;}
@@ -139,7 +139,7 @@ if(id==='depot'){
  if(state.flags.branchDone){say('Depósito municipal','Ya conservaste la información que pudiste recuperar. Ordan espera en su taller.');return;}
  say('La tinta del silencio','El encargado ordena los avisos junto a una copia del sello. Puedes fingir que llevas una orden de revisión. Engañar contra Averiguar intenciones +2; fallar conserva la pista básica.',[['Intentar recuperar la orden · Engañar',async()=>{const q=await opposedCheck();if(!q)return;const success=q.success;state.flags.seal=success;state.flags.branchDone=true;item(success?'Orden de traslado sellada':'Copia parcial de los traslados');save();hud();say('Un rastro de tinta',success?'La orden confirma que los trasladados pasan por las criptas. Su sello permitirá evitar al guardia.':'El encargado te descubre y oculta la orden. Alcanzas a leer la referencia a las criptas; conservas una copia parcial.',[['Ir al taller de Ordan',()=>travel('taller')]]);}]]);return;
 }
-if(id==='ordan'){
+ if(id==='ordan'){state.flags.ordanMet=true;save();
  if(state.flags.workshop){say('Ordan','La campana no está llamando a los muertos. Alguien la alimenta con nombres. Baja a las criptas y recupera el registro. Yo abriré el mantenimiento de la compuerta. Puedes descansar aquí antes de bajar.',[['Bajar a las criptas',()=>travel('criptas')],['Descansar',()=>rest()],['Comprar en el taller',()=>showShop('ordan')]]);return;}
  say('Ordan','La cera sigue caliente… Darien vino con una advertencia parecida. Hay algo conectado al río. ¡Atrás! La ceniza del conducto está tomando forma.',[['Prepararme para el encuentro',()=>say('Primer combate','Cada turno tiene una acción. Selecciona un objetivo, elige una orden y pulsa «Tirar dados» cuando aparezcan desde el cielo. El Eco puede anunciar una descarga; el diario y los menús pausan el combate.',[['Comenzar',()=>startBattle('echo')]])],['Revisar mi personaje',()=>sheet()]]);return;
 }
@@ -246,8 +246,10 @@ function stagedCast(){
   if(state.flags.captivesFreed)list=list.filter(x=>!['darien','patientA','patientB','patientC'].includes(x[0]));
   if(state.flags.ordanArrived&&!state.flags.captivesFreed)list.push(['ordanRescue','darien',1160,410]);
  }
- if(state.place==='monasterio'&&state.flags.captivesFreed){list=list.filter(x=>x[0]!=='sereth');list.push(['darien','darien',720,480],['patientA','darien',570,565],['patientB','darien',640,560],['patientC','darien',710,570],['attendant','darien',590,620]);}
- if(state.place==='capilla'&&state.flags.chapelWon)list=list.filter(x=>!['mara','serethChapel'].includes(x[0]));
+  if(state.place==='monasterio'&&state.flags.iriaJoined&&!state.flags.captivesFreed)list.push(['ranger',3,1040,610]);
+  if(state.place==='monasterio'&&state.flags.captivesFreed){list=list.filter(x=>x[0]!=='sereth');list.push(['darien','darien',720,480],['patientA','darien',570,565],['patientB','darien',640,560],['patientC','darien',710,570],['attendant','darien',590,620]);if(state.flags.iriaJoined)list.push(['ranger',3,820,610]);}
+  if(state.place==='capilla'&&state.flags.captivesFreed){list.push(['nurse',0,520,620]);if(state.flags.iriaJoined)list.push(['ranger',3,1000,640]);}
+  if(state.place==='capilla'&&state.flags.chapelWon)list=list.filter(x=>!['mara','serethChapel'].includes(x[0]));
  return list;
 }
 async function runStage(steps){
@@ -273,12 +275,23 @@ async function chapelReveal(){
  state.flags.chapelRevealed=true;note('Mara no pudo responder sobre el presente. El diapasón reveló voces prestadas. Sereth activó los soportes de la capilla.');hud();
  say('Sereth','Todavía puedo completar el llamado. No dejaré que me la quiten otra vez.',[['Ver qué despierta',()=>revealEncounter({kind:'ash',id:'guardian-ceniza',flag:'chapelWon',x:800,y:440,title:'Guardián de ceniza',text:'Dos campanas laten fuera de ritmo. Entre ambas, la ceniza aprende a sostener un martillo.',detail:'J02 · 42 PG, CA 16. Dos soportes alimentan sus ataques. Ordan señala la palanca central.'})]]);
 }
-function chapelAfter(){
+ async function groupCouncil(){
+  if(encounterBusy||battle||state.flags.councilSeen)return;
+  await runStage([
+   {text:'Darien reúne a quienes siguen en pie. Liora revisa las vendas; Ordan coloca el núcleo frío sobre el plano de la montaña.',focus:[760,560],moves:[['darienChapel',[[680,580],[750,560]]],['nurse',[[520,620],[650,610]]],['ordanChapel',[[590,480],[700,520]]],['ally',[[850,620],[810,560]]]]},
+   {text:'Iria señala una ruta lateral en el mapa. «Si el Umbral repite las voces, responderemos con más de una memoria». Nadie queda reducido a una sola versión de la historia.',focus:[780,560],moves:state.flags.iriaJoined?[['ranger',[[1000,640],[900,590]]]]:[]}
+  ]);
+  state.flags.councilSeen=true;note('El círculo de aliados decidió continuar unido: Darien y Liora protegerán a los rescatados; Ordan, Elara e Iria abrirán la ruta al Umbral.');save();
+  say('Consejo de la Vigilia','La siguiente etapa no depende de una sola voz. Darien llevará las pruebas, Liora cuidará a los rescatados, Ordan leerá el mecanismo e Iria vigilará los senderos.',[['Partir con Ordan y Elara',departMountain],['Abrir el registro del grupo',()=>paper('Círculo de aliados',knownAllies())],['Quedarnos un momento',()=>{}]]);
+ }
+ function chapelAfter(){
  if(!state.flags.chapelWon){say('El nicho','El zumbido de los soportes impide acercarte con seguridad.');return;}
  if(state.flags.campaignComplete){epilogue();return;}
  if(state.flags.umbralClosed){journeyEnding();return;}
  if(!state.flags.chapelLoot){state.flags.chapelLoot=true;state.gold+=20;state.potions++;item('Núcleo frío');item('Broche de la Vigilia');item('Silbato de Darien');note('Recuperaste el núcleo frío, el broche, 20 Brasas y una poción. Darien entregó su silbato a Elara.');}
- say('Ordan · la ruta de la montaña','Sereth ha huido al Umbral. El núcleo conserva la misma marca que el paso de montaña; puedo guiarlos hasta allí. Darien y los rescatados permanecerán con Liora. Elara comprueba el silbato y asiente: «Esta vez volveremos todos».',[
+  const council=state.flags.councilSeen?[]:[['Reunir al círculo de aliados',typeof groupCouncil==='function'?groupCouncil:()=>{}]];
+  say('Ordan · la ruta de la montaña','Sereth ha huido al Umbral. El núcleo conserva la misma marca que el paso de montaña; puedo guiarlos hasta allí. Darien y los rescatados permanecerán con Liora. Elara comprueba el silbato y asiente: «Esta vez volveremos todos».',[
+  ...council,
  [state.flags.mountainStarted?'Retomar la ruta de montaña':'Partir con Ordan y Elara',departMountain],
  ['Prepararnos antes de partir',()=>say('Elara','Podemos recuperar fuerzas aquí. Avanzaremos cuando estés listo.',[['Descansar',async()=>{await restCinema(false);chapelAfter();}],['Revisar la mochila',inventory],['Volver a hablar con Ordan',chapelAfter]])],
  ['Quedarme en la capilla',()=>{}],['Consultar el diario',journal]]);hud();save();
@@ -350,10 +363,22 @@ async function epilogue(){
  say('Valdara · tres días después',(why[state.flags.mountainReason]||why.valdara)+' Ordan entrega su testimonio y acepta responder por su participación. Elara ayuda a organizar una guardia que rinda cuentas a la ciudad. '+(state.flags.serethSaved?'Sereth declara bajo custodia: Mara murió en la inundación; el Coro nunca fue su hermana.':'Los registros conservan las pruebas contra Sereth y la memoria de quienes murieron.')+' La historia principal ha terminado. Puedes seguir recorriendo la región y completar los encargos pendientes.',[['Explorar Valdara',()=>{}],['Leer el diario',journal]]);
 }
 
-function mirador(){
+ async function companionCampfire(){
+  if(encounterBusy||battle||!state.flags.iriaJoined||state.flags.ensembleCamp)return;
+  await runStage([
+   {text:'Iria encuentra un claro junto al sendero. Elara deja la guardia y permite que el silencio hable primero.',focus:[1320,430],moves:[['ranger',[[1260,455],[1180,480]]],['ally',[[1100,500],[1160,500]]],['hero',[[1040,520],[1100,520]]]]},
+   {text:'Iria: «No todos los caminos llevan al mismo lugar. Pero nadie debería cruzar uno de ellos sin saber quién camina a su lado».',focus:[1160,500]},
+   {text:'Elara: «Entonces caminaremos con los nombres a la vista». La carta, el silbato y el mapa de Iria quedan sobre la misma piedra.',focus:[1130,500]}
+  ]);
+  state.flags.ensembleCamp=true;item('Mapa de Iria');note('Iria se unió al círculo de aliados. Elara y ella acordaron compartir señales y rutas.');hud();save();
+  say('El círculo de aliados','El bosque ya no es solo un lugar de paso. Iria conoce los senderos; Elara conoce las patrullas. Puedes dejar que la conversación marque el rumbo.',[['Continuar al monasterio',enterMonastery],['Abrir el registro del grupo',()=>paper('Círculo de aliados',knownAllies())],['Quedarnos un momento',()=>{}]]);
+ }
+ function mirador(){
  if(!state.flags.forest){say('Elara','Antes de seguir, comprobemos la voz entre las raíces. No dejaremos esa trampa a espaldas de los viajeros.');return;}
  if(!state.flags.monasteryTrail){state.flags.monasteryTrail=true;note('Reconociste el camino al monasterio desde la hornacina.');}hud();
- say('El camino de la Vigilia','El sendero continúa hasta el patio del monasterio. Puedes avanzar ahora o recuperar fuerzas antes de partir.',[['Continuar al monasterio',enterMonastery],['Descansar con Elara',async()=>{await restCinema(false);if(state.place==='bosque')mirador();}],['Seguir explorando el bosque',()=>{}]]);
+  const options=[['Continuar al monasterio',enterMonastery],['Descansar con Elara',async()=>{await restCinema(false);if(state.place==='bosque')mirador();}],['Seguir explorando el bosque',()=>{}]];
+  if(state.flags.iriaJoined&&!state.flags.ensembleCamp)options.unshift(['Reunir al grupo',companionCampfire]);
+  say('El camino de la Vigilia','El sendero continúa hasta el patio del monasterio. Puedes avanzar ahora o recuperar fuerzas antes de partir.',options);
 }
 function enterMonastery(){
  if(state.place!=='bosque'||!state.flags.forest||battle||encounterBusy)return;
@@ -475,7 +500,8 @@ async function enemyAction(){if(!battle||modal())return;const s=battle.s;const t
 async function act(kind){if(!battle||modal()||performance.now()<moveAt)return;if(['attack','power','missile'].includes(kind)){await cinematicAction(kind==='missile'?'Proyectil mágico':'Ataque de '+battle.actor.name,false,o=>battle.act(kind,o),true,false,kind);return;}const names={attack:'Ataque',power:'Ataque poderoso',missile:'Proyectil mágico',potion:'Poción de curación',conduit:'Golpear el conducto'};if(!names[kind]){battle.act(kind);after();return;}stop();const result=await Dice.show({title:names[kind],combat:true,detail:'Confirma la acción para tirar. Puedes salir ahora sin gastar tu acción ni recursos.',optional:true,resolve:()=>{battle.rolls.length=0;battle.events.length=0;battle.act(kind);save();return {dice:battle.rolls.splice(0),summary:battle.events.splice(0).join('\n')};}});if(result)after();}
 function after(){renderBattle();save();autoAt=performance.now()+2800;const last=battle?.s.history.at(-1);if(last)toast(last);showCombatRolls();}
 const battleLoot={whisper:5,echo:7,sentinel:10,custodian:15,ash:20,coro:30};
-function awardBattleLoot(s){const amount=battleLoot[s.kind]||3;state.gold+=amount;const text=`Botín del encuentro: +${amount} ${CURRENCY}.`;state.log.push(text);state.log=state.log.slice(-100);return text;}
+ function awardBattleLoot(s){const amount=battleLoot[s.kind]||3;state.gold+=amount;const text=`Botín del encuentro: +${amount} ${CURRENCY}.`;state.log.push(text);state.log=state.log.slice(-100);return text;}
+ function knownAllies(){const roster=[['Elara','Guardia de Valdara · compañera de ruta',true,'Acompaña al protagonista y protege a los testigos.'],['Ordan','Campanero · guía del Umbral',state.flags.ordanMet||state.flags.workshop||state.flags.mountainStarted,'Reconstruye el mecanismo y asume su responsabilidad.'],['Iria','Guardabosques · guía de los senderos',state.flags.iriaMet,'Conoce las rutas del bosque y puede unirse al cruce.'],['Darien','Archivista · voz de los cautivos',state.flags.darienMet,'Mantiene unidos a los cautivos y conserva la prueba escrita.'],['Liora','Sanadora de la Vigilia',state.flags.lioraMet||state.flags.captivesFreed,'Acompaña la evacuación y cuida a quienes regresan.'],['Tovin','Barquero del embarcadero',state.flags.tovinMet||state.flags.dockVisited,'Conoce las entregas de la Orden y abastece al grupo.'],['Maela','Testigo y organizadora de Valdara',state.flags.maelaMet||state.flags.branchDone,'Protege los nombres en la plaza y guarda copias del registro.']].filter(x=>x[2]);return `<section class="ally-roster"><h3>Círculo de aliados</h3><p class="muted">La historia se abre según a quién escuchas y quién decide caminar contigo.</p>${roster.map(([name,role,,detail])=>`<article><b>${esc(name)}</b><small>${esc(role)}</small><p>${esc(detail)}</p></article>`).join('')}</section>`;}
 function loseBattleMoney(){if(state.gold<=0)return 0;const amount=Math.min(state.gold,Math.max(1,Math.ceil(state.gold*.25)));state.gold-=amount;state.log.push(`Derrota: pierdes ${amount} ${CURRENCY} en el regreso.`);state.log=state.log.slice(-100);return amount;}
 async function finishBattle(){if(!battle?.s.result)return;const s=battle.s;state.log.push(...s.history);state.log=state.log.slice(-100);
  if(s.result==='defeat'){const checkpoint=state.checkpoint;state=checkpoint&&R.valid(checkpoint)?checkpoint:R.fresh();const lost=loseBattleMoney();battle=null;state.combat=null;heroProfile=window.CenizasEquipment.profile(R,character,state);$('battle').hidden=true;document.body.classList.remove('fighting');scene.enter();save();hud();toast(lost?`Regresas al inicio del encuentro. Pierdes ${lost} ${CURRENCY}.`:'Regresas al inicio del encuentro.');return;}

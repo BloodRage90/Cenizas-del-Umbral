@@ -48,7 +48,11 @@ class Battle{
  else if(kind==='armor'){if(a.class!=='Mago'||this.s.spells<1||this.s.spellArmor)return false;this.s.spells--;a.ac+=4;a.flat+=4;this.s.spellArmor=true;this.log('Armadura de mago: +4 CA durante este encuentro.');}
  else if(kind==='potion'){if(!this.s.potions||a.hp===a.max)return false;const d=this.die(8)+1,healed=Math.min(d,a.max-a.hp);a.hp+=healed;this.s.potions--;this.log(`${a.name} bebe una poción: 1d8+1 = ${d}; recupera ${healed} PG.`);}
  else if(kind==='guard'){a.guard=true;this.log(`${a.name} adopta defensa total: +4 CA hasta su siguiente turno.`);}
- else if(kind==='mechanism'){if(this.s.kind==='echo'){this.s.valve=true;e.hp=0;this.log('La válvula queda cerrada. El eco se disipa.');}
+  else if(kind==='mechanism'){
+  const needsContact=['echo','whisper','custodian'].includes(this.s.kind);
+  const contactTarget=this.s.kind==='custodian'?{x:this.s.wheels.includes(0)?6:0,y:1}:e;
+  if(needsContact&&distance(a,contactTarget)>1)return this.fail('Debes acercarte al mecanismo antes de activarlo.');
+  if(this.s.kind==='echo'){this.s.valve=true;e.hp=0;this.log('La válvula queda cerrada. El eco se disipa.');}
  else if(this.s.kind==='whisper'){e.hp=0;this.log('Aíslas el foco con el paño. El eco se deshace.');}
  else if(this.s.kind==='ash'){const i=[0,1].find(j=>!this.s.wheels.includes(j));if(i===undefined)return this.fail('Los dos soportes ya están apagados.');this.s.wheels.push(i);e.attack=8-this.s.wheels.length;this.log('Soporte apagado. El martillo pierde fuerza.');if(this.s.wheels.length===2){this.s.cancelNext=true;this.s.exposed=true;this.log('Ambos soportes apagados. La palanca central queda libre.');}}
  else if(this.s.kind==='custodian'){const i=[0,1].find(j=>!this.s.wheels.includes(j));if(i===undefined)return this.fail('Las dos ruedas ya están cerradas.');this.s.wheels.push(i);this.log(`Rueda ${i+1} cerrada (${this.s.wheels.length}/2).`);if(this.s.wheels.length===2){e.hp=0;this.log('Ambas ruedas cerradas: el Custodio se apaga.');}}
