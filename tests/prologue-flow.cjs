@@ -8,6 +8,7 @@ els.set('menu-video-slot',element('menu-video-slot'));els.set('intro-copy',eleme
 const intro=els.get('intro-cinema');intro.hidden=true;intro.setAttribute=(_name,value)=>{intro.ariaHidden=value};
 const video=els.get('intro-video');video.currentTime=0;video.load=()=>{video.loaded=true};video.pause=()=>{video.paused=true};video.play=()=>{video.played=true;return Promise.resolve()};
 const film=element('intro-film');film.classList={add(){},remove(){}};
+const fallback=element('intro-fallback');film.querySelector=selector=>selector==='.intro-fallback'?fallback:null;
 const copy=els.get('intro-copy');
 let starts=0;
 const context={
@@ -24,7 +25,11 @@ assert.equal(intro.dataset.stage,'video','la primera pantalla es el vídeo pixel
 assert.equal(video.played,true,'el vídeo se inicia al entrar al prólogo');
 assert.match(copy.innerHTML,/PRÓLOGO CINEMÁTICO/);
 assert.equal(starts,0,'el creador no se abre antes de terminar el prólogo');
+video.onloadeddata();
+assert.equal(fallback.style.opacity,'0','el respaldo queda oculto cuando hay un fotograma cargado');
+assert.equal(fallback.style.pointerEvents,'none','el respaldo no intercepta el vídeo cargado');
 els.get('skip-intro').onclick();
 assert.equal(intro.hidden,true,'Continuar cierra el prólogo');
 assert.equal(starts,1,'Continuar abre el creador de personaje una sola vez');
+assert.equal(fallback.style.opacity,'','el respaldo se restablece al cerrar el prólogo');
 console.log('PASS: Juego nuevo muestra el prólogo y solo después inicia la creación del personaje.');
