@@ -198,3 +198,35 @@
 .preview-character-stage.pixel-combat.orco .preview-player-sprite.pixel-sprite{filter:drop-shadow(0 9px 6px #000d) saturate(.86) sepia(.14) hue-rotate(23deg) brightness(.98)}
 .preview-character-stage.pixel-combat.semiorco .preview-player-sprite.pixel-sprite{filter:drop-shadow(0 9px 6px #000d) saturate(.9) sepia(.1) hue-rotate(18deg) brightness(1)}
 .preview-character-stage.pixel-combat .preview-race-feature.orco::after,.preview-character-stage.pixel-combat .preview-race-feature.semiorco::after{left:44%;top:27%;width:12%;height:11%;background:linear-gradient(125deg,transparent 0 28%,#f8e7b9 29% 45%,transparent 46% 55%,#f8e7b9 56% 72%,transparent 73%);filter:drop-shadow(0 0 2px #fff0bd);opacity:.9}
+
+/* Final identity pass: one coherent frame, class sprite + unmistakable race silhouette. */
+.character-visual-preview .preview-character-stage.pixel-combat::after{display:none}
+.character-visual-preview .preview-character-stage.pixel-combat .preview-player-sprite.pixel-sprite{background-image:var(--identity-sprite);background-size:200% 200%;background-position:0 0;image-rendering:auto;animation:pixelBattleCycle 3.4s steps(1,end) infinite}
+.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature{display:block;z-index:5}
+.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature::before,.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature::after{display:block}
+
+/* Elves: long ears are attached to the head, not floating triangles. */
+.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature.elfo::before,.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature.semielfo::before{left:22%;top:17%;width:25%;height:13%;background:#dca47f;clip-path:polygon(100% 50%,0 10%,22% 50%,0 90%);filter:drop-shadow(0 1px 1px #251a18)}
+.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature.elfo::after,.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature.semielfo::after{left:53%;top:17%;width:25%;height:13%;background:#dca47f;clip-path:polygon(0 50%,100% 10%,78% 50%,100% 90%);filter:drop-shadow(0 1px 1px #251a18)}
+.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature.semielfo::before,.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature.semielfo::after{background:#d2a078;opacity:.86}
+
+/* Orc lineage: olive palette, heavier shoulders and visible tusks. */
+.character-visual-preview .preview-character-stage.pixel-combat.orco .preview-player-sprite.pixel-sprite{--pixel-identity-scale:1.52;filter:drop-shadow(0 9px 6px #000d) saturate(.68) sepia(.34) hue-rotate(30deg) brightness(.92)}
+.character-visual-preview .preview-character-stage.pixel-combat.semiorco .preview-player-sprite.pixel-sprite{--pixel-identity-scale:1.47;filter:drop-shadow(0 9px 6px #000d) saturate(.78) sepia(.23) hue-rotate(27deg) brightness(.95)}
+.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature.orco::before,.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature.semiorco::before{left:22%;top:12%;width:56%;height:34%;background:transparent;clip-path:none;filter:none;box-shadow:-10px 27px 0 -4px #6e8548,10px 27px 0 -4px #6e8548}
+.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature.orco::after,.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature.semiorco::after{left:39%;top:29%;width:22%;height:12%;background:linear-gradient(120deg,transparent 0 22%,#f7e3b1 23% 40%,transparent 41% 59%,#f7e3b1 60% 77%,transparent 78%);clip-path:polygon(0 0,45% 100%,50% 35%,55% 100%,100% 0);filter:drop-shadow(0 1px 1px #241a16)}
+
+/* Dwarf, gnome and halfling proportions are deliberately strong at this size. */
+.character-visual-preview .preview-character-stage.pixel-combat.enano .preview-player-sprite.pixel-sprite{--pixel-identity-scale:1.16;filter:drop-shadow(0 9px 6px #000d) saturate(.88) sepia(.12) hue-rotate(-5deg)}
+.character-visual-preview .preview-character-stage.pixel-combat.gnomo .preview-player-sprite.pixel-sprite{--pixel-identity-scale:1.08;filter:drop-shadow(0 9px 6px #000d) saturate(.96) hue-rotate(-6deg)}
+.character-visual-preview .preview-character-stage.pixel-combat.mediano .preview-player-sprite.pixel-sprite{--pixel-identity-scale:1.02;filter:drop-shadow(0 9px 6px #000d) saturate(1.05) hue-rotate(-3deg)}
+.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature.enano::before{left:31%;top:24%;width:38%;height:32%;background:linear-gradient(90deg,#38251f,#a26b46 48%,#38251f);clip-path:polygon(10% 0,90% 0,100% 42%,76% 100%,50% 80%,24% 100%,0 42%);filter:drop-shadow(0 1px 1px #000)}
+.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature.enano::after{left:23%;top:22%;width:16%;height:30%;border-left:5px solid #8d5b3f;border-radius:50%;transform:rotate(-12deg);box-shadow:58px 0 0 -1px #8d5b3f}
+.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature.gnomo::before{left:30%;top:4%;width:40%;height:23%;background:linear-gradient(145deg,#b36b50,#e2b86c 58%,#664037);clip-path:polygon(50% 0,100% 88%,75% 100%,25% 100%,0 88%);filter:drop-shadow(0 2px 1px #000)}
+.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature.gnomo::after{left:42%;top:24%;width:16%;height:12%;border-radius:50%;background:#d29a74;box-shadow:0 0 0 2px #3e2922}
+.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature.mediano::before{left:32%;top:16%;width:36%;height:17%;background:#7b4d37;clip-path:polygon(0 55%,14% 14%,34% 44%,52% 0,72% 44%,100% 14%,100% 72%,0 72%);filter:drop-shadow(0 1px 1px #000)}
+.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature.mediano::after{left:37%;top:29%;width:26%;height:8%;border-radius:50%;background:#d8a37d;box-shadow:0 0 0 2px #402b21}
+
+/* Keep the animation inside the card and leave only one border around the scene. */
+.character-visual-preview .preview-character-stage.pixel-combat{overflow:visible;filter:drop-shadow(0 10px 8px #000c)}
+.character-visual-preview .preview-character-stage.pixel-combat .preview-player-sprite.pixel-sprite{transform:scale(var(--pixel-identity-scale,1.34));transform-origin:50% 94%}

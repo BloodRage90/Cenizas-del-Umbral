@@ -172,6 +172,9 @@ for (const required of ['data-race', 'data-gender', 'v.raceClass', 'v.genderClas
   if (!app.includes(required)) fail(`La identidad visual no conserva ${required}.`);
 }
 for (const race of races.slice(1)) if (!css.includes(`.preview-character-stage.pixel-combat.${token(race)}`)) fail(`Falta la capa visual de raza ${race} en dist/style.css.`);
+for (const marker of ['background-image:var(--identity-sprite)', 'animation:pixelBattleCycle', 'preview-race-feature.elfo::before', 'preview-race-feature.enano::before', 'preview-race-feature.orco::after', 'preview-race-feature.gnomo::before', 'preview-race-feature.mediano::before']) {
+  if (!css.includes(marker)) fail(`Falta el tratamiento visual verificable: ${marker}.`);
+}
 const genderTokens = Object.fromEntries((genderData || []).map(entry => [entry[0], entry[1]]));
 for (const gender of genders) if (!css.includes(`.preview-character-stage.${genderTokens[gender] || token(gender)}`)) fail(`Falta la capa visual de género ${gender} en dist/style.css.`);
 for (const names of Object.values(subclasses)) for (const name of names) {
