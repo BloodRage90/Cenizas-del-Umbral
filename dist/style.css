@@ -230,3 +230,11 @@
 /* Keep the animation inside the card and leave only one border around the scene. */
 .character-visual-preview .preview-character-stage.pixel-combat{overflow:visible;filter:drop-shadow(0 10px 8px #000c)}
 .character-visual-preview .preview-character-stage.pixel-combat .preview-player-sprite.pixel-sprite{transform:scale(var(--pixel-identity-scale,1.34));transform-origin:50% 94%}
+
+/* Use the real race portrait as the face plate; this keeps the pixel body and makes race changes obvious. */
+.character-visual-preview .preview-character-stage.pixel-combat .preview-player-portrait{display:block;left:39%;top:14%;width:42%;height:36%;z-index:6;border:1px solid #f4dfaa66;border-radius:48% 48% 43% 43%;background-size:172% auto;background-position:50% 9%;background-repeat:no-repeat;transform:none;opacity:.98;clip-path:ellipse(46% 48% at 50% 47%);filter:saturate(1.08) contrast(1.05) drop-shadow(0 2px 2px #000b);box-shadow:0 0 0 2px #07120f88,0 0 12px color-mix(in srgb,var(--accent),transparent 55%)}
+.character-visual-preview .preview-character-stage.pixel-combat .preview-player-portrait::after{display:none}
+.character-visual-preview .preview-character-stage.pixel-combat.enano .preview-player-portrait{left:40%;top:15%;width:40%;height:38%;background-size:180% auto}
+.character-visual-preview .preview-character-stage.pixel-combat.gnomo .preview-player-portrait,.character-visual-preview .preview-character-stage.pixel-combat.mediano .preview-player-portrait{left:42%;top:17%;width:35%;height:33%;background-size:185% auto}
+.character-visual-preview .preview-character-stage.pixel-combat.orco .preview-player-portrait,.character-visual-preview .preview-character-stage.pixel-combat.semiorco .preview-player-portrait{left:38%;top:14%;width:44%;height:38%;background-size:170% auto;filter:saturate(.96) contrast(1.1) drop-shadow(0 2px 2px #000b)}
+.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature::before,.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature::after{display:none}
