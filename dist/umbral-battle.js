@@ -31,37 +31,28 @@ class UmbralBattle extends R.Battle{
    return super.act(kind,options);
   }
   if(kind==='mechanism'){
-   const c=['left','right'].map(id=>this.unit(id)).find(u=>u.hp>0&&R.distance(a,u)<=1);
-   if(!c)return this.fail('Acércate a un conductor encendido.');c.hp=0;this.log(c.name+' apagado; su armadura pierde energía.');
+   const c=['left','right'].map(id=>this.unit(id)).find(u=>u.hp>0);
+   if(!c)return this.fail('Los dos conductores ya están apagados.');c.hp=0;this.log(c.name+' apagado; su armadura pierde energía.');
   }else if(kind==='names'){
    if(this.powered)return this.fail('Apaga los dos conductores antes de abrir el registro.');
-   if(this.s.names>=2||R.distance(a,{x:3,y:2})>1)return this.fail('Acércate al atril (fila 3, columna 4).');
+   if(this.s.names>=2)return this.fail('Los nombres ya fueron liberados.');
    this.s.names++;this.log(`Nombres liberados: ${this.s.names}/2.`);
    if(this.s.names===2){this.s.exposed=true;this.s.pulseQueue.push('final');this.log('El ancla queda expuesta. La descarga final se anunciará antes de golpear.');}
   }else if(kind==='rescue'){
-   if(this.powered||this.s.serethRescued||R.distance(a,{x:5,y:3})>1)return this.fail('Apaga los conductores y acércate a la palanca de Sereth (fila 4, columna 6).');
+   if(this.powered||this.s.serethRescued)return this.fail('Apaga los conductores antes de rescatar a Sereth.');
    this.s.serethRescued=true;this.s.pulseQueue.unshift('emergency');this.log('Liberas a Sereth. La descarga de emergencia se anunciará un turno antes.');
   }else if(kind==='fracture'){
-   if(this.s.names<2||R.distance(a,this.unit('enemy'))>1)return this.fail('Libera los nombres y acércate a la piedra ancla.');
+   if(this.s.names<2)return this.fail('Libera los nombres antes de fracturar el ancla.');
    this.s.fracture++;this.log(`Abrazadera del ancla: ${this.s.fracture}/2 acciones.`);if(this.s.fracture>=2)this.unit('enemy').hp=0;
   }else return super.act(kind,options);
   this.s.action=false;this.check();return true;
  }
- enemyTurn(options={}){
-  if(this.s.result||this.actor.team!=='enemy')return;
-  this.reaction=options.defense||null;this.s.envTurns++;
-  let party=this.s.units.filter(u=>u.team==='party'&&u.hp>0);
-  const w=this.s.warning;
-  if(w&&!this.s.opening)for(const t of party){if(t.y!==w.y)continue;const d=this.die(),raw=this.die(4)+this.die(4),ok=d===20||(d!==1&&d+t.ref>=14),dmg=this.mitigate(t,ok?(t.class==='Pícaro'?0:Math.floor(raw/2)):raw);t.hp=Math.max(0,t.hp-dmg);this.log(`${t.name}: Reflejos ${d}+${t.ref} CD 14; descarga ${dmg} PG.`);}
+ enemyTurn(){
+  if(this.s.result||this.actor.team!=='enemy')return;this.s.envTurns++;let party=this.s.units.filter(u=>u.team==='party'&&u.hp>0);
+  if(this.s.warning&&!this.s.opening&&party[0]){const d=this.die(),raw=this.die(4)+this.die(4),t=party[0],ok=d===20||(d!==1&&d+t.ref>=14),damage=ok?(t.class==='Pícaro'?0:Math.floor(raw/2)):raw;t.hp=Math.max(0,t.hp-damage);this.log(`${t.name}: Reflejos ${d}+${t.ref} CD 14; descarga ${damage} PG.`);}
   this.s.warning=null;this.s.opening=false;
-  for(const id of ['armorL','armorR']){
-   const arm=this.unit(id);if(arm.hp<=0||(id==='armorR'&&this.s.envTurns<2))continue;
-   party=this.s.units.filter(u=>u.team==='party'&&u.hp>0);if(!party.length)break;
-   if(arm.warning){for(const t of party)if(t.x===arm.warning.x&&t.y===arm.warning.y)this.hit(arm,t);delete arm.warning;}
-   else{const t=party.sort((a,b)=>R.distance(arm,a)-R.distance(arm,b))[0];for(let n=0;n<4&&R.distance(arm,t)>1;n++){const steps=[[1,0],[-1,0],[0,1],[0,-1]].map(([dx,dy])=>({x:arm.x+dx,y:arm.y+dy})).filter(p=>p.x>=0&&p.x<7&&p.y>=0&&p.y<5&&!this.occupied(p.x,p.y)).sort((a,b)=>R.distance(a,t)-R.distance(b,t));if(!steps.length||R.distance(steps[0],t)>=R.distance(arm,t))break;Object.assign(arm,steps[0]);}if(R.distance(arm,t)===1){arm.warning={x:t.x,y:t.y};this.log(arm.name+' levanta el arma: abandona la casilla roja antes del siguiente turno.');}}
-  }
-  const pulse=this.s.pulseQueue.shift();
-  if(pulse||this.powered){this.s.warning={type:'pulse',y:this.s.envTurns%2?1:3,regular:!pulse};this.log(`Descarga ${pulse==='emergency'?'de emergencia':pulse==='final'?'final':''} anunciada para la fila ${this.s.warning.y+1}. Tienes un turno completo para salir.`);}
+  for(const id of ['armorL','armorR']){const arm=this.unit(id);if(arm.hp<=0||(id==='armorR'&&this.s.envTurns<2)||!party.length)continue;if(arm.warning){const t=party[0];this.hit(arm,t);delete arm.warning;}else{arm.warning={armed:true};this.log(arm.name+' prepara un golpe anunciado.');}}
+  const pulse=this.s.pulseQueue.shift();if(pulse||this.powered){this.s.warning={type:'pulse',regular:!pulse};this.log(`Descarga ${pulse==='emergency'?'de emergencia':pulse==='final'?'final':''} anunciada para el próximo turno.`);}
   this.reaction=null;this.check();if(!this.s.result)this.end();
  }
  autoPlan(){

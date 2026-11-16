@@ -3,3 +3,238 @@
 
 .line>b{max-width:58%;text-align:right;overflow-wrap:anywhere}.line>span{min-width:0}.portrait-caption h1{max-width:100%}
 @media(max-width:720px){header{height:auto;min-height:70px;flex-wrap:wrap;padding-top:10px;padding-bottom:10px;gap:8px}header .brand{flex:1 1 100%}#back-to-map{margin-right:auto}header .quiet{margin-left:0}}
+
+/* Character identity: class, subclass and gender now have a visible signature. */
+.archetype-builder{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:18px;align-items:center;margin:28px 0 18px;padding:18px;border:1px solid var(--line);background:linear-gradient(135deg,#20291e,#171d18);border-radius:4px}.builder-copy h2{margin:7px 0 8px}.character-visual-preview{--accent:#d9b56c;position:relative;display:grid;place-items:center;min-height:220px;overflow:hidden;border:1px solid color-mix(in srgb,var(--accent),#fff 20%);border-radius:14px;background:radial-gradient(circle at 50% 35%,color-mix(in srgb,var(--accent),transparent 72%),transparent 48%),linear-gradient(155deg,#253629,#0c1411 72%);box-shadow:inset 0 1px #fff2,0 12px 30px #0007}.character-visual-preview .visual-halo{position:absolute;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--accent),transparent 45%),transparent 70%);filter:blur(5px);opacity:.8}.character-visual-preview .visual-sigil{position:absolute;top:18px;color:var(--accent);font:38px Georgia;text-shadow:0 0 18px var(--accent)}.character-visual-preview .visual-figure{position:relative;width:84px;height:126px;margin-top:18px;filter:drop-shadow(0 11px 7px #000b)}.character-visual-preview .visual-figure i{position:absolute;left:27px;top:4px;width:31px;height:31px;border-radius:50%;background:#dfb388;border:2px solid #35271e;z-index:2}.character-visual-preview .visual-figure b{position:absolute;left:12px;top:28px;width:60px;height:91px;border-radius:23px 23px 12px 12px;background:linear-gradient(90deg,color-mix(in srgb,var(--accent),#101912 35%),color-mix(in srgb,var(--accent),#fff 18%),color-mix(in srgb,var(--accent),#101912 50%));border:2px solid #3e3325}.character-visual-preview.guardian .visual-figure b{border-radius:18px 18px 8px 8px;box-shadow:inset 13px 0 #ffffff18,inset -12px 0 #0005}.character-visual-preview.berserker .visual-figure b{transform:skew(-5deg);border-radius:18px 25px 8px 8px}.character-visual-preview.shadow .visual-figure b{background:linear-gradient(90deg,#132b2a,#274b43,#10211f);border-radius:27px 27px 9px 9px}.character-visual-preview.scout .visual-figure b{border-radius:25px 14px 10px 10px}.character-visual-preview.arcane .visual-figure b{height:103px;border-radius:30px 30px 5px 5px;clip-path:polygon(50% 0,100% 22%,84% 100%,16% 100%,0 22%)}.character-visual-preview.ash-weaver .visual-figure b{height:103px;border-radius:32px 32px 6px 6px;clip-path:polygon(50% 0,100% 32%,78% 100%,22% 100%,0 32%)}.character-visual-preview.woman .visual-figure i{box-shadow:8px 4px 0 -2px #332319}.character-visual-preview.man .visual-figure i{box-shadow:0 -5px 0 -1px #3d2b21}.character-visual-preview.nonbinary .visual-figure i{box-shadow:0 0 0 4px color-mix(in srgb,var(--accent),transparent 45%)}.character-visual-preview strong,.character-visual-preview small{position:absolute;bottom:27px;left:8px;right:8px;text-align:center;color:#f4ead3;font-size:13px}.character-visual-preview small{bottom:9px;color:var(--accent);font-size:11px}.subclass-grid,.gender-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:10px 0 17px}.gender-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.subclass-card,.gender-card{position:relative;text-align:left;padding:13px;border:1px solid var(--line);background:#191f19;border-radius:4px}.subclass-card>span,.gender-card>span{display:block;color:var(--accent,var(--gold));font:24px Georgia}.subclass-card strong,.gender-card strong{display:block;color:var(--text);margin-top:4px}.subclass-card small{display:block;color:var(--muted);font-size:11px;margin-top:4px}.subclass-card.selected,.gender-card.selected{border-color:var(--accent,var(--gold));box-shadow:inset 0 2px var(--accent,var(--gold)),0 6px 18px #0005;background:#252c22}.sheet-identity{display:flex;align-items:center;gap:18px;margin-bottom:8px}.sheet-identity .character-visual-preview{width:148px;min-height:148px;flex-shrink:0}.sheet-identity .character-visual-preview .visual-figure{transform:scale(.72);margin-top:8px}.sheet-identity .character-visual-preview .visual-sigil{top:7px;font-size:27px}.sheet-identity .character-visual-preview strong{bottom:17px;font-size:10px}.sheet-identity .character-visual-preview small{bottom:3px;font-size:9px}
+@media(max-width:720px){.archetype-builder{grid-template-columns:1fr}.character-visual-preview{min-height:190px}.gender-grid{grid-template-columns:1fr}.sheet-identity{align-items:flex-start}.sheet-identity .character-visual-preview{width:116px;min-height:130px}.sheet-identity .character-visual-preview .visual-figure{transform:scale(.58)}}
+
+/* Dynamic portrait mirrors race, class, subclass, gender and equipped campaign gear. */
+.portrait[data-portrait-mode="svg"]>img{display:none}.portrait-art{display:none}.portrait[data-portrait-mode="svg"] .portrait-art{display:block;height:650px;background:#0d120f}.portrait-art svg{display:block;width:100%;height:100%;filter:saturate(.92)}
+@media(max-width:720px){.portrait[data-portrait-mode="svg"]{height:190px}.portrait[data-portrait-mode="svg"] .portrait-art{height:320px}}
+
+/* Portraits: polished race-specific artwork replaces the temporary vector mannequin. */
+.portrait[data-portrait-mode="raster"]{background:#08130f}
+.portrait[data-portrait-mode="raster"]>img{display:none}
+.portrait[data-portrait-mode="raster"] .portrait-art{display:block;position:relative;height:650px;overflow:hidden;background:radial-gradient(circle at 50% 28%,#2b4a3a,#08130f 68%)}
+.portrait-raster-shell{position:relative;height:100%;overflow:hidden;isolation:isolate;background:#08130f}
+.portrait-raster-shell::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,transparent 35%,#07120fcc 78%,#07120ff5 100%),linear-gradient(90deg,#07120f66,transparent 25%,transparent 72%,#07120f55)}
+.portrait-raster-shell::after{content:"";position:absolute;inset:18px;z-index:2;pointer-events:none;border:1px solid color-mix(in srgb,var(--portrait-accent),#fff 8%);border-radius:12px;box-shadow:inset 0 0 42px #0007,0 0 0 1px #07120f99}
+.portrait-raster{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 19%;filter:saturate(1.05) contrast(1.04);transform:scale(1.015);transition:transform .45s ease,filter .45s ease}
+.portrait-raster-shell:hover .portrait-raster{transform:scale(1.035);filter:saturate(1.12) contrast(1.06)}
+.portrait-raster-mark{position:absolute;top:36px;right:38px;z-index:3;min-width:118px;padding:8px 12px;border:1px solid color-mix(in srgb,var(--portrait-accent),#fff 12%);border-radius:3px;background:#08130fc7;box-shadow:0 8px 22px #0008;backdrop-filter:blur(8px);text-align:right;color:#f1e7cb;text-shadow:0 2px 12px #000}
+.portrait-raster-mark span{display:block;color:var(--portrait-accent);font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:600}
+.portrait-raster-mark b{display:block;margin-top:3px;font:18px 'Cormorant Garamond',Georgia,serif;font-weight:600;white-space:nowrap}
+.portrait-raster-meta{position:absolute;left:auto;right:10%;bottom:25px;width:min(52%,230px);z-index:3;display:flex;flex-direction:column;align-items:flex-end;gap:2px;padding:12px 16px 11px;border-right:2px solid var(--portrait-accent);background:linear-gradient(270deg,#07120fe8,#07120fa8 72%,transparent);text-align:right;text-shadow:0 2px 12px #000;color:#e8e3d5;backdrop-filter:blur(4px)}
+.portrait-raster-meta strong{font:20px 'Cormorant Garamond',Georgia,serif;font-weight:600}
+.portrait-raster-meta span{font-size:11px;letter-spacing:1px;color:#c8caba;text-transform:uppercase}
+.portrait-raster-meta em{font-style:normal;font-size:10px;letter-spacing:1.5px;color:var(--portrait-accent);margin-top:3px}
+@media(max-width:720px){.portrait[data-portrait-mode="raster"]{height:190px}.portrait[data-portrait-mode="raster"] .portrait-art{height:320px}.portrait-raster-mark{top:18px;right:24px;min-width:0;padding:5px 8px}.portrait-raster-mark b{font-size:14px}.portrait-raster-meta{display:none}}
+
+/* Small character cards use the same artwork, so the sheet never falls back to a toy silhouette. */
+.character-visual-preview{overflow:hidden}
+.character-visual-preview .preview-raster-surface{position:absolute;inset:0;overflow:hidden;background:#0b1713}
+.preview-raster-surface::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,transparent 38%,#07120fc9 76%,#07120ff5 100%),linear-gradient(90deg,#07120f44,transparent 35%,#07120f55)}
+.preview-raster-surface::after{content:"";position:absolute;inset:9px;z-index:2;border:1px solid color-mix(in srgb,var(--accent),#fff 8%);border-radius:9px;box-shadow:inset 0 0 24px #0008;pointer-events:none}
+.preview-raster-surface .preview-raster-backdrop{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;object-position:50% 18%;filter:blur(7px) saturate(.82) brightness(.42);transform:scale(1.12);opacity:.82}
+.preview-raster-copy{position:absolute;left:10px;right:10px;bottom:10px;z-index:3;text-align:left;text-shadow:0 2px 8px #000}
+.preview-raster-copy strong{position:static;display:block;color:#f4ead3;font:14px 'Cormorant Garamond',Georgia,serif;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.preview-raster-copy small{position:static;display:block;margin-top:2px;color:var(--accent);font-size:9px;letter-spacing:.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sheet-identity .preview-raster-copy{left:7px;right:7px;bottom:7px}.sheet-identity .preview-raster-copy strong{font-size:10px}.sheet-identity .preview-raster-copy small{font-size:8px}
+.preview-character-stage{position:absolute;left:50%;bottom:32px;z-index:3;width:132px;height:158px;transform:translateX(-50%);filter:drop-shadow(0 10px 10px #000c);animation:characterRenderIdle 3.2s ease-in-out infinite;pointer-events:none}
+.preview-character-stage::before{content:"";position:absolute;left:14px;right:14px;bottom:-3px;height:18px;border-radius:50%;background:#020806c9;filter:blur(5px);animation:characterRenderShadow 3.2s ease-in-out infinite}
+.preview-character-stage::after{content:"";position:absolute;inset:2px;border:1px solid color-mix(in srgb,var(--accent),#fff 20%);border-radius:46% 46% 18px 18px;box-shadow:inset 0 0 18px #fff2,0 0 16px color-mix(in srgb,var(--accent),transparent 45%);mix-blend-mode:screen}
+.preview-character-render{position:absolute;inset:0;z-index:2;display:block;width:100%;height:100%;object-fit:contain;object-position:50% 100%;border:0;border-radius:0;clip-path:none;filter:drop-shadow(0 5px 4px #000b) saturate(1.06) contrast(1.04)}
+.preview-player-sprite{position:absolute;inset:3px 5px 0;z-index:2;background:url('hero-walk-v2.png') 0 66.667%/400% 400% no-repeat;filter:drop-shadow(0 7px 5px #000c) saturate(1.05);animation:playerSpriteIdle 1.1s steps(4,end) infinite}.preview-player-sprite.vigilia{background-image:url('hero-vigilia.png')}
+.preview-player-weapon{position:absolute;right:12px;top:63px;z-index:4;width:5px;height:44px;border-radius:4px;background:linear-gradient(#fff4c7 0 18%,var(--accent) 19% 82%,#4a3024 83%);box-shadow:0 0 8px color-mix(in srgb,var(--accent),transparent 25%);transform:rotate(-30deg);transform-origin:50% 88%;animation:playerWeaponAttack 2.8s ease-in-out infinite}.preview-player-weapon::before{content:"";position:absolute;left:-7px;bottom:5px;width:19px;height:4px;border-radius:4px;background:#9d6a3e;box-shadow:0 0 0 1px #241b18}.preview-player-weapon.shadow,.preview-player-weapon.scout{height:31px;top:71px;right:10px;transform:rotate(-52deg)}.preview-player-weapon.shadow::after,.preview-player-weapon.scout::after{content:"";position:absolute;right:-4px;top:-7px;width:17px;height:17px;border-top:2px solid #d9f1d5;border-right:2px solid #d9f1d5;transform:rotate(45deg)}.preview-player-weapon.arcane,.preview-player-weapon.ash-weaver{height:53px;top:49px;right:9px;width:4px;transform:rotate(8deg);background:linear-gradient(#fff7d0,var(--accent) 35% 85%,#5b3b2b)}.preview-player-weapon.arcane::after,.preview-player-weapon.ash-weaver::after{content:"";position:absolute;left:-7px;top:-8px;width:17px;height:17px;border-radius:50%;background:var(--accent);box-shadow:0 0 14px var(--accent)}
+.preview-attack-flash{position:absolute;right:-1px;top:55px;z-index:3;width:45px;height:58px;border:3px solid color-mix(in srgb,var(--accent),#fff 25%);border-left-color:transparent;border-bottom-color:transparent;border-radius:50%;opacity:0;transform:rotate(28deg) scale(.6);animation:playerAttackFlash 2.8s ease-in-out infinite;filter:drop-shadow(0 0 7px var(--accent))}.preview-attack-flash.shadow,.preview-attack-flash.scout{width:31px;height:42px;right:3px;top:67px;border-width:2px}.preview-attack-flash.arcane,.preview-attack-flash.ash-weaver{border-color:color-mix(in srgb,var(--accent),#fff 18%);border-left-color:transparent;border-bottom-color:transparent}
+.preview-character-aura{position:absolute;left:-16px;right:-16px;top:8px;bottom:10px;z-index:1;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--accent),transparent 48%),transparent 70%);filter:blur(7px);opacity:.78;animation:characterRenderAura 3.2s ease-in-out infinite}
+.preview-character-equip{display:none;position:absolute;right:-7px;bottom:24px;z-index:4;width:7px;height:54px;border-radius:4px;background:var(--accent);box-shadow:0 0 10px var(--accent);transform:rotate(-16deg);transform-origin:bottom center}
+.preview-character-stage.guardian .preview-character-equip{height:34px;width:28px;right:-1px;bottom:34px;border:2px solid #f4dfaa;border-radius:4px;background:linear-gradient(135deg,#d9b56c,#765339);transform:rotate(6deg)}.preview-character-stage.berserker .preview-character-equip{height:62px;background:#e47f5f;transform:rotate(-36deg)}.preview-character-stage.shadow .preview-character-equip{height:46px;background:#8fc8b1;box-shadow:0 0 9px #8fc8b1}.preview-character-stage.scout .preview-character-equip{height:46px;background:#c7d98c;transform:rotate(-30deg)}.preview-character-stage.arcane .preview-character-equip,.preview-character-stage.ash-weaver .preview-character-equip{height:62px;background:#b9aaf4;box-shadow:0 0 11px #b9aaf4;transform:rotate(5deg)}.preview-character-stage.cape .preview-character-render{filter:drop-shadow(0 5px 4px #000b) drop-shadow(0 0 9px #f1cf7e)}.preview-character-stage.woman .preview-character-render,.preview-character-stage.man .preview-character-render,.preview-character-stage.nonbinary .preview-character-render{object-position:50% 100%}.preview-character-stage.nonbinary .preview-character-render{filter:drop-shadow(0 5px 4px #000b) saturate(1.08) contrast(1.05) hue-rotate(-4deg)}
+.preview-character-kicker{position:absolute;top:12px;left:12px;z-index:4;color:var(--accent);font-size:9px;letter-spacing:1.7px;text-shadow:0 2px 8px #000;background:#07120fa6;padding:3px 5px;border-left:2px solid var(--accent)}
+@keyframes characterRenderIdle{0%,100%{transform:translate(-50%,0) rotate(-.5deg)}50%{transform:translate(-50%,-5px) rotate(.5deg)}}@keyframes characterRenderShadow{0%,100%{transform:scaleX(1);opacity:.7}50%{transform:scaleX(.78);opacity:.42}}@keyframes characterRenderAura{0%,100%{transform:scale(.94);opacity:.6}50%{transform:scale(1.04);opacity:.9}}@keyframes playerSpriteIdle{0%{background-position:0 66.667%}100%{background-position:100% 66.667%}}@keyframes playerWeaponAttack{0%,52%,100%{transform:rotate(-30deg) translate(0,0)}60%{transform:rotate(-72deg) translate(8px,-3px)}68%{transform:rotate(-40deg) translate(1px,0)}}@keyframes playerAttackFlash{0%,52%,100%{opacity:0;transform:rotate(28deg) scale(.6)}59%{opacity:.05;transform:rotate(14deg) scale(.82)}64%{opacity:.95;transform:rotate(-8deg) scale(1.1)}72%{opacity:0;transform:rotate(-30deg) scale(1.24)}}
+@media(prefers-reduced-motion:reduce){.preview-character-stage,.preview-character-stage::before,.preview-character-aura,.preview-player-sprite,.preview-player-weapon,.preview-attack-flash{animation:none}}
+.sheet-identity .preview-character-stage{bottom:24px;width:94px;height:112px}.sheet-identity .preview-character-kicker{top:8px;left:7px;font-size:7px;letter-spacing:1px}.sheet-identity .preview-raster-copy{bottom:4px}
+
+/* Races add a second silhouette layer to the class/subclass identity. */
+.character-visual-preview.orco .visual-figure{transform:scale(1.08)}.character-visual-preview.orco .visual-figure i{box-shadow:0 0 0 3px #6e4a32}.character-visual-preview.orco .visual-figure b{border-radius:18px 18px 8px 8px}.character-visual-preview.enano .visual-figure{transform:scale(.82,.9);transform-origin:50% 94%}.character-visual-preview.gnomo .visual-figure{transform:scale(.76,.84);transform-origin:50% 94%}.character-visual-preview.mediano .visual-figure{transform:scale(.7,.76);transform-origin:50% 94%}.character-visual-preview.elfo .visual-figure i,.character-visual-preview.semielfo .visual-figure i{box-shadow:10px 2px 0 -1px #d8ae82,-10px 2px 0 -1px #d8ae82}.character-visual-preview.semiorco .visual-figure{transform:scale(1.03)}.character-visual-preview.semiorco .visual-figure i{box-shadow:0 0 0 2px #69452f}.character-visual-preview.orco .visual-sigil,.character-visual-preview.semiorco .visual-sigil{filter:saturate(1.3);text-shadow:0 0 20px #e47f5f}
+.preview-raster-surface{background:radial-gradient(circle at 61% 42%,color-mix(in srgb,var(--accent),transparent 72%),transparent 36%),linear-gradient(145deg,#1b3029,#07120f 78%)}
+.preview-raster-surface::before{background:linear-gradient(180deg,transparent 31%,#07120fa8 70%,#07120ff2 100%),linear-gradient(90deg,#07120f88,transparent 42%,#07120f33)}
+.preview-raster-surface .preview-raster-backdrop{opacity:.22;filter:blur(2px) saturate(.78) brightness(.38);transform:scale(1.04);object-position:50% 16%}
+.preview-identity-stamp{position:absolute;left:10px;top:38px;z-index:5;width:46px;height:62px;overflow:hidden;border:1px solid color-mix(in srgb,var(--accent),#fff 12%);border-radius:7px;background:#07120fcc;box-shadow:0 5px 16px #0008,0 0 12px color-mix(in srgb,var(--accent),transparent 65%)}
+.preview-identity-stamp img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 16%;filter:saturate(1.1) contrast(1.05)}
+.preview-identity-stamp span{position:absolute;left:2px;right:2px;bottom:2px;overflow:hidden;color:#f4ead3;font-size:6px;line-height:1.1;letter-spacing:.25px;text-align:center;text-shadow:0 1px 4px #000;white-space:nowrap;text-overflow:ellipsis}
+.preview-character-stage{left:58%;bottom:28px;width:154px;height:178px}
+.preview-character-stage::after{inset:1px;border-radius:42% 42% 15px 15px;opacity:.55}
+.preview-player-sprite{inset:3px 5px 0;background-image:url('hero-sprites.png');background-position:0 66.667%;background-size:400% 400%;animation:playerSpriteIdle 1.1s steps(4,end) infinite,playerSpriteStride 2.8s ease-in-out infinite}
+.preview-player-sprite.vigilia{background-image:url('hero-vigilia.png')}
+.preview-player-sprite.woman{background-image:url('elara-walk.png')}
+.preview-character-stage.orco .preview-player-sprite,.preview-character-stage.semiorco .preview-player-sprite{filter:drop-shadow(0 7px 5px #000c) saturate(.72) sepia(.18) hue-rotate(32deg);transform:scale(1.07)}
+.preview-character-stage.elfo .preview-player-sprite,.preview-character-stage.semielfo .preview-player-sprite{filter:drop-shadow(0 7px 5px #000c) saturate(1.12) hue-rotate(8deg)}
+.preview-character-stage.enano .preview-player-sprite,.preview-character-stage.gnomo .preview-player-sprite,.preview-character-stage.mediano .preview-player-sprite{transform:scale(.82,.88);transform-origin:50% 96%}
+.preview-character-stage.orco .preview-player-sprite.woman,.preview-character-stage.semiorco .preview-player-sprite.woman{transform:scale(1.03,1.06)}
+.preview-race-feature{position:absolute;left:0;top:0;z-index:4;width:100%;height:100%;pointer-events:none}
+.preview-race-feature.elfo::before,.preview-race-feature.semielfo::before{content:"";position:absolute;left:57px;top:50px;width:23px;height:10px;border-top:2px solid #f0c79f;border-radius:50%;transform:rotate(-18deg);filter:drop-shadow(0 0 4px #f0c79f)}
+.preview-race-feature.orco::before,.preview-race-feature.semiorco::before{content:"";position:absolute;left:65px;top:77px;width:10px;height:6px;border-left:2px solid #f0d1a2;border-bottom:2px solid #f0d1a2;transform:rotate(-23deg);filter:drop-shadow(0 0 3px #f0d1a2)}
+.preview-race-feature.enano::before{content:"";position:absolute;left:56px;top:76px;width:24px;height:15px;border-radius:0 0 50% 50%;background:linear-gradient(90deg,#8c5c3f,#d6a174,#70452f);opacity:.88;filter:drop-shadow(0 2px 2px #000)}
+.preview-player-weapon{right:31px;top:83px;width:47px;height:7px;border-radius:5px;background:linear-gradient(90deg,#593b2d 0 17%,#d9b56c 18% 26%,#fff8d6 27% 82%,#b5c0b8 83% 100%);box-shadow:0 0 8px color-mix(in srgb,var(--accent),transparent 22%);transform:rotate(-18deg);transform-origin:8px 50%;animation:playerWeaponAttack 2.8s ease-in-out infinite}
+.preview-player-weapon::before{left:9px;bottom:-6px;width:4px;height:19px;border-radius:3px;background:#d9b56c;box-shadow:0 0 0 1px #3d2a20}
+.preview-player-weapon::after{content:"";position:absolute;right:-6px;top:-3px;width:9px;height:9px;clip-path:polygon(0 0,100% 50%,0 100%);background:#fffdf0;filter:drop-shadow(0 0 3px #fff4c2)}
+.preview-player-weapon.shadow,.preview-player-weapon.scout{right:34px;top:87px;width:29px;height:5px;transform:rotate(-26deg);background:linear-gradient(90deg,#593b2d 0 20%,#8fc8b1 21% 30%,#eaffdc 31% 100%)}
+.preview-player-weapon.shadow::before,.preview-player-weapon.scout::before{left:7px;bottom:-5px;height:14px;background:#8fc8b1}
+.preview-player-weapon.arcane,.preview-player-weapon.ash-weaver{right:35px;top:49px;width:5px;height:75px;border-radius:5px;background:linear-gradient(#f8f1d3 0 13%,var(--accent) 14% 87%,#5b3b2b);transform:rotate(9deg);transform-origin:50% 95%}
+.preview-player-weapon.arcane::before,.preview-player-weapon.ash-weaver::before{left:-6px;bottom:-4px;width:17px;height:5px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent)}
+.preview-player-weapon.arcane::after,.preview-player-weapon.ash-weaver::after{right:-6px;top:-11px;width:17px;height:17px;clip-path:none;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff9db 0 12%,var(--accent) 38%,transparent 72%);box-shadow:0 0 15px var(--accent)}
+.preview-attack-flash{right:1px;top:61px;width:62px;height:70px;border-width:3px;border-color:color-mix(in srgb,var(--accent),#fff 28%);border-left-color:transparent;border-bottom-color:transparent;transform:rotate(24deg) scale(.55);animation:playerAttackFlash 2.8s ease-in-out infinite}
+.preview-attack-flash.shadow,.preview-attack-flash.scout{right:5px;top:72px;width:42px;height:48px;border-width:2px}
+.preview-attack-flash.arcane,.preview-attack-flash.ash-weaver{right:5px;top:49px;width:53px;height:62px;border-color:color-mix(in srgb,var(--accent),#fff 18%);border-left-color:transparent;border-bottom-color:transparent}
+.preview-impact-sparks{position:absolute;right:3px;top:86px;z-index:5;width:5px;height:5px;border-radius:50%;background:#fff5c5;opacity:0;box-shadow:12px -11px 0 1px var(--accent),18px 4px 0 -1px #fff5c5,5px 14px 0 -1px var(--accent);animation:playerImpactSparks 2.8s ease-in-out infinite}
+.preview-impact-sparks.shadow,.preview-impact-sparks.scout{right:14px;top:90px}
+.preview-impact-sparks.arcane,.preview-impact-sparks.ash-weaver{right:23px;top:57px;box-shadow:12px -9px 0 1px var(--accent),18px 4px 0 -1px #fff5c5,4px 14px 0 -1px var(--accent)}
+.preview-character-kicker{top:10px;left:10px;font-size:8px;letter-spacing:1.35px}
+.preview-raster-copy{left:66px;right:10px;bottom:10px}
+.preview-raster-copy strong{font-size:13px}
+.preview-raster-copy small{font-size:8px}
+.sheet-identity .preview-identity-stamp{left:7px;top:30px;width:34px;height:46px}.sheet-identity .preview-character-stage{left:58%;bottom:24px;width:112px;height:132px}.sheet-identity .preview-raster-copy{left:48px;bottom:4px}.sheet-identity .preview-raster-copy strong{font-size:9px}.sheet-identity .preview-raster-copy small{font-size:7px}
+@keyframes playerSpriteStride{0%,100%{transform:translateY(0) rotate(-.4deg)}50%{transform:translateY(-3px) rotate(.4deg)}}
+@keyframes playerImpactSparks{0%,52%,100%{opacity:0;transform:scale(.4)}60%{opacity:.15;transform:scale(.7)}64%{opacity:1;transform:scale(1.25)}74%{opacity:0;transform:scale(1.6)}}
+@media(prefers-reduced-motion:reduce){.preview-player-sprite{animation:none}.preview-impact-sparks{display:none}}
+.preview-player-portrait{position:absolute;left:58px;top:38px;z-index:3;width:37px;height:47px;border-radius:47% 44% 46% 43%;background-size:215% 215%;background-position:50% 10%;background-repeat:no-repeat;transform:rotateY(-18deg) rotate(-3deg);filter:saturate(1.12) contrast(1.06) drop-shadow(0 2px 2px #0008);clip-path:polygon(18% 0,78% 2%,100% 27%,94% 77%,75% 100%,20% 94%,0 62%,4% 22%)}
+.preview-player-portrait::after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(90deg,#07120f44,transparent 58%,#fff2)}
+.preview-character-stage.orco .preview-player-portrait,.preview-character-stage.semiorco .preview-player-portrait{filter:saturate(.82) sepia(.12) hue-rotate(30deg) drop-shadow(0 2px 2px #0008);transform:rotateY(-18deg) rotate(-3deg) scale(1.08)}
+.preview-character-stage.enano .preview-player-portrait,.preview-character-stage.gnomo .preview-player-portrait,.preview-character-stage.mediano .preview-player-portrait{transform:rotateY(-18deg) rotate(-3deg) scale(.86);transform-origin:50% 100%}
+.preview-character-stage.woman .preview-player-portrait{left:57px;top:37px;width:39px;height:51px}
+.preview-character-stage.arcane .preview-player-portrait,.preview-character-stage.ash-weaver .preview-player-portrait{box-shadow:0 0 0 1px color-mix(in srgb,var(--accent),#fff 20%),0 0 12px color-mix(in srgb,var(--accent),transparent 42%)}
+.preview-character-stage.shadow .preview-player-portrait,.preview-character-stage.scout .preview-player-portrait{width:36px;height:45px}
+.sheet-identity .preview-player-portrait{left:43px;top:28px;width:29px;height:36px}
+.preview-player-sprite{background-repeat:no-repeat}
+.character-visual-preview{container-type:inline-size}
+.preview-player-portrait{display:none}
+.preview-identity-stamp::before{content:"RETRATO ACTUAL";position:absolute;left:7px;top:6px;z-index:2;color:#f4ead3;font-size:7px;letter-spacing:1.15px;text-shadow:0 1px 5px #000;background:#07120fb8;padding:2px 3px}
+@container (min-width:360px){
+  .preview-identity-stamp{left:22px;top:35px;width:156px;height:174px;border-radius:11px;box-shadow:0 8px 22px #0009,0 0 15px color-mix(in srgb,var(--accent),transparent 62%)}
+  .preview-identity-stamp img{object-position:50% 17%;filter:saturate(1.08) contrast(1.04)}
+  .preview-identity-stamp span{left:7px;right:7px;bottom:7px;font-size:9px;letter-spacing:.5px;background:#07120fc7;padding:3px 2px}
+  .preview-character-stage{left:73%;bottom:19px;width:205px;height:212px;transform:translateX(-50%) scale(1.02)}
+  .preview-character-kicker{left:auto;right:18px;top:14px;font-size:9px}
+  .preview-raster-copy{left:22px;right:23px;bottom:8px}
+  .preview-raster-copy strong{font-size:14px}
+  .preview-raster-copy small{font-size:9px}
+}
+@container (max-width:359px){
+  .preview-identity-stamp{left:9px;top:38px;width:47px;height:64px}
+  .preview-character-stage{left:59%;bottom:28px;width:154px;height:178px}
+  .preview-character-kicker{left:10px;right:auto;top:10px;font-size:8px}
+  .preview-raster-copy{left:66px;right:10px;bottom:10px}
+}
+.preview-character-stage{overflow:visible}
+@container (min-width:360px){.preview-character-stage{left:73%;bottom:22px;width:164px;height:180px;transform:translateX(-50%)}}
+.preview-character-stage.pixel-combat{width:164px;height:164px;bottom:25px}
+.preview-character-stage.pixel-combat .preview-player-sprite.pixel-sprite{inset:0;background-image:var(--identity-sprite);background-size:200% 200%;background-position:0 0;background-repeat:no-repeat;filter:drop-shadow(0 9px 6px #000d) saturate(1.05);image-rendering:auto;animation:pixelBattleCycle 3.4s steps(1,end) infinite}
+.preview-character-stage.pixel-combat .preview-player-weapon,.preview-character-stage.pixel-combat .preview-attack-flash,.preview-character-stage.pixel-combat .preview-impact-sparks,.preview-character-stage.pixel-combat .preview-race-feature{display:none}
+@container (min-width:360px){.preview-character-stage.pixel-combat{left:73%;bottom:20px;width:186px;height:186px}}
+@container (max-width:359px){.preview-character-stage.pixel-combat{left:65%;bottom:30px;width:146px;height:146px}}
+@keyframes pixelBattleCycle{0%,19%{background-position:0 0}20%,39%{background-position:100% 0}40%,64%{background-position:0 100%}65%,100%{background-position:100% 100%}}
+@media(prefers-reduced-motion:reduce){.preview-character-stage.pixel-combat .preview-player-sprite.pixel-sprite{animation:none;background-position:0 0}}
+.preview-character-stage.pixel-combat .preview-player-sprite.pixel-sprite{transform:scale(1.42);transform-origin:50% 92%}
+@container (min-width:360px){.preview-character-stage.pixel-combat .preview-player-sprite.pixel-sprite{transform:scale(1.34);transform-origin:50% 92%}}
+
+/* Race and gender are part of the playable silhouette, not only the portrait stamp. */
+.preview-character-stage.pixel-combat .preview-player-sprite.pixel-sprite{transform:scale(var(--pixel-identity-scale,1.42));transform-origin:50% 92%}
+.preview-character-stage.pixel-combat .preview-race-feature,.preview-character-stage.pixel-combat .preview-gender-feature{display:block;position:absolute;inset:0;z-index:5;pointer-events:none}
+.preview-character-stage.pixel-combat .preview-gender-feature{z-index:6}
+.preview-character-stage.pixel-combat .preview-race-feature::before,.preview-character-stage.pixel-combat .preview-race-feature::after,.preview-character-stage.pixel-combat .preview-gender-feature::before,.preview-character-stage.pixel-combat .preview-gender-feature::after{content:"";position:absolute;pointer-events:none}
+
+/* Stature and palette. The class sheet still owns the weapon and attack pose. */
+.preview-character-stage.pixel-combat.orco .preview-player-sprite.pixel-sprite{--pixel-identity-scale:1.48;filter:drop-shadow(0 9px 6px #000d) saturate(.7) sepia(.27) hue-rotate(29deg) brightness(.96)}
+.preview-character-stage.pixel-combat.semiorco .preview-player-sprite.pixel-sprite{--pixel-identity-scale:1.43;filter:drop-shadow(0 9px 6px #000d) saturate(.82) sepia(.18) hue-rotate(24deg) brightness(.98)}
+.preview-character-stage.pixel-combat.elfo .preview-player-sprite.pixel-sprite,.preview-character-stage.pixel-combat.semielfo .preview-player-sprite.pixel-sprite{filter:drop-shadow(0 9px 6px #000d) saturate(1.08) hue-rotate(7deg)}
+.preview-character-stage.pixel-combat.enano .preview-player-sprite.pixel-sprite{--pixel-identity-scale:1.18;filter:drop-shadow(0 9px 6px #000d) saturate(.92) sepia(.1) hue-rotate(-4deg)}
+.preview-character-stage.pixel-combat.gnomo .preview-player-sprite.pixel-sprite{--pixel-identity-scale:1.12;filter:drop-shadow(0 9px 6px #000d) saturate(.98) hue-rotate(-4deg)}
+.preview-character-stage.pixel-combat.mediano .preview-player-sprite.pixel-sprite{--pixel-identity-scale:1.16;filter:drop-shadow(0 9px 6px #000d) saturate(1.04) hue-rotate(-2deg)}
+
+/* Pointed ears for elves and half-elves. */
+.preview-character-stage.pixel-combat .preview-race-feature.elfo::before,.preview-character-stage.pixel-combat .preview-race-feature.semielfo::before{left:27%;top:15%;width:16%;height:15%;background:linear-gradient(135deg,#efc7a1,#ae756c);clip-path:polygon(100% 0,0 49%,100% 100%);filter:drop-shadow(0 0 3px #f0c79f)}
+.preview-character-stage.pixel-combat .preview-race-feature.elfo::after,.preview-character-stage.pixel-combat .preview-race-feature.semielfo::after{left:57%;top:15%;width:16%;height:15%;background:linear-gradient(225deg,#efc7a1,#ae756c);clip-path:polygon(0 0,100% 49%,0 100%);filter:drop-shadow(0 0 3px #f0c79f)}
+.preview-character-stage.pixel-combat .preview-race-feature.semielfo::before,.preview-character-stage.pixel-combat .preview-race-feature.semielfo::after{background:linear-gradient(135deg,#e7bb94,#986c70)}
+
+/* Orc lineage: olive skin tint plus visible tusks. */
+.preview-character-stage.pixel-combat .preview-race-feature.orco::before,.preview-character-stage.pixel-combat .preview-race-feature.semiorco::before{left:37%;top:10%;width:26%;height:24%;border-radius:47% 47% 44% 44%;background:linear-gradient(140deg,#8ea35c,#657f4b);mix-blend-mode:color;opacity:.92}
+.preview-character-stage.pixel-combat .preview-race-feature.orco::after,.preview-character-stage.pixel-combat .preview-race-feature.semiorco::after{left:43%;top:28%;width:14%;height:10%;background:radial-gradient(ellipse at 26% 8%,#f8e7b9 0 20%,transparent 22%),radial-gradient(ellipse at 74% 8%,#f8e7b9 0 20%,transparent 22%);filter:drop-shadow(0 0 2px #fff0bd)}
+
+/* Dwarves carry a beard; gnomes and halflings read smaller even in attack frames. */
+.preview-character-stage.pixel-combat .preview-race-feature.enano::before{left:34%;top:24%;width:32%;height:27%;border-radius:44% 44% 48% 48%;background:linear-gradient(90deg,#4d3029,#a56e45 48%,#4d3029);clip-path:polygon(10% 0,90% 0,100% 42%,75% 100%,50% 78%,25% 100%,0 42%);opacity:.92;filter:drop-shadow(0 2px 2px #000b)}
+.preview-character-stage.pixel-combat .preview-race-feature.gnomo::before{left:32%;top:6%;width:36%;height:16%;background:linear-gradient(145deg,#d9b56c,#8d5a3f);clip-path:polygon(50% 0,100% 85%,74% 100%,26% 100%,0 85%);filter:drop-shadow(0 2px 2px #000b)}
+.preview-character-stage.pixel-combat .preview-race-feature.mediano::before{left:33%;top:51%;width:34%;height:7%;background:linear-gradient(90deg,#a96e42,#e3c172,#a96e42);transform:rotate(-9deg);box-shadow:0 0 0 1px #35251d,0 0 7px #d9b56c88}
+
+/* Gender presentation uses a readable accessory on the playable sprite. */
+.preview-character-stage.pixel-combat .preview-gender-feature.woman::before{left:59%;top:19%;width:9%;height:46%;border:4px solid #9a6044;border-left-color:transparent;border-top-color:#c47b4e;border-radius:50%;transform:rotate(7deg);filter:drop-shadow(0 1px 2px #000b)}
+.preview-character-stage.pixel-combat .preview-gender-feature.woman::after{left:61%;top:45%;width:5%;height:22%;border-radius:50%;background:#c47b4e;transform:rotate(11deg);box-shadow:0 0 0 1px #3b2822}
+.preview-character-stage.pixel-combat .preview-gender-feature.man::before{left:41%;top:6%;width:18%;height:10%;background:linear-gradient(145deg,#3d2925,#86503a);clip-path:polygon(8% 100%,18% 0,43% 46%,64% 0,94% 100%);filter:drop-shadow(0 1px 2px #000b)}
+.preview-character-stage.pixel-combat .preview-gender-feature.man::after{left:34%;top:42%;width:32%;height:4%;background:#8e674b;transform:rotate(-8deg);opacity:.8;box-shadow:0 0 0 1px #2d211b}
+.preview-character-stage.pixel-combat .preview-gender-feature.nonbinary::before{left:31%;top:45%;width:38%;height:6%;background:linear-gradient(90deg,#b9aaf4,#79c9bb,#d9b56c);transform:rotate(-12deg);box-shadow:0 0 7px #8fc8b188}
+.preview-character-stage.pixel-combat .preview-gender-feature.nonbinary::after{left:58%;top:27%;width:8%;height:13%;border:2px solid #8fc8b1;border-radius:50%;transform:rotate(15deg);box-shadow:0 0 6px #8fc8b1}
+
+@container (min-width:360px){.preview-character-stage.pixel-combat .preview-player-sprite.pixel-sprite{--pixel-identity-scale:1.34}}
+@container (max-width:359px){.preview-character-stage.pixel-combat .preview-player-sprite.pixel-sprite{--pixel-identity-scale:1.36}.preview-identity-stamp{width:60px;height:82px}.preview-identity-stamp span{font-size:7px}}
+
+/* Keep the playable render large enough to compare every race/class/gender combination. */
+.archetype-builder{grid-template-columns:minmax(0,1fr) minmax(360px,42%)}
+.archetype-builder .character-visual-preview{min-height:300px}
+@media(max-width:720px){.archetype-builder{grid-template-columns:1fr}.archetype-builder .character-visual-preview{min-height:260px}}
+@container (min-width:300px) and (max-width:359px){
+  .preview-identity-stamp{left:14px;top:34px;width:100px;height:132px;border-radius:10px}
+  .preview-identity-stamp img{object-position:50% 17%}
+  .preview-identity-stamp span{left:5px;right:5px;bottom:5px;font-size:8px;letter-spacing:.35px;background:#07120fc7;padding:3px 2px}
+  .preview-character-stage.pixel-combat{left:70%;bottom:22px;width:190px;height:204px}
+  .preview-character-stage.pixel-combat .preview-player-sprite.pixel-sprite{--pixel-identity-scale:1.28}
+  .preview-character-kicker{left:auto;right:14px;top:13px;font-size:8px}
+  .preview-raster-copy{left:14px;right:14px;bottom:8px}
+  .preview-raster-copy strong{font-size:12px}
+  .preview-raster-copy small{font-size:8px}
+}
+
+/* Keep race accents readable at small sizes; never paint a flat mask over the face. */
+.preview-character-stage.pixel-combat .preview-race-feature.orco::before,.preview-character-stage.pixel-combat .preview-race-feature.semiorco::before,.preview-character-stage.pixel-combat .preview-race-feature.enano::before{display:none}
+.preview-character-stage.pixel-combat.orco .preview-player-sprite.pixel-sprite{filter:drop-shadow(0 9px 6px #000d) saturate(.86) sepia(.14) hue-rotate(23deg) brightness(.98)}
+.preview-character-stage.pixel-combat.semiorco .preview-player-sprite.pixel-sprite{filter:drop-shadow(0 9px 6px #000d) saturate(.9) sepia(.1) hue-rotate(18deg) brightness(1)}
+.preview-character-stage.pixel-combat .preview-race-feature.orco::after,.preview-character-stage.pixel-combat .preview-race-feature.semiorco::after{left:44%;top:27%;width:12%;height:11%;background:linear-gradient(125deg,transparent 0 28%,#f8e7b9 29% 45%,transparent 46% 55%,#f8e7b9 56% 72%,transparent 73%);filter:drop-shadow(0 0 2px #fff0bd);opacity:.9}
+
+/* Final identity pass: one coherent frame, class sprite + unmistakable race silhouette. */
+.character-visual-preview .preview-character-stage.pixel-combat::after{display:none}
+.character-visual-preview .preview-character-stage.pixel-combat .preview-player-sprite.pixel-sprite{background-image:var(--identity-sprite);background-size:200% 200%;background-position:0 0;image-rendering:auto;animation:pixelBattleCycle 3.4s steps(1,end) infinite}
+.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature{display:block;z-index:5}
+.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature::before,.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature::after{display:block}
+
+/* Elves: long ears are attached to the head, not floating triangles. */
+.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature.elfo::before,.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature.semielfo::before{left:22%;top:17%;width:25%;height:13%;background:#dca47f;clip-path:polygon(100% 50%,0 10%,22% 50%,0 90%);filter:drop-shadow(0 1px 1px #251a18)}
+.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature.elfo::after,.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature.semielfo::after{left:53%;top:17%;width:25%;height:13%;background:#dca47f;clip-path:polygon(0 50%,100% 10%,78% 50%,100% 90%);filter:drop-shadow(0 1px 1px #251a18)}
+.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature.semielfo::before,.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature.semielfo::after{background:#d2a078;opacity:.86}
+
+/* Orc lineage: olive palette, heavier shoulders and visible tusks. */
+.character-visual-preview .preview-character-stage.pixel-combat.orco .preview-player-sprite.pixel-sprite{--pixel-identity-scale:1.52;filter:drop-shadow(0 9px 6px #000d) saturate(.68) sepia(.34) hue-rotate(30deg) brightness(.92)}
+.character-visual-preview .preview-character-stage.pixel-combat.semiorco .preview-player-sprite.pixel-sprite{--pixel-identity-scale:1.47;filter:drop-shadow(0 9px 6px #000d) saturate(.78) sepia(.23) hue-rotate(27deg) brightness(.95)}
+.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature.orco::before,.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature.semiorco::before{left:22%;top:12%;width:56%;height:34%;background:transparent;clip-path:none;filter:none;box-shadow:-10px 27px 0 -4px #6e8548,10px 27px 0 -4px #6e8548}
+.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature.orco::after,.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature.semiorco::after{left:39%;top:29%;width:22%;height:12%;background:linear-gradient(120deg,transparent 0 22%,#f7e3b1 23% 40%,transparent 41% 59%,#f7e3b1 60% 77%,transparent 78%);clip-path:polygon(0 0,45% 100%,50% 35%,55% 100%,100% 0);filter:drop-shadow(0 1px 1px #241a16)}
+
+/* Dwarf, gnome and halfling proportions are deliberately strong at this size. */
+.character-visual-preview .preview-character-stage.pixel-combat.enano .preview-player-sprite.pixel-sprite{--pixel-identity-scale:1.16;filter:drop-shadow(0 9px 6px #000d) saturate(.88) sepia(.12) hue-rotate(-5deg)}
+.character-visual-preview .preview-character-stage.pixel-combat.gnomo .preview-player-sprite.pixel-sprite{--pixel-identity-scale:1.08;filter:drop-shadow(0 9px 6px #000d) saturate(.96) hue-rotate(-6deg)}
+.character-visual-preview .preview-character-stage.pixel-combat.mediano .preview-player-sprite.pixel-sprite{--pixel-identity-scale:1.02;filter:drop-shadow(0 9px 6px #000d) saturate(1.05) hue-rotate(-3deg)}
+.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature.enano::before{left:31%;top:24%;width:38%;height:32%;background:linear-gradient(90deg,#38251f,#a26b46 48%,#38251f);clip-path:polygon(10% 0,90% 0,100% 42%,76% 100%,50% 80%,24% 100%,0 42%);filter:drop-shadow(0 1px 1px #000)}
+.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature.enano::after{left:23%;top:22%;width:16%;height:30%;border-left:5px solid #8d5b3f;border-radius:50%;transform:rotate(-12deg);box-shadow:58px 0 0 -1px #8d5b3f}
+.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature.gnomo::before{left:30%;top:4%;width:40%;height:23%;background:linear-gradient(145deg,#b36b50,#e2b86c 58%,#664037);clip-path:polygon(50% 0,100% 88%,75% 100%,25% 100%,0 88%);filter:drop-shadow(0 2px 1px #000)}
+.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature.gnomo::after{left:42%;top:24%;width:16%;height:12%;border-radius:50%;background:#d29a74;box-shadow:0 0 0 2px #3e2922}
+.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature.mediano::before{left:32%;top:16%;width:36%;height:17%;background:#7b4d37;clip-path:polygon(0 55%,14% 14%,34% 44%,52% 0,72% 44%,100% 14%,100% 72%,0 72%);filter:drop-shadow(0 1px 1px #000)}
+.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature.mediano::after{left:37%;top:29%;width:26%;height:8%;border-radius:50%;background:#d8a37d;box-shadow:0 0 0 2px #402b21}
+
+/* Keep the animation inside the card and leave only one border around the scene. */
+.character-visual-preview .preview-character-stage.pixel-combat{overflow:visible;filter:drop-shadow(0 10px 8px #000c)}
+.character-visual-preview .preview-character-stage.pixel-combat .preview-player-sprite.pixel-sprite{transform:scale(var(--pixel-identity-scale,1.34));transform-origin:50% 94%}
+
+/* Use the real race portrait as the face plate; this keeps the pixel body and makes race changes obvious. */
+.character-visual-preview .preview-character-stage.pixel-combat .preview-player-portrait{display:block;left:39%;top:14%;width:42%;height:36%;z-index:6;border:0;border-radius:48% 48% 43% 43%;background-size:172% auto;background-position:50% 9%;background-repeat:no-repeat;transform:none;opacity:.93;clip-path:ellipse(46% 48% at 50% 47%);mask-image:radial-gradient(ellipse at center,#000 47%,#000d 63%,transparent 82%);filter:saturate(1.08) contrast(1.05) drop-shadow(0 2px 2px #000b)}
+.character-visual-preview .preview-character-stage.pixel-combat .preview-player-portrait::after{display:none}
+.character-visual-preview .preview-character-stage.pixel-combat.enano .preview-player-portrait{left:40%;top:15%;width:40%;height:38%;background-size:180% auto}
+.character-visual-preview .preview-character-stage.pixel-combat.gnomo .preview-player-portrait,.character-visual-preview .preview-character-stage.pixel-combat.mediano .preview-player-portrait{left:42%;top:17%;width:35%;height:33%;background-size:185% auto}
+.character-visual-preview .preview-character-stage.pixel-combat.orco .preview-player-portrait,.character-visual-preview .preview-character-stage.pixel-combat.semiorco .preview-player-portrait{left:38%;top:14%;width:44%;height:38%;background-size:170% auto;filter:saturate(.96) contrast(1.1) drop-shadow(0 2px 2px #000b)}
+.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature::before,.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature::after{display:none}
