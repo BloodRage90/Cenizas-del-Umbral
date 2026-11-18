@@ -44,7 +44,7 @@ async function show(){
  dialog.addEventListener('cancel',e=>{e.preventDefault();finish(false)});leave.onclick=()=>finish(false);
  const load=src=>new Promise((resolve,reject)=>{const im=new Image(),timer=setTimeout(()=>reject(new Error('timeout')),20000);im.onload=()=>{clearTimeout(timer);resolve(im)};im.onerror=()=>{clearTimeout(timer);reject(new Error('asset'))};im.src=src;});
  try{
-  const loaded=await Promise.race([Promise.all([load('scenes/montana-before-bell.png'),load('bell-cinema-atlas.png'),load('scenes/montana.png')]),result.then(()=>null)]);if(finished||!loaded)return result;const [ground,atlas,present]=loaded;
+  const loaded=await Promise.race([Promise.all([load('scenes/montana-before-bell.webp'),load('bell-cinema-atlas.png'),load('scenes/montana.webp')]),result.then(()=>null)]);if(finished||!loaded)return result;const [ground,atlas,present]=loaded;
   const sw=atlas.width/2,sh=atlas.height/2;
   function wheel(x,y,size,angle,alpha=1,inner=false){ctx.save();ctx.globalAlpha*=alpha;ctx.translate(x,y);ctx.scale(.69,1);ctx.rotate(angle);ctx.beginPath();ctx.arc(0,0,size/2,0,Math.PI*2);ctx.clip();const crop=inner?[541,265,132,179]:[495,229,191,247];ctx.drawImage(atlas,...crop,-size/2,-size/2,size,size);ctx.restore();}
   function cart(f){const k=245/sw;ctx.save();ctx.globalAlpha=f.cartAlpha??1;ctx.translate(f.cx,f.cy+(f.bounce||0));ctx.rotate(f.tilt||0);ctx.scale(k,k);ctx.translate(-sw/2,-sh*.82);

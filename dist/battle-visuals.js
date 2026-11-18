@@ -68,7 +68,7 @@ window.CenizasBattleVisuals=(()=>{
    return 'portraits/'+race+'-'+gender+'.png';
  }
  function render(s,room){
-  const stage=$('battle-stage');if(!stage)return;stage.style.backgroundImage=`linear-gradient(#07141db8,#0c1823d9),url(scenes/${room==='plaza'?'plaza-forest':room}.png)`;
+  const stage=$('battle-stage');if(!stage)return;stage.style.backgroundImage=`linear-gradient(#07141db8,#0c1823d9),url(scenes/${room==='plaza'?'plaza-forest':room}.webp)`;
   let layer=stage.querySelector('.battle-actors');if(!layer){layer=document.createElement('div');layer.className='battle-actors';stage.append(layer);}
   const ids=new Set(s.units.map(u=>u.id));layer.querySelectorAll('.battle-actor').forEach(n=>{if(!ids.has(n.dataset.unit))n.remove();});
   const party=s.units.filter(u=>u.team==='party'),foes=s.units.filter(u=>u.team!=='party');

@@ -7,6 +7,8 @@ const chapter=read('dist/chapter.js');
 const app=read('dist/app.js');
 const combat=read('dist/combat.js');
 const visuals=read('dist/battle-visuals.js');
+const chapterCss=read('dist/chapter.css');
+const music=read('dist/music.js');
 const html=read('dist/chapter.html');
 const index=read('dist/index.html');
 
@@ -28,5 +30,9 @@ assert(!chapter.includes('libera los nombres antes de atacar el ancla'),'no qued
 assert(visuals.includes('classFiles')&&visuals.includes('actor-portrait'),'los sprites y retratos dependen del personaje');
 assert(html.includes('id="scene" role="region"')&&html.includes('id="battle-stage" role="region"'),'los contenedores interactivos tienen rol');
 assert(index.includes('id="game" role="region"')&&index.includes('intro-video')&&index.includes('preload="none"'),'el mapa y el vídeo respetan accesibilidad y carga diferida');
+assert(fs.existsSync(path.join(root,'dist','assets.js'))&&index.includes('assets.js')&&html.includes('assets.js'),'existe un único token de caché compartido');
+assert(!music.includes('resonancias-combate-2')&&!music.includes('resonancias-combate-3'),'la música no conserva versiones de caché duplicadas');
+assert(chapterCss.includes('orientation:landscape')&&chapterCss.includes('min-height:48px')&&chapterCss.includes('white-space:nowrap'),'el carril horizontal conserva objetivos táctiles y nombres legibles');
+assert(fs.existsSync(path.join(root,'dist','valdara.webp'))&&fs.existsSync(path.join(root,'dist','region-map.webp')),'el mapa y el mundo tienen formatos comprimidos');
 assert(!index.includes('Practicar combate ATB'),'la ayuda principal no ofrece el laboratorio ATB heredado como combate de campaña');
 console.log('PASS: auditoría estática del informe.');
