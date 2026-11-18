@@ -2,16 +2,22 @@
 (function(root){
 'use strict';
 const mod=n=>Math.floor((n-10)/2),sign=n=>n>=0?'+'+n:String(n);
-const raceMods={Humano:[0,0,0,0,0,0],Elfo:[0,2,-2,0,0,0],Enano:[0,0,2,0,0,-2],Orco:[4,0,0,-2,0,-2],Mediano:[-2,2,0,0,0,0],Gnomo:[-2,0,2,0,0,0],Semielfo:[0,0,0,0,0,0],Semiorco:[2,0,0,-2,0,0]},raceSpeed={Humano:6,Elfo:6,Enano:4,Orco:6,Mediano:4,Gnomo:4,Semielfo:6,Semiorco:6};
+const Data=typeof module!=='undefined'&&module.exports?require('./character-data.js'):root.CenizasCharacterData;
+const {raceData,classes,subclassRules}=Data;
+const raceMods=Object.fromEntries(Object.entries(raceData).map(([name,value])=>[name,value.mods])),raceSpeed=Object.fromEntries(Object.entries(raceData).map(([name,value])=>[name,value.speed]));
 const defaults={name:'Viajero',race:'Humano',class:'Guerrero',base:[16,14,14,12,10,8],feats:['Dureza','Iniciativa mejorada','Soltura con el arma'],ranks:{}};
 function profile(c=defaults,level=1){
- const cls=['Guerrero','Pícaro','Mago'].includes(c.class)?c.class:'Guerrero';
+ const cls=classes[c.class]?c.class:'Guerrero',race=raceData[c.race]?c.race:'Humano',rule=subclassRules[c.subclass]?.class===cls?subclassRules[c.subclass]:null;
  const base=Array.isArray(c.base)&&c.base.length===6&&c.base.every(n=>Number.isFinite(n)&&n>=8&&n<=18)?c.base.map((n,i)=>n+(Number(c.levelBonuses?.[i])||0)):defaults.base;
- const m=base.map((v,i)=>mod(v+(raceMods[c.race]?.[i]||0)));
+ const m=base.map((v,i)=>mod(v+(raceMods[race]?.[i]||0)));
  const feats=Array.isArray(c.feats)?c.feats:[],has=f=>feats.includes(f),lvl=Math.max(1,Math.min(5,level));
- const hd={Guerrero:10,'Pícaro':6,Mago:4}[cls],bab=cls==='Guerrero'?lvl:cls==='Pícaro'?Math.floor(lvl*.75):Math.floor(lvl/2),armor={Guerrero:5,'Pícaro':2,Mago:0}[cls];
+ const hd=classes[cls].hp,bab=cls==='Guerrero'?lvl:cls==='Pícaro'?Math.floor(lvl*.75):Math.floor(lvl/2),armor=classes[cls].armor+(classes[cls].shield||0);
  const hp=Math.max(1,hd+m[2])+(has('Dureza')?3:0)+(cls==='Mago'?3:0)+(lvl-1)*Math.max(1,hd/2+1+m[2]);
- return {id:'hero',name:String(c.name||'Viajero').slice(0,40),class:cls,level:lvl,max:hp,ac:10+armor+Math.min(m[1],cls==='Guerrero'?4:cls==='Pícaro'?6:99),flat:10+armor+Math.min(0,m[1]),attack:bab+m[0]+(has('Soltura con el arma')?1:0),damage:cls==='Guerrero'?8:6,bonus:cls==='Mago'?m[3]:m[0],threat:cls==='Mago'?20:19,init:m[1]+(has('Iniciativa mejorada')?4:0),ref:(cls==='Pícaro'?(2+Math.floor(lvl/2)):Math.floor(lvl/3))+m[1]+(has('Reflejos rápidos')?2:0),strength:m[0],move:raceSpeed[c.race]??6,range:1,missileRange:4,spells:cls==='Mago'&&base[3]>=11?(lvl+(m[3]>=1?1:0)):0,power:has('Ataque poderoso')&&m[0]>=1,bab};
+ const small=raceData[race].size==='S',baseDamage=classes[cls].damageDie|| (cls==='Guerrero'?8:6),damage=Math.max(4,baseDamage-(small?(raceData[race].damageDiePenalty||1):0));
+ const attack=bab+m[0]+(has('Soltura con el arma')?1:0)+(raceData[race].attackBonus||0);
+ const ac=10+armor+Math.min(m[1],classes[cls].maxDex)+(raceData[race].acBonus||0)+(rule?.ac||0);
+ const spells=cls==='Mago'&&base[3]>=11?lvl+(m[3]>=1?1:0)+(rule?.spellSlots||0):0;
+ return {id:'hero',name:String(c.name||'Viajero').slice(0,40),class:cls,race,subclass:c.subclass||null,gender:c.gender||null,level:lvl,max:hp,ac,flat:10+armor+Math.min(0,m[1])+(rule?.ac||0),attack,damage,bonus:(cls==='Mago'?m[3]:m[0])+(rule?.damage||0),threat:cls==='Mago'?20:19,init:m[1]+(has('Iniciativa mejorada')?4:0)+(rule?.initiative||0),ref:(cls==='Pícaro'?(2+Math.floor(lvl/2)):Math.floor(lvl/3))+m[1]+(has('Reflejos rápidos')?2:0),strength:m[0],move:raceSpeed[race]??6,range:1,missileRange:4+(rule?.ranged||0),spells,power:has('Ataque poderoso')&&m[0]>=1,bab,subclassRule:rule?.label||null,sneakDie:rule?.sneakDie||0,spellDC:rule?.spellDC||0,action:rule?.action||null,small};
 }
 const enemies={ash:{name:"Guardián de ceniza",max:42,ac:16,flat:15,attack:8,damage:6,bonus:3,init:1,ref:2,move:4,threat:20,construct:true},sentinel:{name:'Centinela del claro',max:22,ac:14,flat:14,attack:3,damage:4,bonus:1,init:0,ref:0,move:0,threat:20,construct:true},echo:{name:'Eco incipiente',max:4,ac:12,flat:11,attack:1,damage:3,bonus:-1,init:1,ref:1,move:4,threat:20},custodian:{name:'Custodio de la compuerta',max:16,ac:13,flat:13,attack:2,damage:4,bonus:1,init:-1,ref:0,move:0,threat:20,construct:true},whisper:{name:'Eco del murmullo',max:12,ac:13,flat:11,attack:3,damage:4,bonus:0,init:2,ref:2,move:6,threat:20}};
 const elara={id:'elara',name:'Elara',max:16,ac:16,flat:15,attack:4,damage:8,bonus:2,threat:19,init:1,ref:1,move:6,range:1};
@@ -42,7 +48,7 @@ class Battle{
  constructor(kind,p,save={},rng){this.rng=rng||null;this.events=[];this.rolls=[];
  if(save.combat){this.s=JSON.parse(JSON.stringify(save.combat));return;}
  const h={...p,hp:save.hp??p.max,x:1,y:3,team:'party'},e={...enemies[kind],id:'enemy',kind,hp:enemies[kind].max,x:['custodian','sentinel','ash'].includes(kind)?3:4,y:['custodian','sentinel','ash'].includes(kind)?1:2,team:'enemy'};
- this.s={kind,units:[h,e],round:1,index:0,order:[],action:true,movement:h.move,acted:[],wheels:[],valve:false,exposed:false,spellArmor:false,spells:save.spells??p.spells,potions:save.potions??2,warning:null,history:[],result:null,opening:true};
+ this.s={kind,units:[h,e],round:1,index:0,order:[],action:true,movement:h.move,acted:[],wheels:[],valve:false,exposed:false,spellArmor:false,spells:save.spells??p.spells,potions:save.potions??2,warning:null,history:[],result:null,opening:true,shadowFeint:false,markedTarget:null,arcaneFocus:false};
  if(['whisper','sentinel','ash'].includes(kind)&&save.flags?.elara)this.s.units.push({...elara,hp:save.elaraHP??16,x:1,y:2,team:'party'});
  this.s.order=this.s.units.map(u=>{const die=this.die();this.log(`${u.name} · iniciativa ${die} ${sign(u.init)} = ${die+u.init}`);return {id:u.id,n:die+u.init,dex:u.init}}).sort((a,b)=>b.n-a.n||b.dex-a.dex).map(x=>x.id);
  if(kind==='ash')this.s.warning={type:'radius',x:3,y:1};this.begin();
@@ -57,16 +63,19 @@ class Battle{
  move(dx,dy){if(this.s.result||this.actor.team!=='party'||Math.abs(dx)+Math.abs(dy)!==1||this.s.movement<1)return false;const a=this.actor,x=a.x+dx,y=a.y+dy;if(!inside(x,y)||this.occupied(x,y))return false;a.x=x;a.y=y;this.s.movement--;return true;}
  hit(a,b,power=0){const reach=a.range??1;if(!this.s.noBoard&&distance(a,b)>reach){this.log(a.name+' está fuera de alcance para un ataque cuerpo a cuerpo.');return null;}const ac=(!this.s.acted.includes(b.id)?b.flat:b.ac)+(b.guard?4:0),d=this.die(),bonus=a.attack-power+(a.team==='party'&&this.precision?2:0);this.log(`${a.name}: d20 ${d} ${sign(bonus)} = ${d+bonus} contra CA ${ac}`);if(d===1||(d!==20&&d+bonus<ac)){this.log('Fallo.');return 0;}
   this.log('Impacto: el ataque supera la defensa.');let crit=false;if(d>=a.threat&&!b.construct){const q=this.die();crit=q!==1&&(q===20||q+bonus>=ac);this.log(`Confirmación: ${q} ${sign(bonus)} = ${q+bonus} · ${crit?'crítico':'impacto normal'}`)}
- let dmg=Math.max(1,this.die(a.damage)+a.bonus+power*(a.class==='Mago'?2:1));if(crit)dmg+=Math.max(1,this.die(a.damage)+a.bonus+power*(a.class==='Mago'?2:1));
+ let dmg=Math.max(1,this.die(a.damage)+a.bonus+power*(a.class==='Mago'?2:1)+(this.s.markedTarget===b.id?2:0));if(crit)dmg+=Math.max(1,this.die(a.damage)+a.bonus+power*(a.class==='Mago'?2:1));
  const ally=this.s.units.find(u=>u.team==='party'&&u.id!==a.id&&u.hp>0);const flank=ally&&distance(a,b)===1&&distance(ally,b)===1&&a.x+ally.x===2*b.x&&a.y+ally.y===2*b.y;
- if(a.class==='Pícaro'&&(!b.construct||this.s.exposed)&&(!this.s.acted.includes(b.id)||flank||this.s.exposed)){const sneak=this.die(6);dmg+=sneak;this.log(`Ataque furtivo +${sneak} (1d6).`)}
+ if(a.class==='Pícaro'&&(!b.construct||this.s.exposed)&&(this.s.shadowFeint||!this.s.acted.includes(b.id)||flank||this.s.exposed)){const sides=a.sneakDie||6,sneak=this.die(sides);dmg+=sneak;this.s.shadowFeint=false;this.log(`Ataque furtivo +${sneak} (1d${sides}).`)}
  dmg=this.mitigate(b,dmg);b.hp=Math.max(0,b.hp-dmg);this.log(`${b.name} recibe ${dmg} de daño${crit?' crítico':''}.`);return dmg;}
  mitigate(target,damage){if(target.team!=='party'||!this.reaction)return damage;const n=this.reaction==='parry'?0:Math.floor(damage/2);this.log(`${target.name}: ${this.reaction==='parry'?'parada':'esquiva'} reduce ${damage} a ${n} PG.`);return n;}
  act(kind,options={}){this.precision=!!options.precision;if(this.s.result||this.actor.team!=='party'||!this.s.action)return false;const a=this.actor,e=this.enemy;
  if(kind==='attack'||kind==='power'){if(kind==='power'&&!a.power)return false;const damage=this.hit(a,e,kind==='power'?a.bab:0);if(damage===null)return false;}
- else if(kind==='missile'){if(a.class!=='Mago'||this.s.spells<1)return false;if(!this.s.noBoard&&distance(a,e)>(a.missileRange??4))return this.fail('El objetivo está fuera del alcance del proyectil mágico.');const d=this.die(4)+1+(this.precision?1:0);e.hp=Math.max(0,e.hp-d);this.s.spells--;this.log(`Proyectil mágico: 1d4+1${this.precision?' +1 de precisión':''} = ${d}. Impacta sin tirada de ataque.`);}
- else if(kind==='armor'){if(a.class!=='Mago'||this.s.spells<1||this.s.spellArmor)return false;this.s.spells--;a.ac+=4;a.flat+=4;this.s.spellArmor=true;this.log('Armadura de mago: +4 CA durante este encuentro.');}
+ else if(kind==='missile'){if(a.class!=='Mago'||this.s.spells<1)return false;if(!this.s.noBoard&&distance(a,e)>(a.missileRange??4))return this.fail('El objetivo está fuera del alcance del proyectil mágico.');const d=this.die(4)+1+(this.precision?1:0)+(a.subclass==='Tejedor'?1:0)+(this.s.arcaneFocus?(a.spellDC||0):0);e.hp=Math.max(0,e.hp-d);this.s.spells--;this.s.arcaneFocus=false;this.log(`Proyectil mágico${a.subclass==='Tejedor'?' de ceniza':''}: 1d4+1${a.subclass==='Tejedor'?' +1 de Tejedor':''}${this.precision?' +1 de precisión':''} = ${d}. Impacta sin tirada de ataque.`);}
+ else if(kind==='armor'){if(a.class!=='Mago'||this.s.spells<1||this.s.spellArmor)return false;this.s.spells--;a.ac+=4;a.flat+=4;this.s.spellArmor=true;this.s.arcaneFocus=false;this.log('Armadura de mago: +4 CA durante este encuentro.');}
  else if(kind==='potion'){if(!this.s.potions||a.hp===a.max)return false;const d=this.die(8)+1,healed=Math.min(d,a.max-a.hp);a.hp+=healed;this.s.potions--;this.log(`${a.name} bebe una poción: 1d8+1 = ${d}; recupera ${healed} PG.`);}
+ else if(kind==='finta'){if(a.class!=='Pícaro'||a.action==='marcar')return false;this.s.shadowFeint=true;this.s.targetId=e.id;this.log(`${a.name} ejecuta una finta de sombra: el próximo ataque puede aplicar furtivo +1d${a.sneakDie||8}.`);}
+ else if(kind==='marcar'){if(a.class!=='Pícaro'||a.action!=='marcar')return false;this.s.markedTarget=e.id;this.s.targetId=e.id;this.log(`${a.name} marca a ${e.name}: el siguiente impacto causa +2 daño.`);}
+ else if(kind==='canalizar'){if(a.class!=='Mago'||a.action!=='canalizar')return false;this.s.arcaneFocus=true;this.log(`${a.name} canaliza el Umbral: el próximo conjuro recibe +${a.spellDC||0} CD y precisión.`);}
  else if(kind==='guard'){a.guard=true;this.log(`${a.name} adopta defensa total: +4 CA hasta su siguiente turno.`);}
   else if(kind==='mechanism'){
   const needsContact=['echo','whisper','custodian'].includes(this.s.kind);
@@ -115,5 +124,5 @@ class Battle{
  options.sort((p,q)=>score(p)-score(q));if(!options.length||score(options[0])>=score(a))break;this.move(options[0].dx,options[0].dy);}
  if(distance(a,e)===1&&tactic!=='distance')this.act('attack');else this.act('guard');if(!this.s.result)this.end();}
 }
-const api={profile,fresh,valid,migrate,places,Battle,defaults,distance,elara:Object.freeze({...elara})};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.CenizasRules=api;
+const api={profile,fresh,valid,migrate,places,Battle,defaults,distance,races:raceData,subclassRules,elara:Object.freeze({...elara})};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.CenizasRules=api;
 })(typeof window!=='undefined'?window:globalThis);

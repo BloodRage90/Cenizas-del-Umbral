@@ -24,7 +24,8 @@ function frame(sprite,dx,dy,dt=1000/60){
   sprite.walkIdle=(sprite.walkIdle||0)+elapsed;
   if(sprite.walkIdle>=80)sprite.walkPhase=1;
  }
- const index=direction*4+Math.floor(sprite.walkPhase??1);
+ const columns=sprite.walkColumns||4,rows=sprite.walkRows||4,frameDirection=direction%rows,phase=Math.floor(sprite.walkPhase??1)%columns;
+ const index=frameDirection*columns+phase;
  if(sprite.walkFrame!==index){sprite.setFrame(index);sprite.walkFrame=index;}
 }
 

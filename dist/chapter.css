@@ -122,3 +122,21 @@ dialog button,#choices button,.travel button,.shop-items button{border:1px solid
 /* Side-view turn combat: no board, grid or movement controller. */
 #battle #board,#battle #combat-arrows,[data-step]{display:none!important}
 #battle #battle-stage{grid-area:auto;}
+
+/* Readable race and gender silhouettes in the side-view arena. The source
+   sprites remain class-specific; these presentation layers add the racial
+   scale/palette cues without pretending that a tint is a new asset. */
+body[data-hero-race="Orco"] #battle [data-unit="hero"] .combat-art{filter:saturate(1.35) hue-rotate(48deg) contrast(1.08) drop-shadow(0 8px 5px #07121bdd)}
+body[data-hero-race="Semiorco"] #battle [data-unit="hero"] .combat-art{filter:saturate(1.18) hue-rotate(28deg) contrast(1.06) drop-shadow(0 8px 5px #07121bdd)}
+body[data-hero-race="Elfo"] #battle [data-unit="hero"] .combat-art{filter:saturate(.88) hue-rotate(8deg) brightness(1.08) drop-shadow(0 8px 5px #07121bdd)}
+body[data-hero-race="Enano"] #battle [data-unit="hero"] .combat-art{filter:saturate(.9) sepia(.16) contrast(1.12) drop-shadow(0 8px 5px #07121bdd)}
+body[data-hero-race="Mediano"] #battle [data-unit="hero"] .combat-art,body[data-hero-race="Gnomo"] #battle [data-unit="hero"] .combat-art{transform:scale(.82);transform-origin:50% 100%;filter:saturate(1.1) brightness(1.08) drop-shadow(0 8px 5px #07121bdd)}
+body[data-hero-race="Semielfo"] #battle [data-unit="hero"] .combat-art{filter:saturate(1.02) hue-rotate(-4deg) brightness(1.04) drop-shadow(0 8px 5px #07121bdd)}
+body[data-hero-gender="Mujer"] #battle [data-unit="hero"] .combat-art{filter:brightness(1.06) saturate(1.04) drop-shadow(0 8px 5px #07121bdd)}
+body[data-hero-gender="No binario"] #battle [data-unit="hero"] .combat-art{filter:contrast(1.05) drop-shadow(0 8px 5px #07121bdd)}
+body[data-hero-subclass="Guardia"] #battle [data-unit="hero"] .combat-art{outline:2px solid #d9b56c88;outline-offset:-12px}
+body[data-hero-subclass="Berserker"] #battle [data-unit="hero"] .combat-art{filter:saturate(1.4) contrast(1.12) drop-shadow(0 0 12px #e47f5f66)}
+body[data-hero-subclass="Sombra"] #battle [data-unit="hero"] .combat-art{filter:brightness(.86) saturate(.82) drop-shadow(0 0 12px #8fc8b166)}
+body[data-hero-subclass="Explorador"] #battle [data-unit="hero"] .combat-art{filter:brightness(1.04) saturate(1.12) drop-shadow(0 0 12px #c7d98c55)}
+body[data-hero-subclass="Arcanista"] #battle [data-unit="hero"] .combat-art{filter:hue-rotate(24deg) saturate(1.26) brightness(1.1) drop-shadow(0 0 14px #b9aaf477)}
+body[data-hero-subclass="Tejedor"] #battle [data-unit="hero"] .combat-art{filter:hue-rotate(-18deg) saturate(1.22) brightness(1.04) drop-shadow(0 0 14px #d6a17c77)}

@@ -8,8 +8,10 @@ const vm = require('node:vm');
 
 const root = path.resolve(__dirname, '..');
 const appPath = path.join(root, 'dist', 'app.js');
+const dataPath = path.join(root, 'dist', 'character-data.js');
 const cssPath = path.join(root, 'dist', 'style.css');
 const app = fs.readFileSync(appPath, 'utf8');
+const data = require(dataPath);
 const css = fs.readFileSync(cssPath, 'utf8');
 
 const races = ['Humano', 'Elfo', 'Enano', 'Orco', 'Mediano', 'Gnomo', 'Semielfo', 'Semiorco'];
@@ -56,10 +58,11 @@ function hash(file) {
   return crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
 }
 
-const classData = literal('classes');
-const raceData = literal('raceData');
-const subclassData = literal('subclassData');
-const genderData = literal('genderData');
+const classData = data.classes;
+const raceData = data.raceData;
+const subclassData = data.subclassData;
+const genderData = data.genderData;
+const subclassRules = data.subclassRules;
 const portraitAssets = literal('portraitAssets');
 
 function buildRuntimeAudit() {
@@ -71,6 +74,9 @@ function buildRuntimeAudit() {
   const context = {
     localStorage: { getItem: () => null, setItem: () => {} },
     crypto: crypto.webcrypto,
+    window: { CenizasCharacterData: data },
+    document: { getElementById: () => null, querySelector: () => null, querySelectorAll: () => [], body: {} },
+    MutationObserver: class { observe() {} },
   };
   vm.createContext(context);
   try {
@@ -103,6 +109,9 @@ if (raceData) {
     if (!Array.isArray(raceData[name]?.mods) || raceData[name].mods.length !== 6) fail(`La raza ${name} no tiene seis modificadores.`);
     if (!Number.isFinite(raceData[name]?.speed) || raceData[name].speed <= 0) fail(`La raza ${name} no tiene velocidad jugable.`);
   }
+  if (raceData.Orco?.mods?.join(',') !== '4,0,0,-2,-2,-2') fail('Orco debe aplicar −2 a Inteligencia, Sabiduría y Carisma.');
+  if (raceData.Semiorco?.mods?.join(',') !== '2,0,0,0,0,-2') fail('Semiorco debe aplicar +2 Fuerza y −2 Carisma.');
+  for (const name of ['Mediano', 'Gnomo']) if (raceData[name]?.size !== 'S' || raceData[name]?.acBonus !== 1 || raceData[name]?.attackBonus !== 1) fail(`${name} debe conservar el paquete de tamaño Pequeño (+1 CA y ataque).`);
 }
 
 if (subclassData) {
@@ -111,6 +120,7 @@ if (subclassData) {
     for (const name of expected) if (!actual.includes(name)) fail(`Falta la subclase ${className} · ${name}.`);
     for (const name of actual) if (!expected.includes(name)) note(`Subclase no contemplada por la matriz: ${className} · ${name}.`);
   }
+  for (const name of Object.keys(subclassRules || {})) if (!Number.isFinite(subclassRules[name].ac) || !Number.isFinite(subclassRules[name].damage)) fail(`La subclase ${name} no tiene reglas mecánicas completas.`);
 }
 
 if (genderData) {
@@ -208,7 +218,7 @@ if (runtime) {
 }
 
 console.log('IDENTITY REVIEW · Cenizas del Umbral');
-console.log(`Matriz revisada: ${matrix.length} combinaciones (${races.length} razas × ${classes.length} clases × 2 subclases × ${genders.length} géneros).`);
+console.log(`Matriz revisada: ${matrix.length} combinaciones (${races.length} razas × ${Object.values(subclasses).flat().length} pares clase/subclase × ${genders.length} géneros).`);
 console.log(`Retratos revisados: ${portraitAssets ? Object.values(portraitAssets).reduce((sum, group) => sum + Object.keys(group).length, 0) : 0}.`);
 console.log(`Personajes jugables ejecutados: ${runtime ? matrix.length : 0}.`);
 if (notes.length) for (const message of notes) console.log(`NOTE: ${message}`);

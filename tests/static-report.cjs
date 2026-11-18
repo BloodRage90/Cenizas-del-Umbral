@@ -14,7 +14,8 @@ for(const name of ['renderPortrait','identity','sheet','updateHero','changed','b
 assert(!app.includes('issues()'),'app.js no conserva la hoja muerta que llamaba a issues()');
 assert(!app.includes('Historia personal</h3>'),'la historia personal fue retirada de la hoja jugable');
 assert(combat.includes('function migrate(raw)')&&combat.includes('range:1'),'el motor expone migración y alcance');
-assert(combat.includes("bonus:cls==='Mago'?m[3]:m[0]"),'el Mago usa Inteligencia');
+assert(combat.includes("bonus:(cls==='Mago'?m[3]:m[0])"),'el Mago usa Inteligencia');
+assert(combat.includes('subclassRules')&&combat.includes('raceData'),'las reglas de personaje están centralizadas');
 assert.equal((chapter.match(/function bindBattleTargets/g)||[]).length,1,'solo existe un enlace de objetivos de combate lateral');
 assert(!chapter.includes('bindBattleBoard')&&!html.includes('id="board"')&&!html.includes('id="combat-arrows"'),'el combate no conserva tablero ni control de movimiento');
 assert(chapter.includes('noBoard=true')&&combat.includes('this.s.noBoard'),'el motor resuelve el combate sin casillas cuando se juega en la arena lateral');
