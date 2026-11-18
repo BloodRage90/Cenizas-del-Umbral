@@ -4,7 +4,7 @@
 
 - Se añadió una tira de orden de turnos accesible en la cabecera de la arena lateral, con estado actual y unidades derrotadas.
 - El orden se desplaza horizontalmente en pantallas estrechas sin recuperar el tablero ni sus controles.
-- Las comprobaciones opcionales de habilidad cubren diez rutas (cerraduras, sigilo, arcano, trepar, información, intención, escritura y mecanismos) sin alterar las rutas principales.
+- Las comprobaciones opcionales cubren diez habilidades en doce rutas (cerraduras, sigilo, arcano, trepar, información, intención, escritura, concentración, intimidación y mecanismos) sin alterar las rutas principales.
 
 ## 2026-11-18 · Fase 3
 
