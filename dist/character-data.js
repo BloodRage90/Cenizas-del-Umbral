@@ -48,14 +48,15 @@
     Mago: { explore: 'Discernir', combat: 'Canalizar', promise: 'Controlas el campo: conviertes un turno en tres.', example: 'Canaliza 1 PI → acepta −2 CA → lanza sin gastar espacio.' }
   };
   const raceVerbs = {
-    Humano: { verb: 'Negociar', promise: 'Adaptas un bono menor a cualquier situación.', dialogue: 'La guardia escucha tu propuesta antes de cerrar el puente.' },
+    Humano: { verb: 'Negociar', promise: 'Tu experiencia te permite elegir una respuesta adaptable en cada secreto.', dialogue: 'La guardia escucha tu propuesta antes de cerrar el puente.' },
     Elfo: { verb: 'Percibir', promise: 'Lees la vida escondida entre la vegetación y las inscripciones naturales.', dialogue: 'Las hojas te muestran una escritura que nadie más ve.' },
-    Enano: { verb: 'Forzar', promise: 'Abres mecanismos pesados y resistes gases y venenos ambientales.', dialogue: 'El metal vibra bajo tus dedos: reconoces el cierre de la compuerta.' },
-    Orco: { verb: 'Intimidar', promise: 'Tu presencia abre paso ante quienes solo respetan la fuerza.', dialogue: 'El encargado retrocede al ver tus colmillos y deja de fingir.' },
-    Mediano: { verb: 'Escabullirse', promise: 'Te mueves por debajo de barreras y alcanzas rendijas imposibles.', dialogue: 'La criatura del hueco te hace sitio: está acostumbrada a tu tamaño.' },
-    Gnomo: { verb: 'Colarse', promise: 'Entras por rendijas y puedes hablar con criaturas pequeñas.', dialogue: 'Un ratón de ceniza te responde con un mapa diminuto.' },
-    Semielfo: { verb: 'Tender puentes', promise: 'Tu herencia dual abre conversaciones que otros no pueden sostener.', dialogue: 'La inscripción cambia al oír tu voz y muestra dos caminos.' },
-    Semiorco: { verb: 'Imponerse', promise: 'Combinas vigor y trato urbano para apartar a los indecisos.', dialogue: 'El mercader reconoce tu determinación y ofrece una salida justa.' }
+    Enano: { verb: 'Forjar memoria', promise: 'Reconoces la huella de una compuerta y la dejas registrada.', dialogue: 'El metal vibra bajo tus dedos: reconoces el cierre de la compuerta.' },
+    Orco: { verb: 'Intimidar', promise: 'Tu presencia cambia el tono de quienes intentan negar lo ocurrido.', dialogue: 'El encargado retrocede al ver tus colmillos y deja de fingir.' },
+    Mediano: { verb: 'Escabullirse', promise: 'Encuentras una rendija y recuperas un recuerdo que otros pasan por alto.', dialogue: 'La criatura del hueco te hace sitio: está acostumbrada a tu tamaño.' },
+    Gnomo: { verb: 'Colarse', promise: 'Sigues señales diminutas y descubres una versión inesperada del mito.', dialogue: 'Un ratón de ceniza te responde con un mapa diminuto.' },
+    Semielfo: { verb: 'Tender puentes', promise: 'Sostienes dos relatos a la vez y evitas que uno borre al otro.', dialogue: 'La inscripción cambia al oír tu voz y muestra dos caminos.' },
+    Semiorco: { verb: 'Imponerse', promise: 'Nombras el daño sin dejar que te conviertan en una caricatura.', dialogue: 'El mercader reconoce tu determinación y ofrece una salida justa.' }
+>>>>>>> 3fd8390 (feat: active combat and narrative continuity)
   };
   const genderData = [['Mujer', 'woman', '✧'], ['Hombre', 'man', '◆'], ['No binario', 'nonbinary', '◇']];
   const classSubclassPairs = Object.entries(subclassData).flatMap(([className, entries]) => entries.map(entry => ({ class: className, subclass: entry[0] })));
