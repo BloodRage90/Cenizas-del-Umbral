@@ -1,58 +1,68 @@
 (function (root) {
   'use strict';
 
-  /* One visual contract for the creator, exploration and side-view combat.
-   * The art is intentionally shared by class, while race, gender and subclass
-   * change the silhouette treatment, palette and equipment accents at runtime. */
+  /*
+   * Visual contract shared by the creator, exploration and combat.
+   *
+   * The four supplied pixel sheets remain the source art, but they are never
+   * shown raw anymore. The browser builds a deterministic variant from class,
+   * race, gender and subclass, so every playable combination has a distinct
+   * sprite without adding 144 large binary files to the repository.
+   */
   const classFiles = {
     Guerrero: 'identity-warrior-pixel.webp',
     Pícaro: 'identity-rogue-pixel.webp',
     Mago: 'identity-mage-pixel.webp'
   };
+  const classKeys = { Guerrero: 'hero-warrior', Pícaro: 'hero-rogue', Mago: 'hero-mage' };
+
   const raceData = {
-    Humano: { scale: 1, filter: 'none', accent: '#d9b56c', feature: 'round' },
-    Elfo: { scale: 1.03, filter: 'saturate(1.12) hue-rotate(8deg)', accent: '#a9d6b6', feature: 'ears' },
-    Enano: { scale: 0.91, filter: 'sepia(.13) saturate(.92) contrast(1.06)', accent: '#c58d62', feature: 'beard' },
-    Orco: { scale: 1.12, filter: 'saturate(.72) sepia(.3) hue-rotate(26deg) contrast(1.08)', accent: '#92a85d', feature: 'tusks' },
-    Mediano: { scale: 0.78, filter: 'saturate(1.08) brightness(1.04)', accent: '#e2bc7a', feature: 'small' },
-    Gnomo: { scale: 0.83, filter: 'saturate(.98) hue-rotate(-7deg) brightness(1.04)', accent: '#d8a1d2', feature: 'cap' },
-    Semielfo: { scale: 1, filter: 'saturate(1.04) hue-rotate(2deg)', accent: '#b9d0b2', feature: 'half-ears' },
-    Semiorco: { scale: 1.08, filter: 'saturate(.82) sepia(.2) hue-rotate(25deg) contrast(1.08)', accent: '#a9a36b', feature: 'half-tusks' }
+    Humano: { scale: 1, filter: 'none', accent: '#d9b56c', feature: 'round', skin: '#c68b68' },
+    Elfo: { scale: 1.03, filter: 'saturate(1.12) hue-rotate(8deg)', accent: '#a9d6b6', feature: 'ears', skin: '#d3a07f' },
+    Enano: { scale: 0.91, filter: 'sepia(.13) saturate(.92) contrast(1.06)', accent: '#c58d62', feature: 'beard', skin: '#b97b59' },
+    Orco: { scale: 1.12, filter: 'saturate(.72) sepia(.3) hue-rotate(26deg) contrast(1.08)', accent: '#92a85d', feature: 'tusks', skin: '#718a4e' },
+    Mediano: { scale: 0.78, filter: 'saturate(1.08) brightness(1.04)', accent: '#e2bc7a', feature: 'small', skin: '#d39b70' },
+    Gnomo: { scale: 0.83, filter: 'saturate(.98) hue-rotate(-7deg) brightness(1.04)', accent: '#d8a1d2', feature: 'cap', skin: '#d7a27d' },
+    Semielfo: { scale: 1, filter: 'saturate(1.04) hue-rotate(2deg)', accent: '#b9d0b2', feature: 'half-ears', skin: '#c99576' },
+    Semiorco: { scale: 1.08, filter: 'saturate(.82) sepia(.2) hue-rotate(25deg) contrast(1.08)', accent: '#a9a36b', feature: 'half-tusks', skin: '#8f8256' }
   };
   const genderData = {
-    Mujer: { key: 'woman', accent: '#e6a3b8', feature: 'ribbon' },
-    Hombre: { key: 'man', accent: '#9eb9d1', feature: 'braid' },
-    'No binario': { key: 'nonbinary', accent: '#b9aaf4', feature: 'sash' }
+    Mujer: { key: 'woman', accent: '#e6a3b8', feature: 'ribbon', hair: '#9a6044' },
+    Hombre: { key: 'man', accent: '#9eb9d1', feature: 'braid', hair: '#4a3029' },
+    'No binario': { key: 'nonbinary', accent: '#b9aaf4', feature: 'sash', hair: '#6f516d' }
   };
   const subclassData = {
-    Guardia: { visual: 'guardian', accent: '#d9b56c', mark: 'shield' },
-    Berserker: { visual: 'berserker', accent: '#e47f5f', mark: 'rage' },
-    Sombra: { visual: 'shadow', accent: '#8fc8b1', mark: 'crescent' },
-    Explorador: { visual: 'scout', accent: '#c7d98c', mark: 'compass' },
-    Arcanista: { visual: 'arcane', accent: '#b9aaf4', mark: 'rune' },
-    Tejedor: { visual: 'ash-weaver', accent: '#d6a17c', mark: 'ember' }
+    Guardia: { class: 'Guerrero', visual: 'guardian', accent: '#d9b56c', mark: 'shield' },
+    Berserker: { class: 'Guerrero', visual: 'berserker', accent: '#e47f5f', mark: 'rage' },
+    Sombra: { class: 'Pícaro', visual: 'shadow', accent: '#8fc8b1', mark: 'crescent' },
+    Explorador: { class: 'Pícaro', visual: 'scout', accent: '#c7d98c', mark: 'compass' },
+    Arcanista: { class: 'Mago', visual: 'arcane', accent: '#b9aaf4', mark: 'rune' },
+    Tejedor: { class: 'Mago', visual: 'ash-weaver', accent: '#d6a17c', mark: 'ember' }
   };
-
-  const validClass = value => Object.prototype.hasOwnProperty.call(classFiles, value) ? value : 'Guerrero';
-  const validRace = value => Object.prototype.hasOwnProperty.call(raceData, value) ? value : 'Humano';
-  const validGender = value => Object.prototype.hasOwnProperty.call(genderData, value) ? value : 'No binario';
+  const defaults = { Guerrero: 'Guardia', Pícaro: 'Sombra', Mago: 'Arcanista' };
   const slug = value => String(value || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  const valid = (table, value, fallback) => Object.prototype.hasOwnProperty.call(table, value) ? value : fallback;
+
+  function variantKey({ className, race, gender, subclass }) {
+    return `hero-${classKeys[className]}-${slug(race)}-${genderData[gender].key}-${slug(subclass)}`;
+  }
 
   function profile(character = {}) {
-    const className = validClass(character.class);
-    const race = validRace(character.race);
-    const gender = validGender(character.gender);
-    const subclass = subclassData[character.subclass] ? character.subclass : className === 'Guerrero' ? 'Guardia' : className === 'Pícaro' ? 'Sombra' : 'Arcanista';
+    const className = valid(classFiles, character.class, 'Guerrero');
+    const race = valid(raceData, character.race, 'Humano');
+    const gender = valid(genderData, character.gender, 'No binario');
+    const subclass = subclassData[character.subclass]?.class === className ? character.subclass : defaults[className];
     const classFile = className === 'Mago' && subclass === 'Tejedor' ? 'identity-mage-ash-pixel.webp' : classFiles[className];
+    const baseTextureKey = className === 'Mago' && subclass === 'Tejedor' ? 'hero-mage-ash' : classKeys[className];
     const raceInfo = raceData[race], genderInfo = genderData[gender], subInfo = subclassData[subclass];
+    const key = variantKey({ className, race, gender, subclass });
     return {
       class: className, race, gender, subclass,
       classSlug: slug(className), raceSlug: slug(race), genderSlug: genderInfo.key,
-      visual: subInfo.visual, mark: subInfo.mark,
-      file: classFile, textureKey: 'hero-' + (className === 'Mago' && subclass === 'Tejedor' ? 'mage-ash' : slug(className)),
-      scale: raceInfo.scale, filter: raceInfo.filter,
-      raceFeature: raceInfo.feature, raceAccent: raceInfo.accent,
-      genderFeature: genderInfo.feature, genderAccent: genderInfo.accent,
+      visual: subInfo.visual, mark: subInfo.mark, file: classFile, baseTextureKey,
+      textureKey: key, variantKey: key, scale: raceInfo.scale, filter: raceInfo.filter,
+      raceFeature: raceInfo.feature, raceAccent: raceInfo.accent, raceSkin: raceInfo.skin,
+      genderFeature: genderInfo.feature, genderAccent: genderInfo.accent, genderHair: genderInfo.hair,
       accent: subInfo.accent
     };
   }
@@ -66,7 +76,98 @@
     };
   }
 
-  const api = { classFiles, raceData, genderData, subclassData, profile, assets, slug };
+  function polygon(ctx, points, fill, stroke = '#241a16', width = 4) {
+    ctx.beginPath();
+    ctx.moveTo(points[0][0], points[0][1]);
+    for (let i = 1; i < points.length; i++) ctx.lineTo(points[i][0], points[i][1]);
+    ctx.closePath();
+    if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+    if (stroke) { ctx.lineWidth = width; ctx.strokeStyle = stroke; ctx.stroke(); }
+  }
+
+  function drawVariantFrame(ctx, x, y, width, height, spec) {
+    const u = Math.min(width, height) / 100;
+    const cx = x + width * .5;
+    const headY = y + height * .255;
+    const bodyY = y + height * .44;
+    const skin = spec.raceSkin || '#c68b68';
+    const dark = '#241a16';
+    const race = spec.raceAccent || spec.accent;
+    const sub = spec.accent || '#d9b56c';
+    ctx.save();
+    ctx.imageSmoothingEnabled = false;
+    ctx.lineJoin = 'miter';
+
+    /* Race is carried by the silhouette, not just a hue filter. */
+    if (spec.raceFeature === 'ears' || spec.raceFeature === 'half-ears') {
+      const reach = spec.raceFeature === 'ears' ? 18 : 12;
+      polygon(ctx, [[cx - 10 * u, headY], [cx - (32 + reach) * u, headY - 16 * u], [cx - 23 * u, headY + 9 * u]], skin, dark, 3);
+      polygon(ctx, [[cx + 10 * u, headY], [cx + (32 + reach) * u, headY - 16 * u], [cx + 23 * u, headY + 9 * u]], skin, dark, 3);
+    }
+    if (spec.raceFeature === 'beard') {
+      polygon(ctx, [[cx - 20 * u, headY + 13 * u], [cx + 20 * u, headY + 13 * u], [cx + 14 * u, headY + 34 * u], [cx, headY + 44 * u], [cx - 14 * u, headY + 34 * u]], '#6d4436', dark, 3);
+      ctx.fillStyle = '#b2784e'; ctx.fillRect(cx - 9 * u, headY + 20 * u, 18 * u, 4 * u);
+    }
+    if (spec.raceFeature === 'tusks' || spec.raceFeature === 'half-tusks') {
+      const amount = spec.raceFeature === 'tusks' ? 10 : 6;
+      ctx.globalAlpha = .42; ctx.fillStyle = '#6a814b'; ctx.fillRect(cx - 25 * u, headY - 6 * u, 50 * u, 35 * u); ctx.globalAlpha = 1;
+      polygon(ctx, [[cx - 11 * u, headY + 18 * u], [cx - 3 * u, headY + 18 * u], [cx - 7 * u, headY + (18 + amount) * u]], '#f7e3b1', dark, 2);
+      polygon(ctx, [[cx + 11 * u, headY + 18 * u], [cx + 3 * u, headY + 18 * u], [cx + 7 * u, headY + (18 + amount) * u]], '#f7e3b1', dark, 2);
+    }
+    if (spec.raceFeature === 'cap') {
+      polygon(ctx, [[cx - 27 * u, headY - 11 * u], [cx + 27 * u, headY - 11 * u], [cx + 2 * u, headY - 37 * u], [cx - 7 * u, headY - 22 * u]], race, dark, 3);
+      ctx.strokeStyle = '#f3d68f'; ctx.lineWidth = 3 * u; ctx.beginPath(); ctx.moveTo(cx - 20 * u, headY - 11 * u); ctx.lineTo(cx + 20 * u, headY - 11 * u); ctx.stroke();
+    }
+    if (spec.raceFeature === 'small') {
+      ctx.strokeStyle = race; ctx.lineWidth = 3 * u; ctx.strokeRect(cx - 24 * u, bodyY + 18 * u, 48 * u, 26 * u);
+    }
+
+    /* Gender presentation is an actual accessory with a different shape. */
+    ctx.lineWidth = 3 * u;
+    if (spec.genderFeature === 'ribbon') {
+      ctx.strokeStyle = spec.genderAccent; ctx.beginPath(); ctx.moveTo(cx + 20 * u, headY - 16 * u); ctx.lineTo(cx + 30 * u, headY + 19 * u); ctx.lineTo(cx + 22 * u, headY + 34 * u); ctx.stroke();
+      ctx.fillStyle = spec.genderHair; ctx.fillRect(cx + 18 * u, headY - 18 * u, 7 * u, 24 * u);
+    } else if (spec.genderFeature === 'braid') {
+      ctx.strokeStyle = spec.genderAccent; ctx.beginPath(); ctx.moveTo(cx - 20 * u, headY - 15 * u); ctx.lineTo(cx - 30 * u, headY + 10 * u); ctx.lineTo(cx - 22 * u, headY + 29 * u); ctx.stroke();
+      ctx.fillStyle = spec.genderHair; ctx.fillRect(cx - 26 * u, headY - 18 * u, 8 * u, 23 * u);
+    } else {
+      ctx.strokeStyle = spec.genderAccent; ctx.beginPath(); ctx.moveTo(cx - 29 * u, bodyY + 4 * u); ctx.lineTo(cx + 27 * u, bodyY + 30 * u); ctx.stroke();
+      ctx.fillStyle = spec.genderAccent; ctx.fillRect(cx + 19 * u, bodyY + 24 * u, 10 * u, 7 * u);
+    }
+
+    /* Subclass equipment is large enough to read in the small exploration actor. */
+    const gearX = x + width * .78, gearY = y + height * .53;
+    ctx.strokeStyle = sub; ctx.fillStyle = sub; ctx.lineWidth = 3 * u;
+    if (spec.mark === 'shield') {
+      polygon(ctx, [[gearX - 12 * u, gearY - 16 * u], [gearX + 12 * u, gearY - 16 * u], [gearX + 10 * u, gearY + 13 * u], [gearX, gearY + 21 * u], [gearX - 10 * u, gearY + 13 * u]], sub, dark, 3);
+      ctx.strokeStyle = '#f9e6a9'; ctx.strokeRect(gearX - 2 * u, gearY - 10 * u, 4 * u, 18 * u);
+    } else if (spec.mark === 'rage') {
+      ctx.strokeStyle = '#e47f5f'; ctx.lineWidth = 6 * u; ctx.beginPath(); ctx.moveTo(gearX - 18 * u, gearY - 15 * u); ctx.lineTo(gearX + 17 * u, gearY + 17 * u); ctx.moveTo(gearX - 18 * u, gearY + 17 * u); ctx.lineTo(gearX + 17 * u, gearY - 15 * u); ctx.stroke();
+    } else if (spec.mark === 'crescent') {
+      ctx.strokeStyle = '#8fc8b1'; ctx.lineWidth = 5 * u; ctx.beginPath(); ctx.arc(gearX, gearY, 15 * u, -1.15, 1.15); ctx.stroke();
+    } else if (spec.mark === 'compass') {
+      ctx.strokeStyle = '#c7d98c'; ctx.lineWidth = 3 * u; ctx.strokeRect(gearX - 13 * u, gearY - 13 * u, 26 * u, 26 * u);
+      ctx.beginPath(); ctx.moveTo(gearX - 9 * u, gearY - 9 * u); ctx.lineTo(gearX + 9 * u, gearY + 9 * u); ctx.moveTo(gearX + 9 * u, gearY - 9 * u); ctx.lineTo(gearX - 9 * u, gearY + 9 * u); ctx.stroke();
+    } else if (spec.mark === 'rune') {
+      ctx.strokeStyle = '#b9aaf4'; ctx.lineWidth = 4 * u; ctx.strokeRect(gearX - 15 * u, gearY - 15 * u, 30 * u, 30 * u);
+      ctx.beginPath(); ctx.moveTo(gearX - 12 * u, gearY); ctx.lineTo(gearX, gearY - 12 * u); ctx.lineTo(gearX + 12 * u, gearY); ctx.lineTo(gearX, gearY + 12 * u); ctx.closePath(); ctx.stroke();
+    } else if (spec.mark === 'ember') {
+      ctx.shadowColor = '#d6a17c'; ctx.shadowBlur = 12 * u; polygon(ctx, [[gearX, gearY - 22 * u], [gearX + 13 * u, gearY + 10 * u], [gearX - 13 * u, gearY + 10 * u]], '#d6a17c', '#fff0d0', 2); ctx.shadowBlur = 0;
+    }
+    ctx.restore();
+  }
+
+  function paintVariantCanvas(ctx, source, spec, columns = 2, rows = 2) {
+    if (!ctx || !source) return;
+    const width = source.width, height = source.height;
+    ctx.clearRect(0, 0, width, height); ctx.imageSmoothingEnabled = false;
+    ctx.save(); try { ctx.filter = spec.filter || 'none'; } catch { /* old WebViews ignore canvas filters */ }
+    ctx.drawImage(source, 0, 0, width, height); ctx.restore();
+    const frameWidth = width / columns, frameHeight = height / rows;
+    for (let row = 0; row < rows; row++) for (let column = 0; column < columns; column++) drawVariantFrame(ctx, column * frameWidth, row * frameHeight, frameWidth, frameHeight, spec);
+  }
+
+  const api = { classFiles, raceData, genderData, subclassData, profile, assets, variantKey, paintVariantCanvas, slug };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.CenizasHeroVisuals = api;
 })(typeof window !== 'undefined' ? window : globalThis);

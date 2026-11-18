@@ -204,6 +204,22 @@
 .character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature{display:block;z-index:5}
 .character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature::before,.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature::after{display:block}
 
+/* The playable variant is intentionally unmistakable at card size: the
+   race silhouette sits above the face plate and the subclass weapon remains
+   visible instead of collapsing into the shared base sheet. */
+.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature{z-index:7}
+.character-visual-preview .preview-character-stage.pixel-combat .preview-gender-feature{z-index:8}
+.character-visual-preview .preview-character-stage.pixel-combat .preview-player-weapon{display:block;z-index:9}
+.character-visual-preview .preview-character-stage.pixel-combat .preview-attack-flash{display:block;z-index:8}
+.character-visual-preview .preview-character-stage.pixel-combat .preview-impact-sparks{display:block;z-index:10}
+.character-visual-preview .preview-character-stage.pixel-combat.scout .preview-player-weapon{right:24px;top:58px;width:39px;height:8px;border-radius:50%;background:transparent;border:3px solid #c7d98c;border-left-color:transparent;transform:rotate(-31deg)}
+.character-visual-preview .preview-character-stage.pixel-combat.scout .preview-player-weapon::before{left:13px;bottom:-3px;width:3px;height:28px;background:#c7d98c;transform:rotate(28deg)}
+.character-visual-preview .preview-character-stage.pixel-combat.berserker .preview-player-weapon{right:20px;top:65px;width:9px;height:55px;background:linear-gradient(#fff0d0 0 16%,#e47f5f 17% 75%,#4a3024 76%);transform:rotate(-28deg)}
+.character-visual-preview .preview-character-stage.pixel-combat.berserker .preview-player-weapon::after{right:-8px;width:20px;height:19px;background:#e47f5f;clip-path:polygon(0 50%,100% 0,83% 100%)}
+.character-visual-preview .preview-character-stage.pixel-combat.shadow .preview-player-weapon::after{box-shadow:10px 4px 0 -2px #eaffdc}
+.character-visual-preview .preview-character-stage.pixel-combat.arcane .preview-player-weapon,.character-visual-preview .preview-character-stage.pixel-combat.ash-weaver .preview-player-weapon{z-index:9}
+.character-visual-preview .preview-character-stage.pixel-combat.ash-weaver .preview-player-weapon::after{background:radial-gradient(circle at 35% 30%,#fff9db 0 12%,#d6a17c 38%,transparent 72%);box-shadow:0 0 16px #d6a17c}
+
 /* Elves: long ears are attached to the head, not floating triangles. */
 .character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature.elfo::before,.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature.semielfo::before{left:22%;top:17%;width:25%;height:13%;background:#dca47f;clip-path:polygon(100% 50%,0 10%,22% 50%,0 90%);filter:drop-shadow(0 1px 1px #251a18)}
 .character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature.elfo::after,.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature.semielfo::after{left:53%;top:17%;width:25%;height:13%;background:#dca47f;clip-path:polygon(0 50%,100% 10%,78% 50%,100% 90%);filter:drop-shadow(0 1px 1px #251a18)}
@@ -236,7 +252,7 @@
 .character-visual-preview .preview-character-stage.pixel-combat.enano .preview-player-portrait{left:40%;top:15%;width:40%;height:38%;background-size:180% auto}
 .character-visual-preview .preview-character-stage.pixel-combat.gnomo .preview-player-portrait,.character-visual-preview .preview-character-stage.pixel-combat.mediano .preview-player-portrait{left:42%;top:17%;width:35%;height:33%;background-size:185% auto}
 .character-visual-preview .preview-character-stage.pixel-combat.orco .preview-player-portrait,.character-visual-preview .preview-character-stage.pixel-combat.semiorco .preview-player-portrait{left:38%;top:14%;width:44%;height:38%;background-size:170% auto;filter:saturate(.96) contrast(1.1) drop-shadow(0 2px 2px #000b)}
-.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature::before,.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature::after{display:none}
+.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature::before,.character-visual-preview .preview-character-stage.pixel-combat .preview-race-feature::after{display:block}
 
 
 .error-msg{display:none;margin-top:6px;color:#b8473b;font:600 12px/1.35 system-ui}.error-msg::before{content:'!';display:inline-grid;place-items:center;width:16px;height:16px;margin-right:4px;border-radius:50%;background:#b8473b;color:#fff;font-weight:800}input[aria-invalid='true']{border-color:#b8473b;box-shadow:0 0 0 2px #b8473b33}input[aria-invalid='true']~.error-msg{display:block}

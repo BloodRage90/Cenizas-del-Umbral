@@ -9,6 +9,7 @@ const subclasses = [
   ['Mago', 'Arcanista'], ['Mago', 'Tejedor']
 ];
 let combinations = 0;
+const variantKeys = new Set();
 
 for (const race of races) for (const gender of genders) for (const [className, subclass] of subclasses) {
     const profile = HV.profile({ class: className, race, gender, subclass });
@@ -16,12 +17,16 @@ for (const race of races) for (const gender of genders) for (const [className, s
     assert.equal(profile.race, race);
     assert.equal(profile.gender, gender);
     assert.ok(profile.file.endsWith('.webp'));
+    assert.ok(profile.baseTextureKey.startsWith('hero-'));
     assert.ok(profile.textureKey.startsWith('hero-'));
+    assert.equal(profile.textureKey, profile.variantKey);
+    variantKeys.add(profile.variantKey);
     assert.ok(profile.scale > 0);
     combinations++;
 }
 
 assert.equal(combinations, 144);
+assert.equal(variantKeys.size, 144, 'cada combinación jugable debe generar un sprite único');
 assert.notEqual(HV.profile({ class: 'Guerrero', race: 'Humano', gender: 'Hombre', subclass: 'Guardia' }).file,
   HV.profile({ class: 'Mago', race: 'Elfo', gender: 'Mujer', subclass: 'Tejedor' }).file);
 assert.notEqual(HV.profile({ class: 'Guerrero', race: 'Orco', gender: 'Hombre', subclass: 'Guardia' }).scale,

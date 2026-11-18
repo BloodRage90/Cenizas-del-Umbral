@@ -45,3 +45,9 @@
 - Se estabilizó la migración de guardados, la cinematica de plaza y el combate lateral por turnos.
 - Se actualizaron las pruebas de `battle-scene.js`, incluida la garantía de resolución única y el bloqueo durante una animación.
 - Se exigió nombre de personaje y se corrigieron etiquetas accesibles del creador y del mapa.
+## 2026-11-18 · Variantes de sprites jugables
+
+- Generación determinista de un sprite por combinación de clase, raza, género y subclase (144 variantes), reutilizando las hojas pixel existentes.
+- Las variantes se generan como texturas Phaser en tiempo de ejecución para exploración y como accesorios/siluetas visibles en la identidad y combate.
+- Razas con silueta reconocible (orejas élficas, barba enana, gorro gnomo, colmillos orcos, escala Pequeña) y equipo de subclase distinguible.
+- La prueba visual ahora exige 144 claves de sprite únicas.
