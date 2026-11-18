@@ -13,7 +13,9 @@ const routeLabels=[
   'Leer la respuesta · Averiguar intenciones',
   'Leer el sello · Descifrar escritura',
   'Escalar el paso · Trepar',
-  'Desactivar el atril · Inutilizar mecanismo'
+  'Desactivar el atril · Inutilizar mecanismo',
+  'Imponer la voz · Intimidar',
+  'Resistir el eco · Concentración'
 ];
 for(const label of routeLabels)assert(source.includes(`skillRoute('${label}'`),`ruta de habilidad presente: ${label}`);
 assert((source.match(/skillRoute\(/g)||[]).length>=10,'hay al menos diez rutas de habilidad opcionales');
