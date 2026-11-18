@@ -1,0 +1,19 @@
+{
+  "name": "cenizas-del-umbral",
+  "private": true,
+  "version": "0.1.0",
+  "type": "commonjs",
+  "scripts": {
+    "test": "node scripts/run-tests.cjs && node tests/regressions.cjs && node tests/static-report.cjs",
+    "test:unit": "node scripts/run-tests.cjs",
+    "test:static": "node tests/static-report.cjs",
+    "lint": "eslint scripts tests",
+    "format:check": "prettier --check scripts tests",
+    "test:e2e": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.52.0",
+    "eslint": "^9.15.0",
+    "prettier": "^3.4.2"
+  }
+}

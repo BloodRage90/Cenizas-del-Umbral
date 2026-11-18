@@ -1,17 +1,11 @@
 /* One visual scale and pose system shared by the field and attack close-ups. */
 .combat-art{width:100%;aspect-ratio:1;flex:none;background-repeat:no-repeat;image-rendering:auto;transform-origin:50% 88%;filter:drop-shadow(0 5px 3px #07121bbb);animation:battle-breathe 2.6s ease-in-out infinite}
-.combat-art[data-kind=hero]{background-image:url('combat-hero.png');background-size:400% 200%;background-position:0 0}
-.wearing-vigilia .combat-art[data-kind=hero]{background-position-y:100%}
 .combat-art[data-kind=elara]{background-image:url('combat-elara.png');background-size:200% 200%}
 .combat-art[data-kind=echo]{background-image:url('combat-echo.png');background-size:200% 200%;animation:echo-drift 3.4s ease-in-out infinite}
 .combat-art[data-kind=construct]{background:url('custodian.png') center / contain no-repeat}
 .combat-art[data-pose=windup]{background-position-x:100%}
-.combat-art[data-kind=hero][data-pose=windup]{background-position-x:33.333333%}
 .combat-art[data-pose=strike]{background-position:0 100%;animation:none}
-.combat-art[data-kind=hero][data-pose=strike]{background-position-x:66.666667%;background-position-y:0}
-.wearing-vigilia .combat-art[data-kind=hero][data-pose=strike]{background-position-y:100%}
 .combat-art[data-pose=hurt]{background-position:100% 100%;animation:none}
-.combat-art[data-kind=hero][data-pose=hurt]{background-position-y:0}.wearing-vigilia .combat-art[data-kind=hero][data-pose=hurt]{background-position-y:100%}
 #battle{background:linear-gradient(#080f1ab3,#0c1823e6);gap:7px;padding-top:72px;font-family:system-ui,sans-serif}
 #battle .battle-header{background:#0b1826ee;border:1px solid #b89c6055;border-radius:12px;padding:8px 12px;text-align:left;box-shadow:0 8px 30px #0003}
 #battle .battle-header span{font:600 18px/1.25 Georgia,serif;color:#f3d899}#battle .battle-header small{font-size:13px;color:#c5d2dc;margin-top:3px}#battle .battle-header p{font-size:13px;line-height:1.35;color:#c7d8d3;margin:5px 0 0}
@@ -92,3 +86,30 @@
 #battle .combat-actions button:first-child{background:linear-gradient(180deg,#b77b3d,#69432d);color:#fff1c1;border-color:#f0c974}
 #battle #combat-arrows button{border-radius:50%;background:#193b4b;border-color:#9dc6bf;box-shadow:0 5px 14px #0007}
 @media(max-width:650px){#battle #board{border-radius:17px}#battle .battle-actor{width:clamp(78px,22vw,126px)}#battle .battle-actor.enemy-unit{width:clamp(96px,27vw,154px)}#battle .actor-name{font-size:10px;padding:3px 6px}#battle .actor-health{height:5px}#battle-controls{border-radius:12px;padding:6px}}
+
+
+/* Accessible actor badges and compact landscape controls. */
+#battle .actor-portrait{position:absolute;left:5%;top:-5%;width:clamp(28px,4vw,48px);height:clamp(28px,4vw,48px);object-fit:cover;border:1px solid #f5d883cc;border-radius:10px;background:#06131b;box-shadow:0 4px 12px #0009;z-index:6}
+#battle .party-unit .actor-portrait{border-color:#9bd8c2cc}
+#battle .battle-actor.active::before{top:-14%;bottom:auto}
+#battle #battle-log{min-height:44px;min-width:44px}
+#battle .actor-name{bottom:5%;max-width:92%;overflow:hidden;text-overflow:ellipsis}
+@media (orientation:landscape) and (max-height:600px){
+ #battle{grid-template-columns:minmax(0,1fr) minmax(232px,34vw);grid-template-rows:auto minmax(0,1fr) auto;grid-template-areas:"header header" "stage controls" "status elara";gap:6px;padding:max(8px,env(safe-area-inset-top)) max(10px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left));overflow:auto;scrollbar-gutter:stable}
+ #battle>.battle-header{grid-area:header;position:static;margin:0;min-width:0}
+ #battle>#battle-stage{grid-area:stage;min-height:0;height:auto;width:100%;max-height:none}
+ #battle>#battle-controls{grid-area:controls;min-width:0;min-height:0;max-height:100%;height:auto;overflow:auto;align-self:stretch;scrollbar-gutter:stable}
+ #battle>#party-status{grid-area:status;min-width:0;align-self:end}
+ #battle>#elara-controls{grid-area:elara;min-width:0;align-self:end;overflow:auto}
+ #battle #combat-actions{grid-template-columns:repeat(2,minmax(0,1fr));min-width:0}
+ #battle .combat-actions button{min-height:44px;padding:7px 8px;white-space:normal;font-size:clamp(11px,1.8vw,14px)}
+ #battle .battle-actor{width:clamp(76px,14vw,125px)}
+ #battle .battle-actor.enemy-unit{width:clamp(92px,18vw,156px)}
+ #battle .actor-name{font-size:clamp(9px,1.45vw,12px)}
+ #battle .actor-portrait{width:clamp(26px,4.5vw,42px);height:clamp(26px,4.5vw,42px)}
+}
+@media (max-width:420px){
+ #battle .actor-portrait{width:28px;height:28px;border-radius:7px}
+}
+/* Side-view turn combat: legacy board styles stay inert. */
+#battle #board,#battle #combat-arrows,[data-step]{display:none!important}

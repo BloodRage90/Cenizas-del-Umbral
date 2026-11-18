@@ -60,6 +60,7 @@ class UmbralBattle extends R.Battle{
   if(a.hp<=5&&this.s.potions)return {action:'potion'};
   const active=['left','right'].map(id=>this.unit(id)).filter(u=>u.hp>0).sort((u,v)=>R.distance(a,u)-R.distance(a,v));
   const target=active[0]||(this.s.names<2?{x:3,y:2}:this.unit('enemy')),action=active.length?'mechanism':this.s.names<2?'names':'fracture';
+  if(this.s.noBoard)return {action};
   if(R.distance(a,target)<=1)return {action};
   if(this.s.movement>0){const queue=[{x:a.x,y:a.y,path:[]}],seen=new Set([a.x+','+a.y]);while(queue.length){const p=queue.shift();if(R.distance(p,target)<=1&&p.path.length)return {move:p.path[0]};for(const d of [[1,0],[-1,0],[0,1],[0,-1]]){const q={x:p.x+d[0],y:p.y+d[1]},key=q.x+','+q.y;if(q.x<0||q.x>6||q.y<0||q.y>4||seen.has(key)||this.occupied(q.x,q.y))continue;seen.add(key);queue.push({...q,path:[...p.path,d]});}}}
   return {action:'guard'};

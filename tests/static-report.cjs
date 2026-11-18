@@ -1,0 +1,31 @@
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const path=require('node:path');
+const root=path.resolve(__dirname,'..');
+const read=file=>fs.readFileSync(path.join(root,file),'utf8');
+const chapter=read('dist/chapter.js');
+const app=read('dist/app.js');
+const combat=read('dist/combat.js');
+const visuals=read('dist/battle-visuals.js');
+const html=read('dist/chapter.html');
+const index=read('dist/index.html');
+
+for(const name of ['renderPortrait','identity','sheet','updateHero','changed','bind'])assert.equal((app.match(new RegExp('function '+name+'\\(','g'))||[]).length,1,'app.js no duplica '+name);
+assert(!app.includes('issues()'),'app.js no conserva la hoja muerta que llamaba a issues()');
+assert(!app.includes('Historia personal</h3>'),'la historia personal fue retirada de la hoja jugable');
+assert(combat.includes('function migrate(raw)')&&combat.includes('range:1'),'el motor expone migración y alcance');
+assert(combat.includes("bonus:cls==='Mago'?m[3]:m[0]"),'el Mago usa Inteligencia');
+assert.equal((chapter.match(/function bindBattleTargets/g)||[]).length,1,'solo existe un enlace de objetivos de combate lateral');
+assert(!chapter.includes('bindBattleBoard')&&!html.includes('id="board"')&&!html.includes('id="combat-arrows"'),'el combate no conserva tablero ni control de movimiento');
+assert(chapter.includes('noBoard=true')&&combat.includes('this.s.noBoard'),'el motor resuelve el combate sin casillas cuando se juega en la arena lateral');
+assert(combat.includes('moveToward(actor,target){if(this.s.noBoard)return;'),'la IA enemiga no mueve unidades durante el combate lateral');
+const enemyFiles=['ash-warden','rootbound-sentinel','bell-moth','river-wisp','ember-wolf','thorn-goblin','marsh-hag','rune-beetle','drowned-knight','candle-imp','glass-serpent','fungal-brute','clockwork-raven','mirror-shade','ash-drake','iron-boar','willow-spirit','redcap-miner','frost-revenant','umbral-spider'];
+assert.equal(enemyFiles.length,20,'hay 20 variantes de enemigos');
+for(const name of enemyFiles){assert(fs.existsSync(path.join(root,'dist','enemies',name+'.png')),`existe el sprite enemigo ${name}`);assert(visuals.includes(`'${name}':'enemies/${name}.png'`),`el sprite enemigo ${name} está conectado al renderer`);assert(chapter.includes(`variant:'${name}'`),`el encuentro ${name} está conectado a la campaña`);}
+assert(chapter.includes("state.place==='plaza'")&&chapter.includes('preloadPlaces'),'la cinemática y la carga de escenas están acotadas');
+assert(!chapter.includes('libera los nombres antes de atacar el ancla'),'no queda el aviso residual del jefe final');
+assert(visuals.includes('classFiles')&&visuals.includes('actor-portrait'),'los sprites y retratos dependen del personaje');
+assert(html.includes('id="scene" role="region"')&&html.includes('id="battle-stage" role="region"'),'los contenedores interactivos tienen rol');
+assert(index.includes('id="game" role="region"')&&index.includes('intro-video')&&index.includes('preload="none"'),'el mapa y el vídeo respetan accesibilidad y carga diferida');
+assert(!index.includes('Practicar combate ATB'),'la ayuda principal no ofrece el laboratorio ATB heredado como combate de campaña');
+console.log('PASS: auditoría estática del informe.');
