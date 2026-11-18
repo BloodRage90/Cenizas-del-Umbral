@@ -8,7 +8,7 @@ window.CenizasBattleScene=(()=>{
   const from=find(attacker)||stage?.querySelector('.party-unit,.enemy-unit');
   const to=find(target)||stage?.querySelector('.enemy-unit,.party-unit');
   stage?.classList.add('attack-cue');
-  return Visuals.sequence(stage,from,to,{magic:action==='missile',impact:()=>resolve?.({})||{}})
+  return Visuals.sequence(stage,from,to,{magic:action==='missile'||action==='tech',impact:()=>resolve?.({})||{}})
    .finally(()=>{stage?.classList.remove('attack-cue');busy=false;});
  }
  return {show};

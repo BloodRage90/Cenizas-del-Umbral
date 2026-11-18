@@ -89,6 +89,12 @@ window.CenizasBattleVisuals=(()=>{
  }
  function render(s,room){
   const stage=$('battle-stage');if(!stage)return;stage.style.backgroundImage=`linear-gradient(#07141db8,#0c1823d9),url(scenes/${room==='plaza'?'plaza-forest':room}.webp)`;
+  let wall=stage.querySelector('.umbral-wall-names');
+  if(room==='umbral'){
+   if(!wall){wall=document.createElement('div');wall.className='umbral-wall-names';stage.append(wall);}
+   const hero=s.units.find(u=>u.id==='hero');
+   wall.innerHTML=`<span>LOS NOMBRES QUE QUEDAN</span><b>Darien · Mara · Iven · Nerea · ${hero?.name||'Viajero'}</b><small>${s.names<2?'La piedra aún los reclama':'La piedra ya no puede borrarlos'}</small>`;
+  }else wall?.remove();
   let layer=stage.querySelector('.battle-actors');if(!layer){layer=document.createElement('div');layer.className='battle-actors';stage.append(layer);}
   const ids=new Set(s.units.map(u=>u.id));layer.querySelectorAll('.battle-actor').forEach(n=>{if(!ids.has(n.dataset.unit))n.remove();});
   const party=s.units.filter(u=>u.team==='party'),foes=s.units.filter(u=>u.team!=='party');

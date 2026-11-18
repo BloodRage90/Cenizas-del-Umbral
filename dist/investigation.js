@@ -2,7 +2,8 @@
 const documents={
  oath:{flag:'archiveOath',label:'Libro encuadernado',title:'Acta del primer cierre',text:'«Comparecemos por voluntad propia». Trece años atrás, cada custodio trazó su nombre de una manera distinta. Al margen figura Ordan como responsable de la campana.'},
  captives:{flag:'archiveCaptives',label:'Cuaderno de raciones',title:'Relación del ala oeste',text:'Darien: ala oeste, enfermería. La entrega lleva la anotación «traslado bajo custodia». No hay solicitud del interesado ni fecha de salida.'},
- copies:{flag:'archiveCopies',label:'Papeles sueltos',title:'Registro reciente',text:'Reconoces nombres del cuaderno de raciones. En firmas diferentes se repiten la misma inclinación, una raya partida y el mismo remate. Al pie: «transcrito por orden de la priora». No hay originales adjuntos.'}
+ copies:{flag:'archiveCopies',label:'Papeles sueltos',title:'Registro reciente',text:'Reconoces nombres del cuaderno de raciones. En firmas diferentes se repiten la misma inclinación, una raya partida y el mismo remate. Al pie: «transcrito por orden de la priora». No hay originales adjuntos.'},
+ maraDeath:{flag:'maraDeath',label:'Registro de defunción de Mara',title:'Registro de defunción de Mara, hija de Sereth',text:'Registro de defunción · año 47. Mara, hija de Sereth, murió durante la inundación del río. La inscripción termina con una línea añadida después: «su nombre permanece bajo custodia». No hay firma de la familia.'}
 };
 function read(s,id){const d=documents[id];if(!d)return false;const fresh=!s.flags[d.flag];s.flags[d.flag]=true;s.flags.archiveReviewRequired=false;return fresh;}
 function ready(s){return Object.values(documents).every(d=>s.flags[d.flag]);}

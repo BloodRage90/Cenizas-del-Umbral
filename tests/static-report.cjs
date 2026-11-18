@@ -13,6 +13,7 @@ const html=read('dist/chapter.html');
 const index=read('dist/index.html');
 const characterData=read('dist/character-data.js');
 const heroVisuals=read('dist/hero-visuals.js');
+const systems=read('dist/combat-systems.js');
 
 for(const name of ['renderPortrait','identity','sheet','updateHero','changed','bind'])assert.equal((app.match(new RegExp('function '+name+'\\(','g'))||[]).length,1,'app.js no duplica '+name);
 assert(!app.includes('issues()'),'app.js no conserva la hoja muerta que llamaba a issues()');
@@ -20,6 +21,10 @@ assert(!app.includes('Historia personal</h3>'),'la historia personal fue retirad
 assert(combat.includes('function migrate(raw)')&&combat.includes('range:1'),'el motor expone migración y alcance');
 assert(combat.includes("bonus:(cls==='Mago'?m[3]:m[0])"),'el Mago usa Inteligencia');
 assert(combat.includes('subclassRules')&&combat.includes('raceData'),'las reglas de personaje están centralizadas');
+assert(systems.includes('const MAX_PI = 5')&&systems.includes('filoUmbrio')&&systems.includes('llamaArcana')&&systems.includes('sombraDoble'),'el sistema de PI y técnicas está presente');
+assert(html.includes('combat-systems.js')&&html.indexOf('combat-systems.js')<html.indexOf('combat.js'),'el módulo de técnicas se carga antes del motor en el navegador');
+assert(combat.includes('prepareBlock')&&combat.includes('incoming')&&chapter.includes('waitForBlock'),'el bloqueo activo espera la entrada antes de resolver el golpe');
+assert(fs.existsSync(path.join(root,'STORY_AUDIT.md')),'la auditoría narrativa acompaña los cambios');
 assert(chapter.includes('CD.raceData')&&chapter.includes('skillNames')&&!chapter.includes('mods={Elfo:'),'chapter.js usa el módulo compartido para bonificadores raciales');
 assert(characterData.includes('const skillNames')&&characterData.includes('skillNames,'),'los nombres de habilidad viven en el módulo compartido');
 assert.equal((chapter.match(/function bindBattleTargets/g)||[]).length,1,'solo existe un enlace de objetivos de combate lateral');
@@ -41,6 +46,11 @@ assert(index.includes('id="game" role="region"')&&index.includes('intro-video')&
 assert(fs.existsSync(path.join(root,'dist','assets.js'))&&index.includes('assets.js')&&html.includes('assets.js'),'existe un único token de caché compartido');
 assert(!music.includes('resonancias-combate-2')&&!music.includes('resonancias-combate-3'),'la música no conserva versiones de caché duplicadas');
 assert(chapterCss.includes('orientation:landscape')&&chapterCss.includes('min-height:48px')&&chapterCss.includes('white-space:nowrap'),'el carril horizontal conserva objetivos táctiles y nombres legibles');
+assert(chapter.includes('¿Qué llevarás tú cuando cruces el Umbral?')&&chapter.includes('questionAnswer'),'la pregunta recurrente y sus respuestas quedan persistidas');
+assert(chapter.includes('serethConfronted')&&chapter.includes('no busca gobernar'),'el Coro tiene una motivación narrativa explícita');
+assert(chapter.includes('bellSounds')&&chapter.includes('bellSilent'),'el motivo de la campana atraviesa la historia y el desenlace');
+assert(chapter.includes('racialMyths')&&chapter.includes('maraDeath'),'las perspectivas raciales y el duelo de Mara tienen una ruta jugable');
+assert(visuals.includes('umbral-wall-names')&&chapterCss.includes('.umbral-wall-names'),'la arena final muestra los nombres que la piedra intenta borrar');
 assert(fs.existsSync(path.join(root,'dist','valdara.webp'))&&fs.existsSync(path.join(root,'dist','region-map.webp')),'el mapa y el mundo tienen formatos comprimidos');
 assert(!chapter.includes("'hero-walk-v2.png'")&&!chapter.includes("'npc-clergy.png'")&&!chapter.includes("'combat-echo.png'"),'el capítulo usa sprites comprimidos en ejecución');
 assert(!index.includes('Practicar combate ATB'),'la ayuda principal no ofrece el laboratorio ATB heredado como combate de campaña');

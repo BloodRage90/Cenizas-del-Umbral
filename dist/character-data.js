@@ -42,10 +42,25 @@
     Arcanista: { class: 'Mago', label: 'Arcanista', ac: 0, damage: 0, initiative: 0, sneakDie: 0, spellSlots: 1, ranged: 0, spellDC: 1, action: 'canalizar', description: '+1 espacio de conjuro y +1 a la CD de conjuros.' },
     Tejedor: { class: 'Mago', label: 'Tejedor', ac: 0, damage: 1, initiative: 0, sneakDie: 0, spellSlots: 0, ranged: 2, spellDC: 0, action: 'canalizar', description: 'Proyectil de ceniza: +2 alcance y +1 daño mágico.' }
   };
+  const classVerbs = {
+    Guerrero: { explore: 'Embate', combat: 'Postura de Guardia', promise: 'Aguantas golpes y generas ventaja para tu equipo.', example: 'Guardia → bloquea un golpe → devuelve un impacto pesado.' },
+    Pícaro: { explore: 'Registro rápido', combat: 'Marca del Cazador', promise: 'Creas aperturas: marcas, distraes y castigas al distraído.', example: 'Marca → espera la apertura → remata con furtivo.' },
+    Mago: { explore: 'Discernir', combat: 'Canalizar', promise: 'Controlas el campo: conviertes un turno en tres.', example: 'Canaliza 1 PI → acepta −2 CA → lanza sin gastar espacio.' }
+  };
+  const raceVerbs = {
+    Humano: { verb: 'Negociar', promise: 'Adaptas un bono menor a cualquier situación.', dialogue: 'La guardia escucha tu propuesta antes de cerrar el puente.' },
+    Elfo: { verb: 'Percibir', promise: 'Lees la vida escondida entre la vegetación y las inscripciones naturales.', dialogue: 'Las hojas te muestran una escritura que nadie más ve.' },
+    Enano: { verb: 'Forzar', promise: 'Abres mecanismos pesados y resistes gases y venenos ambientales.', dialogue: 'El metal vibra bajo tus dedos: reconoces el cierre de la compuerta.' },
+    Orco: { verb: 'Intimidar', promise: 'Tu presencia abre paso ante quienes solo respetan la fuerza.', dialogue: 'El encargado retrocede al ver tus colmillos y deja de fingir.' },
+    Mediano: { verb: 'Escabullirse', promise: 'Te mueves por debajo de barreras y alcanzas rendijas imposibles.', dialogue: 'La criatura del hueco te hace sitio: está acostumbrada a tu tamaño.' },
+    Gnomo: { verb: 'Colarse', promise: 'Entras por rendijas y puedes hablar con criaturas pequeñas.', dialogue: 'Un ratón de ceniza te responde con un mapa diminuto.' },
+    Semielfo: { verb: 'Tender puentes', promise: 'Tu herencia dual abre conversaciones que otros no pueden sostener.', dialogue: 'La inscripción cambia al oír tu voz y muestra dos caminos.' },
+    Semiorco: { verb: 'Imponerse', promise: 'Combinas vigor y trato urbano para apartar a los indecisos.', dialogue: 'El mercader reconoce tu determinación y ofrece una salida justa.' }
+  };
   const genderData = [['Mujer', 'woman', '✧'], ['Hombre', 'man', '◆'], ['No binario', 'nonbinary', '◇']];
   const classSubclassPairs = Object.entries(subclassData).flatMap(([className, entries]) => entries.map(entry => ({ class: className, subclass: entry[0] })));
 
-  const api = { names, short, skillNames, costs, classes, raceData, subclassData, subclassRules, genderData, classSubclassPairs };
+  const api = { names, short, skillNames, costs, classes, raceData, subclassData, subclassRules, classVerbs, raceVerbs, genderData, classSubclassPairs };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.CenizasCharacterData = api;
 })(typeof window !== 'undefined' ? window : globalThis);

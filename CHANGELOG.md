@@ -1,5 +1,21 @@
 # Changelog
 
+## 2026-11-18 · Fase 5 — combate activo y continuidad narrativa
+
+- Se añadió defensa activa: cada descarga enemiga abre una ventana temporal bloqueable, con resolución única, reducción de daño y PI persistente (máximo 5).
+- Se añadieron Filo Umbrío, Llama Arcana y Sombra Doble; requieren clases presentes en el grupo, consumen PI y dejan registro en el guardado.
+- Se añadieron verbos de clase/raza en la creación y secretos raciales con ocho lecturas distintas, además del registro de defunción de Mara.
+- Se incorporaron veinte variantes de enemigos con sprites existentes conectados a estadísticas y comportamiento visual propios.
+- Se amplió el prólogo de la campaña: pregunta recurrente, motivación del Coro, motivo de la campana, entrada al Umbral y epílogos según la respuesta del jugador.
+- La arena del Umbral muestra los nombres que el Coro intenta borrar; el combate sigue siendo lateral, por turnos y sin tablero.
+- Se añadió `STORY_AUDIT.md`, y `REFERENCES.md`/`CREDITS.md` documentan las referencias externas sin vendorizar código.
+
+### Validación de esta fase
+
+- `node --test tests/*.cjs`: 37 archivos, 37 pasados.
+- `node --check` sobre los módulos JavaScript modificados: sin errores.
+- `npm test` y `npm run lint` no se pudieron ejecutar en este entorno porque no hay `npm`/`node_modules`; el equivalente directo con Node sí pasó.
+
 ## 2026-11-18 · Variantes jugables visibles
 
 - Se corrigió el flujo que siempre mostraba el `traveler` humano: mapa y capítulo cargan las cuatro hojas de sprites de clase, incluida la variante Tejedor de ceniza.

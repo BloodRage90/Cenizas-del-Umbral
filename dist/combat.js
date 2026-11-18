@@ -3,6 +3,13 @@
 'use strict';
 const mod=n=>Math.floor((n-10)/2),sign=n=>n>=0?'+'+n:String(n);
 const Data=typeof module!=='undefined'&&module.exports?require('./character-data.js'):root.CenizasCharacterData;
+const Systems=typeof module!=='undefined'&&module.exports?require('./combat-systems.js'):root.CenizasCombatSystems||{
+ MAX_PI:5,classVerbs:Data.classVerbs||{},raceVerbs:Data.raceVerbs||{},
+ TECHS:{filoUmbrio:{id:'filoUmbrio',name:'Filo Umbrío',requires:['Pícaro','Guerrero'],cost:2,multiplier:1.5},llamaArcana:{id:'llamaArcana',name:'Llama Arcana',requires:['Mago','Guerrero'],cost:3,multiplier:1.6},sombraDoble:{id:'sombraDoble',name:'Sombra Doble',requires:['Pícaro','Mago'],cost:2,multiplier:1.5}},
+ beginBlock:(targetId='hero',o={})=>({targetId,startedAt:o.startedAt??Date.now(),duration:o.duration??1200,windowStart:o.windowStart??.38,windowEnd:o.windowEnd??.7,attempts:0,status:'pending',reduction:0}),
+ resolveBlock:(b,elapsed)=>{if(!b||b.status!=='pending')return{success:false,ignored:true,reduction:0,piGain:0};b.attempts=(b.attempts||0)+1;const p=elapsed>1?elapsed/b.duration:elapsed,success=p>=b.windowStart&&p<=b.windowEnd;b.status=success?'success':'fail';b.reduction=success?.5:0;return{success,reduction:b.reduction,piGain:success?1:0,attempts:b.attempts};},
+ canUseTech:(id,party,pi)=>{const t=Systems.TECHS[id];return !!t&&pi>=t.cost&&t.requires.every(c=>party.some(u=>u.hp>0&&u.class===c));}
+};
 const {raceData,classes,subclassRules}=Data;
 const raceMods=Object.fromEntries(Object.entries(raceData).map(([name,value])=>[name,value.mods])),raceSpeed=Object.fromEntries(Object.entries(raceData).map(([name,value])=>[name,value.speed]));
 const defaults={name:'Viajero',race:'Humano',class:'Guerrero',base:[16,14,14,12,10,8],feats:['Dureza','Iniciativa mejorada','Soltura con el arma'],ranks:{}};
@@ -17,13 +24,35 @@ function profile(c=defaults,level=1){
  const attack=bab+m[0]+(has('Soltura con el arma')?1:0)+(raceData[race].attackBonus||0);
  const ac=10+armor+Math.min(m[1],classes[cls].maxDex)+(raceData[race].acBonus||0)+(rule?.ac||0);
  const spells=cls==='Mago'&&base[3]>=11?lvl+(m[3]>=1?1:0)+(rule?.spellSlots||0):0;
- return {id:'hero',name:String(c.name||'Viajero').slice(0,40),class:cls,race,subclass:c.subclass||null,gender:c.gender||null,level:lvl,max:hp,ac,flat:10+armor+Math.min(0,m[1])+(rule?.ac||0),attack,damage,bonus:(cls==='Mago'?m[3]:m[0])+(rule?.damage||0),threat:cls==='Mago'?20:19,init:m[1]+(has('Iniciativa mejorada')?4:0)+(rule?.initiative||0),ref:(cls==='Pícaro'?(2+Math.floor(lvl/2)):Math.floor(lvl/3))+m[1]+(has('Reflejos rápidos')?2:0),strength:m[0],move:raceSpeed[race]??6,range:1,missileRange:4+(rule?.ranged||0),spells,power:has('Ataque poderoso')&&m[0]>=1,bab,subclassRule:rule?.label||null,sneakDie:rule?.sneakDie||0,spellDC:rule?.spellDC||0,action:rule?.action||null,small};
+ return {id:'hero',name:String(c.name||'Viajero').slice(0,40),class:cls,race,subclass:c.subclass||null,gender:c.gender||null,level:lvl,max:hp,ac,flat:10+armor+Math.min(0,m[1])+(rule?.ac||0),attack,damage,bonus:(cls==='Mago'?m[3]:m[0])+(rule?.damage||0),threat:cls==='Mago'?20:19,init:m[1]+(has('Iniciativa mejorada')?4:0)+(rule?.initiative||0),ref:(cls==='Pícaro'?(2+Math.floor(lvl/2)):Math.floor(lvl/3))+m[1]+(has('Reflejos rápidos')?2:0),strength:m[0],move:raceSpeed[race]??6,range:1,missileRange:4+(rule?.ranged||0),spells,power:has('Ataque poderoso')&&m[0]>=1,bab,subclassRule:rule?.label||null,sneakDie:rule?.sneakDie||0,spellDC:rule?.spellDC||0,action:rule?.action||null,verb:Systems.classVerbs?.[cls]||null,raceVerb:Systems.raceVerbs?.[race]||null,small};
 }
-const enemies={ash:{name:"Guardián de ceniza",max:42,ac:16,flat:15,attack:8,damage:6,bonus:3,init:1,ref:2,move:4,threat:20,construct:true},sentinel:{name:'Centinela del claro',max:22,ac:14,flat:14,attack:3,damage:4,bonus:1,init:0,ref:0,move:0,threat:20,construct:true},echo:{name:'Eco incipiente',max:4,ac:12,flat:11,attack:1,damage:3,bonus:-1,init:1,ref:1,move:4,threat:20},custodian:{name:'Custodio de la compuerta',max:16,ac:13,flat:13,attack:2,damage:4,bonus:1,init:-1,ref:0,move:0,threat:20,construct:true},whisper:{name:'Eco del murmullo',max:12,ac:13,flat:11,attack:3,damage:4,bonus:0,init:2,ref:2,move:6,threat:20}};
+ const enemies={ash:{name:"Guardián de ceniza",max:42,ac:16,flat:15,attack:8,damage:6,bonus:3,init:1,ref:2,move:4,threat:20,construct:true},sentinel:{name:'Centinela del claro',max:22,ac:14,flat:14,attack:3,damage:4,bonus:1,init:0,ref:0,move:0,threat:20,construct:true},echo:{name:'Eco incipiente',max:4,ac:12,flat:11,attack:1,damage:3,bonus:-1,init:1,ref:1,move:4,threat:20},custodian:{name:'Custodio de la compuerta',max:16,ac:13,flat:13,attack:2,damage:4,bonus:1,init:-1,ref:0,move:0,threat:20,construct:true},whisper:{name:'Eco del murmullo',max:12,ac:13,flat:11,attack:3,damage:4,bonus:0,init:2,ref:2,move:6,threat:20}};
+ const variantData={
+  'river-wisp':{name:'Náyade de la compuerta',max:13,ac:13,attack:3,damage:4,bonus:1,init:3,ref:2,behavior:'water'},
+  'candle-imp':{name:'Diablillo de la rueda',max:10,ac:14,attack:4,damage:3,bonus:1,init:4,ref:3,behavior:'haste'},
+  'thorn-goblin':{name:'Trasgo de espinas',max:15,ac:14,attack:3,damage:5,bonus:0,init:1,ref:1,behavior:'bleed'},
+  'mirror-shade':{name:'Sombra de espejo',max:11,ac:15,attack:3,damage:4,bonus:0,init:4,ref:4,behavior:'mirror'},
+  'bell-moth':{name:'Polilla campana',max:12,ac:13,attack:2,damage:4,bonus:2,init:5,ref:3,behavior:'bell'},
+  'ember-wolf':{name:'Lobo de brasa',max:16,ac:14,attack:5,damage:5,bonus:0,init:3,ref:2,behavior:'burn'},
+  'marsh-hag':{name:'Bruja del pantano',max:18,ac:12,attack:3,damage:6,bonus:1,init:0,ref:3,behavior:'curse'},
+  'fungal-brute':{name:'Bruto micelial',max:24,ac:12,attack:4,damage:6,bonus:2,init:-1,ref:0,behavior:'spore'},
+  'drowned-knight':{name:'Caballero ahogado',max:20,ac:16,attack:5,damage:5,bonus:2,init:0,ref:2,behavior:'guard'},
+  'redcap-miner':{name:'Minero bermejo',max:14,ac:14,attack:4,damage:4,bonus:1,init:2,ref:1,behavior:'mine'},
+  'willow-spirit':{name:'Espíritu de sauce',max:17,ac:13,attack:3,damage:5,bonus:2,init:2,ref:4,behavior:'root'},
+  'clockwork-raven':{name:'Cuervo de engranajes',max:12,ac:16,attack:4,damage:3,bonus:1,init:6,ref:2,behavior:'copper'},
+  'glass-serpent':{name:'Serpiente de vidrio',max:13,ac:15,attack:3,damage:4,bonus:1,init:5,ref:4,behavior:'reflect'},
+  'frost-revenant':{name:'Revenante de escarcha',max:19,ac:14,attack:4,damage:5,bonus:2,init:1,ref:3,behavior:'frost'},
+  'rune-beetle':{name:'Escarabajo rúnico',max:9,ac:17,attack:2,damage:3,bonus:0,init:4,ref:5,behavior:'rune'},
+  'ash-drake':{name:'Draco de ceniza',max:22,ac:15,attack:5,damage:6,bonus:2,init:2,ref:2,behavior:'ash'},
+  'iron-boar':{name:'Jabalí de hierro',max:21,ac:15,attack:6,damage:5,bonus:1,init:1,ref:1,behavior:'charge'},
+  'ash-warden':{name:'Guardián de pavesas',max:18,ac:16,attack:4,damage:5,bonus:1,init:2,ref:2,behavior:'ember'},
+  'rootbound-sentinel':{name:'Centinela de raíces',max:23,ac:15,attack:5,damage:5,bonus:2,init:0,ref:3,behavior:'root'},
+  'umbral-spider':{name:'Araña umbría',max:14,ac:16,attack:4,damage:4,bonus:1,init:5,ref:3,behavior:'web'}
+ };
 const elara={id:'elara',name:'Elara',max:16,ac:16,flat:15,attack:4,damage:8,bonus:2,threat:19,init:1,ref:1,move:6,range:1};
 const places=['plaza','taller','criptas','bosque','lindero','embarcadero','molino','monasterio','archivo','enfermeria','capilla','montana','antesala','umbral'];
 Object.values(enemies).forEach(e=>{e.range=1;});
-function fresh(){return {v:2,place:'plaza',flags:{},branch:null,level:1,hp:null,spells:null,potions:2,gold:12,items:[],log:[],combat:null,elaraHP:16,elaraMode:'manual',tactic:'protect',position:null};}
+function fresh(){return {v:2,place:'plaza',flags:{},branch:null,level:1,hp:null,spells:null,potions:2,gold:12,items:[],log:[],combat:null,elaraHP:16,elaraMode:'manual',tactic:'protect',position:null,pi:0,piMax:Systems.MAX_PI,blockStreak:0,techsUsed:[]};}
 function valid(s){return s&&s.v===2&&places.includes(s.place)&&[1,2,3,4,5].includes(s.level)&&s.flags&&typeof s.flags==='object'&&Array.isArray(s.items)&&Array.isArray(s.log)&&Number.isFinite(s.potions)&&Number.isFinite(s.gold);}
 function migrate(raw){
  const base=fresh(),fields=[];
@@ -36,6 +65,10 @@ function migrate(raw){
  if(!Array.isArray(raw.log)){s.log=[];fields.push('log');}else s.log=raw.log.filter(x=>typeof x==='string').slice(-100);
  if(!Number.isFinite(raw.potions)){s.potions=base.potions;fields.push('potions');}else s.potions=Math.max(0,Math.min(9,Math.floor(raw.potions)));
  if(!Number.isFinite(raw.gold)){s.gold=base.gold;fields.push('gold');}else s.gold=Math.max(0,Math.floor(raw.gold));
+ if(!Number.isFinite(raw.pi)){s.pi=base.pi;fields.push('pi');}else s.pi=Math.max(0,Math.min(base.piMax,Math.floor(raw.pi)));
+ s.piMax=base.piMax;
+ if(!Number.isFinite(raw.blockStreak)){s.blockStreak=0;fields.push('blockStreak');}else s.blockStreak=Math.max(0,Math.floor(raw.blockStreak));
+ s.techsUsed=Array.isArray(raw.techsUsed)?raw.techsUsed.filter(x=>typeof x==='string').slice(-20):[];
  if(raw.hp===null||raw.hp===undefined)s.hp=null;else if(!Number.isFinite(raw.hp)){s.hp=null;fields.push('hp');}else s.hp=Math.max(0,Math.floor(raw.hp));
  if(raw.spells===null||raw.spells===undefined)s.spells=null;else if(!Number.isFinite(raw.spells)){s.spells=null;fields.push('spells');}else s.spells=Math.max(0,Math.floor(raw.spells));
  s.elaraHP=Number.isFinite(raw.elaraHP)?Math.max(0,Math.floor(raw.elaraHP)):base.elaraHP;
@@ -46,36 +79,52 @@ function migrate(raw){
 const distance=(a,b)=>Math.abs(a.x-b.x)+Math.abs(a.y-b.y),inside=(x,y)=>x>=0&&x<7&&y>=0&&y<5;
 class Battle{
  constructor(kind,p,save={},rng){this.rng=rng||null;this.events=[];this.rolls=[];
- if(save.combat){this.s=JSON.parse(JSON.stringify(save.combat));return;}
+ if(save.combat){this.s=JSON.parse(JSON.stringify(save.combat));this.s.pi=Math.max(0,Math.min(Systems.MAX_PI,Math.floor(this.s.pi??save.pi??0)));this.s.piMax=Systems.MAX_PI;this.s.block=null;this.s.blockStreak=Math.max(0,Math.floor(this.s.blockStreak??save.blockStreak??0));this.s.techsUsed=Array.isArray(this.s.techsUsed)?this.s.techsUsed.slice(-20):[];this.s.channeling=!!this.s.channeling;this.s.techEffects=this.s.techEffects||{};return;}
  const h={...p,hp:save.hp??p.max,x:1,y:3,team:'party'},e={...enemies[kind],id:'enemy',kind,hp:enemies[kind].max,x:['custodian','sentinel','ash'].includes(kind)?3:4,y:['custodian','sentinel','ash'].includes(kind)?1:2,team:'enemy'};
- this.s={kind,units:[h,e],round:1,index:0,order:[],action:true,movement:h.move,acted:[],wheels:[],valve:false,exposed:false,spellArmor:false,spells:save.spells??p.spells,potions:save.potions??2,warning:null,history:[],result:null,opening:true,shadowFeint:false,markedTarget:null,arcaneFocus:false};
+ this.s={kind,units:[h,e],round:1,index:0,order:[],action:true,movement:h.move,acted:[],wheels:[],valve:false,exposed:false,spellArmor:false,spells:save.spells??p.spells,potions:save.potions??2,warning:null,history:[],result:null,opening:true,shadowFeint:false,markedTarget:null,arcaneFocus:false,pi:Math.max(0,Math.min(Systems.MAX_PI,Math.floor(save.pi??0))),piMax:Systems.MAX_PI,block:null,blockStreak:Math.max(0,Math.floor(save.blockStreak??0)),techsUsed:Array.isArray(save.techsUsed)?save.techsUsed.slice(-20):[],channeling:false,techEffects:{}};
  if(['whisper','sentinel','ash'].includes(kind)&&save.flags?.elara)this.s.units.push({...elara,hp:save.elaraHP??16,x:1,y:2,team:'party'});
  this.s.order=this.s.units.map(u=>{const die=this.die();this.log(`${u.name} · iniciativa ${die} ${sign(u.init)} = ${die+u.init}`);return {id:u.id,n:die+u.init,dex:u.init}}).sort((a,b)=>b.n-a.n||b.dex-a.dex).map(x=>x.id);
  if(kind==='ash')this.s.warning={type:'radius',x:3,y:1};this.begin();
  }
+  setVariant(variant,encounter={}){const data=variantData[variant];if(!data||!this.enemy)return false;Object.assign(this.enemy,data,{variant});this.enemy.max=data.max;this.enemy.hp=data.max;this.enemy.name=encounter.enemyName||data.name;this.enemy.flat=data.flat??Math.max(10,data.ac-1);this.s.variant=variant;this.s.variantBehavior=data.behavior;this.s.encounter=encounter;this.log(`${this.enemy.name} · variante ${variant}`);return true;}
  die(n=20){let value;if(this.rng)value=this.rng(n);else{const a=new Uint32Array(1),limit=Math.floor(4294967296/n)*n;do{crypto.getRandomValues(a)}while(a[0]>=limit);value=a[0]%n+1;}this.rolls.push({sides:n,value});return value;}
  log(s){this.s.history.push(s);this.s.history=this.s.history.slice(-60);this.events.push(s)}
  get actor(){return this.s.units.find(u=>u.id===this.s.order[this.s.index])}
  get hero(){return this.s.units.find(u=>u.id==='hero')}
  get enemy(){return this.s.units.find(u=>u.id==='enemy')}
  begin(){const a=this.actor;this.s.action=true;this.s.movement=a.move;this.s.guard=false;this.log(`Turno de ${a.name} · ronda ${this.s.round}`)}
+ gainPI(amount=1,reason=''){
+  const before=this.s.pi||0;this.s.pi=Math.min(this.s.piMax||Systems.MAX_PI,before+Math.max(0,Math.floor(amount)));
+  if(this.s.pi>before)this.log(`PI +${this.s.pi-before}${reason?' · '+reason:''} (${this.s.pi}/${this.s.piMax||Systems.MAX_PI}).`);return this.s.pi-before;
+ }
+ spendPI(amount){const cost=Math.max(0,Math.floor(amount));if((this.s.pi||0)<cost)return false;this.s.pi-=cost;this.log(`PI −${cost} (${this.s.pi}/${this.s.piMax||Systems.MAX_PI}).`);return true;}
+ prepareBlock(targetId='hero',options={}){this.s.block=Systems.beginBlock(targetId,{...options,startedAt:Date.now()});this.log('Defensa activa: pulsa Bloquear en la ventana dorada.');return this.s.block;}
+ resolveBlock(elapsed){if(!this.s.block)return {success:false,ignored:true,reduction:0,piGain:0};const result=Systems.resolveBlock(this.s.block,elapsed);if(result.success){this.s.blockStreak=(this.s.blockStreak||0)+1;this.gainPI(1,'bloqueo perfecto');}else this.s.blockStreak=0;this.s.block.result=result;this.log(result.success?'¡Bloqueo perfecto! Daño reducido.':'Bloqueo fallido: recibes el daño completo.');return result;}
+ consumeBlock(target){const block=this.s.block;if(!block||block.targetId!==target.id)return {reduction:0,success:false};if(block.status==='pending')this.resolveBlock(block.duration+1);const result=block.result||block;this.s.block=null;return {reduction:result.reduction||0,success:!!result.success};}
+ incoming(target,damage){if(!target||target.team!=='party')return damage;const block=this.consumeBlock(target);let reduced=block.success?Math.max(0,Math.floor(damage*(1-block.reduction))):damage;if(target.guard){this.gainPI(1,'postura de guardia');reduced=Math.floor(reduced*.65);}return this.mitigate(target,reduced);}
+ availableTechs(){const party=this.s.units.filter(u=>u.team==='party'&&u.hp>0);return Object.values(Systems.TECHS).filter(t=>Systems.canUseTech(t.id,party,this.s.pi||0));}
+ useTech(id,target=this.enemy){const tech=Systems.TECHS[id];if(!tech||!target||target.hp<=0)return false;const party=this.s.units.filter(u=>u.team==='party'&&u.hp>0);if(!Systems.canUseTech(id,party,this.s.pi||0)||!this.s.action)return false;if(!this.spendPI(tech.cost))return false;const striker=party.find(u=>u.class==='Guerrero'&&tech.requires.includes('Guerrero'))||this.actor;const rogue=party.find(u=>u.class==='Pícaro'),mage=party.find(u=>u.class==='Mago');if(id==='filoUmbrio'){this.s.markedTarget=target.id;target.ac=Math.max(1,target.ac-2);const base=Math.max(1,this.die(striker.damage)+striker.bonus),damage=Math.max(1,Math.floor(base*tech.multiplier));target.hp=Math.max(0,target.hp-damage);this.log(`Filo Umbrío: ${rogue?.name||'El Pícaro'} marca y ${striker.name} rompe la defensa · ${damage} PG.`);}
+  else if(id==='llamaArcana'){this.s.techEffects.flame=true;const base=Math.max(1,this.die(striker.damage)+striker.bonus),damage=Math.max(1,Math.floor(base*tech.multiplier));target.hp=Math.max(0,target.hp-damage);this.log(`Llama Arcana: ${mage?.name||'El Mago'} imbuye el arma · ${damage} PG de fuego.`);}
+  else if(id==='sombraDoble'){this.s.shadowFeint=true;target.slowed=true;const rogueActor=rogue||this.actor,base=Math.max(1,this.die(rogueActor.damage)+rogueActor.bonus),damage=Math.max(1,Math.floor(base*tech.multiplier)+(rogueActor.sneakDie?this.die(rogueActor.sneakDie):0));target.hp=Math.max(0,target.hp-damage);this.log(`Sombra Doble: ${mage?.name||'El Mago'} ralentiza y ${rogueActor.name} ejecuta furtivo · ${damage} PG.`);}
+  this.s.techsUsed.push(id);this.s.techsUsed=this.s.techsUsed.slice(-20);this.s.action=false;this.check();return true;}
  occupied(x,y){return this.s.units.some(u=>u.hp>0&&u.x===x&&u.y===y)}
  move(dx,dy){if(this.s.result||this.actor.team!=='party'||Math.abs(dx)+Math.abs(dy)!==1||this.s.movement<1)return false;const a=this.actor,x=a.x+dx,y=a.y+dy;if(!inside(x,y)||this.occupied(x,y))return false;a.x=x;a.y=y;this.s.movement--;return true;}
  hit(a,b,power=0){const reach=a.range??1;if(!this.s.noBoard&&distance(a,b)>reach){this.log(a.name+' está fuera de alcance para un ataque cuerpo a cuerpo.');return null;}const ac=(!this.s.acted.includes(b.id)?b.flat:b.ac)+(b.guard?4:0),d=this.die(),bonus=a.attack-power+(a.team==='party'&&this.precision?2:0);this.log(`${a.name}: d20 ${d} ${sign(bonus)} = ${d+bonus} contra CA ${ac}`);if(d===1||(d!==20&&d+bonus<ac)){this.log('Fallo.');return 0;}
-  this.log('Impacto: el ataque supera la defensa.');let crit=false;if(d>=a.threat&&!b.construct){const q=this.die();crit=q!==1&&(q===20||q+bonus>=ac);this.log(`Confirmación: ${q} ${sign(bonus)} = ${q+bonus} · ${crit?'crítico':'impacto normal'}`)}
+  this.log('Impacto: el ataque supera la defensa.');let crit=false;if(d>=a.threat&&!b.construct){const q=this.die();crit=q!==1&&(q===20||q+bonus>=ac);this.log(`Confirmación: ${q} ${sign(bonus)} = ${q+bonus} · ${crit?'crítico':'impacto normal'}`);if(crit&&a.team==='party')this.gainPI(1,'crítico')}
  let dmg=Math.max(1,this.die(a.damage)+a.bonus+power*(a.class==='Mago'?2:1)+(this.s.markedTarget===b.id?2:0));if(crit)dmg+=Math.max(1,this.die(a.damage)+a.bonus+power*(a.class==='Mago'?2:1));
  const ally=this.s.units.find(u=>u.team==='party'&&u.id!==a.id&&u.hp>0);const flank=ally&&distance(a,b)===1&&distance(ally,b)===1&&a.x+ally.x===2*b.x&&a.y+ally.y===2*b.y;
  if(a.class==='Pícaro'&&(!b.construct||this.s.exposed)&&(this.s.shadowFeint||!this.s.acted.includes(b.id)||flank||this.s.exposed)){const sides=a.sneakDie||6,sneak=this.die(sides);dmg+=sneak;this.s.shadowFeint=false;this.log(`Ataque furtivo +${sneak} (1d${sides}).`)}
- dmg=this.mitigate(b,dmg);b.hp=Math.max(0,b.hp-dmg);this.log(`${b.name} recibe ${dmg} de daño${crit?' crítico':''}.`);return dmg;}
+ dmg=this.incoming(b,dmg);b.hp=Math.max(0,b.hp-dmg);this.log(`${b.name} recibe ${dmg} de daño${crit?' crítico':''}.`);return dmg;}
  mitigate(target,damage){if(target.team!=='party'||!this.reaction)return damage;const n=this.reaction==='parry'?0:Math.floor(damage/2);this.log(`${target.name}: ${this.reaction==='parry'?'parada':'esquiva'} reduce ${damage} a ${n} PG.`);return n;}
  act(kind,options={}){this.precision=!!options.precision;if(this.s.result||this.actor.team!=='party'||!this.s.action)return false;const a=this.actor,e=this.enemy;
+ if(kind==='tech')return this.useTech(options.techId,e);
  if(kind==='attack'||kind==='power'){if(kind==='power'&&!a.power)return false;const damage=this.hit(a,e,kind==='power'?a.bab:0);if(damage===null)return false;}
- else if(kind==='missile'){if(a.class!=='Mago'||this.s.spells<1)return false;if(!this.s.noBoard&&distance(a,e)>(a.missileRange??4))return this.fail('El objetivo está fuera del alcance del proyectil mágico.');const d=this.die(4)+1+(this.precision?1:0)+(a.subclass==='Tejedor'?1:0)+(this.s.arcaneFocus?(a.spellDC||0):0);e.hp=Math.max(0,e.hp-d);this.s.spells--;this.s.arcaneFocus=false;this.log(`Proyectil mágico${a.subclass==='Tejedor'?' de ceniza':''}: 1d4+1${a.subclass==='Tejedor'?' +1 de Tejedor':''}${this.precision?' +1 de precisión':''} = ${d}. Impacta sin tirada de ataque.`);}
+ else if(kind==='missile'){if(a.class!=='Mago'||this.s.spells<1)return false;if(!this.s.noBoard&&distance(a,e)>(a.missileRange??4))return this.fail('El objetivo está fuera del alcance del proyectil mágico.');const d=this.die(4)+1+(this.precision?1:0)+(a.subclass==='Tejedor'?1:0)+(this.s.arcaneFocus?(a.spellDC||0):0);e.hp=Math.max(0,e.hp-d);this.s.spells--;this.s.arcaneFocus=false;this.gainPI(1,'acción elemental');this.log(`Proyectil mágico${a.subclass==='Tejedor'?' de ceniza':''}: 1d4+1${a.subclass==='Tejedor'?' +1 de Tejedor':''}${this.precision?' +1 de precisión':''} = ${d}. Impacta sin tirada de ataque.`);}
  else if(kind==='armor'){if(a.class!=='Mago'||this.s.spells<1||this.s.spellArmor)return false;this.s.spells--;a.ac+=4;a.flat+=4;this.s.spellArmor=true;this.s.arcaneFocus=false;this.log('Armadura de mago: +4 CA durante este encuentro.');}
  else if(kind==='potion'){if(!this.s.potions||a.hp===a.max)return false;const d=this.die(8)+1,healed=Math.min(d,a.max-a.hp);a.hp+=healed;this.s.potions--;this.log(`${a.name} bebe una poción: 1d8+1 = ${d}; recupera ${healed} PG.`);}
  else if(kind==='finta'){if(a.class!=='Pícaro'||a.action==='marcar')return false;this.s.shadowFeint=true;this.s.targetId=e.id;this.log(`${a.name} ejecuta una finta de sombra: el próximo ataque puede aplicar furtivo +1d${a.sneakDie||8}.`);}
  else if(kind==='marcar'){if(a.class!=='Pícaro'||a.action!=='marcar')return false;this.s.markedTarget=e.id;this.s.targetId=e.id;this.log(`${a.name} marca a ${e.name}: el siguiente impacto causa +2 daño.`);}
- else if(kind==='canalizar'){if(a.class!=='Mago'||a.action!=='canalizar')return false;this.s.arcaneFocus=true;this.log(`${a.name} canaliza el Umbral: el próximo conjuro recibe +${a.spellDC||0} CD y precisión.`);}
+ else if(kind==='canalizar'){if(a.class!=='Mago'||a.action!=='canalizar'||!this.spendPI(1))return false;this.s.arcaneFocus=true;this.s.channeling=true;this.s.channelingActor=a.id;this.s.spells=(this.s.spells||0)+1;a.ac=Math.max(1,a.ac-2);a.flat=Math.max(1,a.flat-2);this.log(`${a.name} canaliza el Umbral: conjura sin gastar espacio, pero queda −2 CA hasta su próximo turno.`);}
  else if(kind==='guard'){a.guard=true;this.log(`${a.name} adopta defensa total: +4 CA hasta su siguiente turno.`);}
   else if(kind==='mechanism'){
   const needsContact=['echo','whisper','custodian'].includes(this.s.kind);
@@ -92,16 +141,16 @@ class Battle{
  this.s.action=false;this.check();return true;}
  fail(msg){this.log(msg);return false;}
  check(){if(this.hero.hp<=0){this.s.result='defeat';this.log('Has caído. Puedes volver al punto seguro.');}else if(this.enemy.hp<=0&&(this.s.kind!=='ash'||this.s.wheels.length===2)){this.s.result='victory';this.log('Encuentro resuelto.');}}
- end(){if(this.s.result)return;const a=this.actor;if(!this.s.acted.includes(a.id))this.s.acted.push(a.id);let tries=0;do{this.s.index=(this.s.index+1)%this.s.order.length;if(this.s.index===0)this.s.round++;tries++;}while(this.actor.hp<=0&&tries<4);this.actor.guard=false;this.begin();}
+ end(){if(this.s.result)return;const a=this.actor;if(this.s.channelingActor===a.id){a.ac+=2;a.flat+=2;this.s.channeling=false;this.s.channelingActor=null;}if(!this.s.acted.includes(a.id))this.s.acted.push(a.id);let tries=0;do{this.s.index=(this.s.index+1)%this.s.order.length;if(this.s.index===0)this.s.round++;tries++;}while(this.actor.hp<=0&&tries<4);this.actor.guard=false;this.begin();}
    moveToward(actor,target){if(this.s.noBoard)return;let steps=Math.max(0,actor.move??0),moved=0,range=actor.range??1;while(steps>0&&distance(actor,target)>range){const options=[[1,0],[-1,0],[0,1],[0,-1]].map(([dx,dy])=>({x:actor.x+dx,y:actor.y+dy,dx,dy})).filter(p=>inside(p.x,p.y)&&!this.occupied(p.x,p.y)).sort((u,v)=>distance(u,target)-distance(v,target));if(!options.length)break;actor.x=options[0].x;actor.y=options[0].y;steps--;moved++;}if(moved)this.log(actor.name+' avanza '+moved+' casilla'+(moved===1?'':'s')+' para entrar en alcance.');}
   enemyTurn(){if(this.s.result||this.actor.team!=='enemy')return;const e=this.enemy,targets=this.s.units.filter(u=>u.team==='party'&&u.hp>0).sort((a,b)=>distance(e,a)-distance(e,b)),t=targets[0];if(!t){this.check();return;}
   if(this.s.kind==='ash'){
    if(this.s.cancelNext){this.log('Los soportes apagados cancelan el pulso.');this.s.cancelNext=false;this.s.warning=null;}
-   else if(this.s.warning?.type==='radius'){const d=this.die(),raw=this.die(4)+this.die(4),ok=d===20||(d!==1&&d+t.ref>=14),damage=ok?(t.class==='Pícaro'&&t.level>=2?0:Math.floor(raw/2)):raw;t.hp=Math.max(0,t.hp-damage);this.log(`${t.name}: Reflejos ${d}+${t.ref} CD 14; pulso ${damage} PG.`);this.s.warning=null;}
+   else if(this.s.warning?.type==='radius'){const d=this.die(),raw=this.die(4)+this.die(4),ok=d===20||(d!==1&&d+t.ref>=14),damage=ok?(t.class==='Pícaro'&&t.level>=2?0:Math.floor(raw/2)):raw,actual=this.incoming(t,damage);t.hp=Math.max(0,t.hp-actual);this.log(`${t.name}: Reflejos ${d}+${t.ref} CD 14; pulso ${actual} PG.`);this.s.warning=null;}
    else{this.moveToward(e,t);this.hit(e,t);this.s.warning={type:'radius'};this.log('Pulso de ceniza anunciado: el siguiente ataque será un área.');}
   }else if(['custodian','sentinel'].includes(this.s.kind)){
    if(this.s.cancelNext){this.log('El conducto roto cancela el golpe anunciado.');this.s.cancelNext=false;}
-   else if(this.s.warning?.type==='pulse'){const d=this.die(),dmg=this.die(4),ok=d===20||(d!==1&&d+t.ref>=12),actual=ok?(t.class==='Pícaro'&&t.level>=2?0:Math.floor(dmg/2)):dmg;t.hp=Math.max(0,t.hp-actual);this.log(`${t.name}: Reflejos ${d} ${sign(t.ref)} contra CD 12; descarga ${actual} PG.`);}
+   else if(this.s.warning?.type==='pulse'){const d=this.die(),dmg=this.die(4),ok=d===20||(d!==1&&d+t.ref>=12),damage=ok?(t.class==='Pícaro'&&t.level>=2?0:Math.floor(dmg/2)):dmg,actual=this.incoming(t,damage);t.hp=Math.max(0,t.hp-actual);this.log(`${t.name}: Reflejos ${d} ${sign(t.ref)} contra CD 12; descarga ${actual} PG.`);}
    else if(this.s.warning){this.moveToward(e,t);this.hit(e,t);}
    else this.log(this.s.kind==='sentinel'?'El Centinela despierta y prepara un golpe.':'El Custodio arranca y prepara un golpe.');
    this.s.warning=this.s.warning?.type==='strike'?{type:'pulse'}:{type:'strike'};this.log(this.s.warning.type==='pulse'?'Próximo turno: descarga anunciada.':'Próximo turno: golpe anunciado.');
@@ -124,5 +173,5 @@ class Battle{
  options.sort((p,q)=>score(p)-score(q));if(!options.length||score(options[0])>=score(a))break;this.move(options[0].dx,options[0].dy);}
  if(distance(a,e)===1&&tactic!=='distance')this.act('attack');else this.act('guard');if(!this.s.result)this.end();}
 }
-const api={profile,fresh,valid,migrate,places,Battle,defaults,distance,races:raceData,subclassRules,elara:Object.freeze({...elara})};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.CenizasRules=api;
+ const api={profile,fresh,valid,migrate,places,Battle,defaults,distance,races:raceData,subclassRules,variants:variantData,systems:Systems,elara:Object.freeze({...elara})};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.CenizasRules=api;
 })(typeof window!=='undefined'?window:globalThis);

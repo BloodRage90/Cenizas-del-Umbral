@@ -142,3 +142,35 @@ body[data-hero-subclass="Arcanista"] #battle [data-unit="hero"] .combat-art{filt
 body[data-hero-subclass="Tejedor"] #battle [data-unit="hero"] .combat-art{filter:hue-rotate(-18deg) saturate(1.22) brightness(1.04) drop-shadow(0 0 14px #d6a17c77)}
 /* Final landscape override comes after legacy height rules. */
 @media (orientation:landscape) and (max-width:900px) and (max-height:500px){#battle #combat-actions button{min-height:48px;font-size:13px;line-height:1.1;white-space:nowrap;padding:6px 8px}}
+
+/* Active defense and impulse resources. The timing prompt is deliberately
+   part of the arena so it remains reachable in short landscape viewports. */
+#pi-meter{display:flex;align-items:center;gap:8px;max-width:190px;margin:5px auto 0;padding:4px 8px;border:1px solid #e7c87577;border-radius:999px;background:#071820aa;color:#f5d98b;font:700 12px/1 system-ui;box-shadow:inset 0 1px #fff2;}
+#pi-meter>i{display:block;flex:1;height:7px;min-width:56px;border-radius:99px;background:linear-gradient(90deg,#55c9a1,#f2c66c);transform-origin:left center;box-shadow:0 0 10px #8ce6c366;}
+#block-timing{position:absolute;left:50%;bottom:12%;z-index:12;display:grid;grid-template-columns:auto minmax(130px,260px) auto;align-items:center;gap:8px;transform:translateX(-50%);padding:8px 10px;border:1px solid #f1cb78;border-radius:999px;background:#07151ce8;color:#ffe7ae;box-shadow:0 8px 25px #0009;white-space:nowrap;font:700 12px/1 system-ui;}
+#block-timing[hidden]{display:none;}
+#block-timing .block-track{position:relative;width:100%;height:12px;border:1px solid #d9c48988;border-radius:99px;background:#1c2930;overflow:hidden;}
+#block-progress{display:block;height:100%;width:0;background:linear-gradient(90deg,#78c7b5,#f0cd76);transition:width .04s linear;}
+#block-window{position:absolute;top:0;bottom:0;left:38%;width:32%;background:#f6df8e88;box-shadow:0 0 12px #ffe6a9;}
+#block-button{min-height:36px;padding:6px 10px;border-radius:999px;background:linear-gradient(180deg,#f4d27d,#bc853f);border-color:#ffeab0;color:#1b3029;font-size:12px;}
+#block-button kbd{font:10px system-ui;opacity:.72;}
+#block-status{grid-column:1/-1;text-align:center;font:11px system-ui;color:#d1ecdf;}
+@media (orientation:landscape) and (max-width:900px) and (max-height:500px){
+ #battle{grid-template-columns:minmax(0,1fr) minmax(214px,32vw);grid-template-rows:auto minmax(0,1fr) auto;gap:6px;padding:8px;}
+ #battle .battle-header{grid-column:1;grid-row:1;position:static;min-width:0;text-align:left;}
+ #battle .battle-header #turn{font-size:15px;}
+ #battle .battle-header #warning,#battle .battle-header #battle-prompt{font-size:11px;line-height:1.2;}
+ #battle #elara-controls{grid-column:2;grid-row:1;position:static;display:flex;min-width:0;justify-content:flex-end;gap:4px;}
+ #battle #elara-controls button,#battle #elara-controls select{min-height:42px;font-size:11px;padding:5px;max-width:100%;}
+ #battle #battle-stage{grid-column:1;grid-row:2;min-height:0;height:auto;align-self:stretch;}
+ #battle #party-status{grid-column:1;grid-row:3;min-height:28px;overflow:hidden;}
+ #battle #battle-controls{grid-column:2;grid-row:2/4;min-height:0;max-height:none;overflow-y:auto;align-self:stretch;padding:6px;}
+ #battle #combat-actions{grid-template-columns:1fr;gap:5px;max-height:none;overflow:visible;}
+ #battle #combat-actions button{min-height:48px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px;padding:6px 8px;}
+ #battle .battle-preference{display:grid;gap:5px;margin:0 0 5px;}
+ #battle .battle-preference button{min-height:42px;}
+ #pi-meter{margin:2px 0 0;max-width:160px;}
+ #block-timing{left:50%;bottom:7%;grid-template-columns:1fr;gap:4px;text-align:center;width:min(300px,90%);white-space:normal;}
+ #block-timing .block-track{min-height:12px;}
+}
+.umbral-wall-names{position:absolute;left:50%;top:7%;z-index:2;transform:translateX(-50%);display:grid;gap:3px;width:min(530px,78%);padding:8px 14px;border:1px solid #d7c27766;border-radius:10px;background:linear-gradient(180deg,#07151bcc,#0b2026b8);box-shadow:0 8px 25px #0007,inset 0 1px #f8e6a022;text-align:center;color:#edddb4;pointer-events:none;text-shadow:0 2px 4px #000;font-family:Georgia,serif}.umbral-wall-names span{font:700 9px/1.2 system-ui;letter-spacing:.18em;color:#f0ca74}.umbral-wall-names b{font-size:15px;font-weight:600}.umbral-wall-names small{font:11px/1.2 system-ui;color:#b5d7ce}@media(max-width:650px){.umbral-wall-names{top:4%;width:82%;padding:6px 9px}.umbral-wall-names b{font-size:12px}.umbral-wall-names small{font-size:10px}}

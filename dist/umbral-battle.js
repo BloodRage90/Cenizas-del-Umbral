@@ -49,7 +49,7 @@ class UmbralBattle extends R.Battle{
  }
  enemyTurn(){
   if(this.s.result||this.actor.team!=='enemy')return;this.s.envTurns++;let party=this.s.units.filter(u=>u.team==='party'&&u.hp>0);
-  if(this.s.warning&&!this.s.opening&&party[0]){const d=this.die(),raw=this.die(4)+this.die(4),t=party[0],ok=d===20||(d!==1&&d+t.ref>=14),damage=ok?(t.class==='Pícaro'?0:Math.floor(raw/2)):raw;t.hp=Math.max(0,t.hp-damage);this.log(`${t.name}: Reflejos ${d}+${t.ref} CD 14; descarga ${damage} PG.`);}
+  if(this.s.warning&&!this.s.opening&&party[0]){const d=this.die(),raw=this.die(4)+this.die(4),t=party[0],ok=d===20||(d!==1&&d+t.ref>=14),damage=ok?(t.class==='Pícaro'?0:Math.floor(raw/2)):raw,actual=this.incoming(t,damage);t.hp=Math.max(0,t.hp-actual);this.log(`${t.name}: Reflejos ${d}+${t.ref} CD 14; descarga ${actual} PG.`);}
   this.s.warning=null;this.s.opening=false;
   for(const id of ['armorL','armorR']){const arm=this.unit(id);if(arm.hp<=0||(id==='armorR'&&this.s.envTurns<2)||!party.length)continue;if(arm.warning){const t=party[0];this.hit(arm,t);delete arm.warning;}else{arm.warning={armed:true};this.log(arm.name+' prepara un golpe anunciado.');}}
   const pulse=this.s.pulseQueue.shift();if(pulse||this.powered){this.s.warning={type:'pulse',regular:!pulse};this.log(`Descarga ${pulse==='emergency'?'de emergencia':pulse==='final'?'final':''} anunciada para el próximo turno.`);}
