@@ -1,6 +1,6 @@
 /* Side-view actors: the arena replaces the tactical grid without changing the combat state. */
 window.CenizasBattleVisuals=(()=>{
- const $=id=>document.getElementById(id),previous=new Map();
+ const $=id=>document.getElementById(id),HV=window.CenizasHeroVisuals,previous=new Map();
  const reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
  const sprites={
   anchor:{file:'scenes/umbral.png',scale:1.25,frames:Array(4).fill([646,20,891,335,770,332])},
@@ -20,10 +20,9 @@ window.CenizasBattleVisuals=(()=>{
  const enemyDefaults={ash:'ash-warden',custodian:'rootbound-sentinel',sentinel:'rune-beetle',echo:'bell-moth',whisper:'river-wisp'};
  const slug=value=>String(value||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
  const heroSpec=()=>{
-   const cls=document.body.dataset.heroClass==='Pícaro'?'Pícaro':document.body.dataset.heroClass==='Mago'?'Mago':'Guerrero';
-   const subclass=document.body.dataset.heroSubclass||'';
-   const file=cls==='Mago'&&subclass==='Tejedor'?'identity-mage-ash-pixel.webp':sprites.hero.classFiles[cls];
-   return {...sprites.hero,file,key:'hero|'+file};
+   const profile=HV?.profile?.({class:document.body.dataset.heroClass,race:document.body.dataset.heroRace,gender:document.body.dataset.heroGender,subclass:document.body.dataset.heroSubclass})||{class:'Guerrero',race:'Humano',gender:'No binario',subclass:'Guardia',file:sprites.hero.classFiles.Guerrero,scale:1,filter:'none',raceFeature:'round',genderFeature:'sash',mark:'shield',accent:'#d9b56c',raceAccent:'#d9b56c',genderAccent:'#b9aaf4'};
+   const file=profile.file||sprites.hero.classFiles[profile.class];
+   return {...sprites.hero,...profile,file,key:'hero|'+file+'|'+profile.race+'|'+profile.gender+'|'+profile.subclass};
  };
  const specFor=a=>{
    if(a.dataset.kind==='hero')return heroSpec();
@@ -39,6 +38,27 @@ window.CenizasBattleVisuals=(()=>{
    if(!img){img=images[key]=new Image();img.src=spec.file;}
    return img;
  };
+ function paintHeroTraits(ctx,spec){
+   const s=Math.max(.78,Math.min(1.12,spec.scale||1)),cx=512,head=190*s,accent=spec.accent||'#d9b56c',raceAccent=spec.raceAccent||accent,genderAccent=spec.genderAccent||'#b9aaf4';
+   ctx.save();ctx.lineWidth=5;ctx.globalAlpha=.82;ctx.strokeStyle=raceAccent;ctx.beginPath();ctx.ellipse(cx,head+5,48*s,64*s,0,0,Math.PI*2);ctx.stroke();ctx.globalAlpha=1;ctx.lineWidth=7;ctx.fillStyle=raceAccent;
+   if(spec.raceFeature==='ears'||spec.raceFeature==='half-ears'){ctx.beginPath();ctx.moveTo(cx-34*s,head-25*s);ctx.lineTo(cx-86*s,head-70*s);ctx.lineTo(cx-65*s,head+7*s);ctx.closePath();ctx.fill();ctx.beginPath();ctx.moveTo(cx+34*s,head-25*s);ctx.lineTo(cx+86*s,head-70*s);ctx.lineTo(cx+65*s,head+7*s);ctx.closePath();ctx.fill();}
+   if(spec.raceFeature==='beard'){ctx.beginPath();ctx.moveTo(cx-48*s,head+28*s);ctx.lineTo(cx+48*s,head+28*s);ctx.lineTo(cx,head+96*s);ctx.closePath();ctx.fill();}
+   if(spec.raceFeature==='tusks'||spec.raceFeature==='half-tusks'){ctx.fillStyle='#fff0c2';ctx.beginPath();ctx.moveTo(cx-23*s,head+42*s);ctx.lineTo(cx-5*s,head+42*s);ctx.lineTo(cx-14*s,head+74*s);ctx.closePath();ctx.fill();ctx.beginPath();ctx.moveTo(cx+23*s,head+42*s);ctx.lineTo(cx+5*s,head+42*s);ctx.lineTo(cx+14*s,head+74*s);ctx.closePath();ctx.fill();}
+   if(spec.raceFeature==='cap'){ctx.fillStyle=raceAccent;ctx.beginPath();ctx.moveTo(cx-66*s,head-42*s);ctx.lineTo(cx+66*s,head-42*s);ctx.lineTo(cx,head-126*s);ctx.closePath();ctx.fill();ctx.strokeStyle='#f1d992';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(cx-43*s,head-43*s);ctx.lineTo(cx+43*s,head-43*s);ctx.stroke();}
+   if(spec.raceFeature==='small'){ctx.strokeStyle=raceAccent;ctx.lineWidth=5;ctx.beginPath();ctx.arc(cx,head+10*s,45*s,0,Math.PI*2);ctx.stroke();}
+   ctx.strokeStyle=accent;ctx.lineWidth=8;const markX=cx+150*s,markY=350*s;
+   if(spec.mark==='shield'){ctx.strokeRect(markX-22*s,markY-30*s,44*s,58*s);}
+   if(spec.mark==='rage'){ctx.beginPath();ctx.moveTo(markX-45*s,markY-23*s);ctx.lineTo(markX+32*s,markY+20*s);ctx.moveTo(markX-45*s,markY+20*s);ctx.lineTo(markX+32*s,markY-23*s);ctx.stroke();}
+   if(spec.mark==='crescent'){ctx.beginPath();ctx.arc(markX,markY,30*s,-1.2,1.2);ctx.stroke();ctx.strokeStyle='#07141d';ctx.lineWidth=13;ctx.beginPath();ctx.arc(markX+12*s,markY-5*s,28*s,-1.2,1.2);ctx.stroke();}
+   if(spec.mark==='compass'){ctx.beginPath();ctx.arc(markX,markY,27*s,0,Math.PI*2);ctx.stroke();ctx.beginPath();ctx.moveTo(markX-20*s,markY-20*s);ctx.lineTo(markX+20*s,markY+20*s);ctx.moveTo(markX+20*s,markY-20*s);ctx.lineTo(markX-20*s,markY+20*s);ctx.stroke();}
+   if(spec.mark==='rune'){ctx.strokeRect(markX-26*s,markY-26*s,52*s,52*s);ctx.beginPath();ctx.moveTo(markX-26*s,markY-26*s);ctx.lineTo(markX+26*s,markY+26*s);ctx.stroke();}
+   if(spec.mark==='ember'){ctx.fillStyle=accent;ctx.beginPath();ctx.moveTo(markX,markY-42*s);ctx.lineTo(markX+30*s,markY+20*s);ctx.lineTo(markX-30*s,markY+20*s);ctx.closePath();ctx.fill();}
+   ctx.strokeStyle=genderAccent;ctx.lineWidth=10;ctx.beginPath();
+   if(spec.genderFeature==='ribbon'){ctx.moveTo(cx+50*s,head-35*s);ctx.lineTo(cx+98*s,head+50*s);}
+   if(spec.genderFeature==='braid'){ctx.moveTo(cx-50*s,head-35*s);ctx.lineTo(cx-98*s,head+50*s);}
+   if(spec.genderFeature==='sash'){ctx.moveTo(cx-102*s,head+150*s);ctx.lineTo(cx+110*s,head+250*s);}
+   ctx.stroke();ctx.restore();
+ }
  function paint(a){
    const kind=a.dataset.kind,spec=specFor(a);if(!spec)return;
    const img=imageFor(kind,spec);if(!img.complete||!img.naturalWidth){img.addEventListener('load',()=>paint(a),{once:true});return;}
@@ -47,7 +67,7 @@ window.CenizasBattleVisuals=(()=>{
    if(spec.grid){
      const cols=spec.grid[0],rows=spec.grid[1],frame=index% (cols*rows),sw=img.naturalWidth/cols,sh=img.naturalHeight/rows;
      ctx.imageSmoothingEnabled=false;
-     const dw=720,dh=700;ctx.drawImage(img,(frame%cols)*sw,Math.floor(frame/cols)*sh,sw,sh,(1024-dw)/2,28,dw,dh);
+     const scale=Math.max(.78,Math.min(1.12,spec.scale||1)),dw=720*scale,dh=700*scale;ctx.save();ctx.filter=spec.filter||'none';ctx.drawImage(img,(frame%cols)*sw,Math.floor(frame/cols)*sh,sw,sh,(1024-dw)/2,728-dh,dw,dh);ctx.restore();paintHeroTraits(ctx,spec);
      return;
    }
    ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';

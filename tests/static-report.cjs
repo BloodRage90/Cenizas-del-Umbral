@@ -12,6 +12,7 @@ const music=read('dist/music.js');
 const html=read('dist/chapter.html');
 const index=read('dist/index.html');
 const characterData=read('dist/character-data.js');
+const heroVisuals=read('dist/hero-visuals.js');
 
 for(const name of ['renderPortrait','identity','sheet','updateHero','changed','bind'])assert.equal((app.match(new RegExp('function '+name+'\\(','g'))||[]).length,1,'app.js no duplica '+name);
 assert(!app.includes('issues()'),'app.js no conserva la hoja muerta que llamaba a issues()');
@@ -32,6 +33,9 @@ for(const name of enemyFiles){assert(fs.existsSync(path.join(root,'dist','enemie
 assert(chapter.includes("state.place==='plaza'")&&chapter.includes('preloadPlaces'),'la cinemática y la carga de escenas están acotadas');
 assert(!chapter.includes('libera los nombres antes de atacar el ancla'),'no queda el aviso residual del jefe final');
 assert(visuals.includes('classFiles')&&visuals.includes('actor-portrait'),'los sprites y retratos dependen del personaje');
+assert(heroVisuals.includes('const raceData')&&heroVisuals.includes('const genderData')&&heroVisuals.includes('function profile'),'el perfil visual centraliza raza, género, clase y subclase');
+assert(index.includes('hero-visuals.js')&&html.includes('hero-visuals.js'),'el perfil visual se carga antes de mapa y combate');
+assert(chapter.includes("document.body.dataset.heroClass=character?.class"),'el combate recibe el nombre canónico de la clase');
 assert(html.includes('id="scene" role="region"')&&html.includes('id="battle-stage" role="region"'),'los contenedores interactivos tienen rol');
 assert(index.includes('id="game" role="region"')&&index.includes('intro-video')&&index.includes('preload="none"'),'el mapa y el vídeo respetan accesibilidad y carga diferida');
 assert(fs.existsSync(path.join(root,'dist','assets.js'))&&index.includes('assets.js')&&html.includes('assets.js'),'existe un único token de caché compartido');
