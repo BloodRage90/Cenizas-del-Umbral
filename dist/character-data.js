@@ -56,7 +56,6 @@
     Gnomo: { verb: 'Colarse', promise: 'Sigues señales diminutas y descubres una versión inesperada del mito.', dialogue: 'Un ratón de ceniza te responde con un mapa diminuto.' },
     Semielfo: { verb: 'Tender puentes', promise: 'Sostienes dos relatos a la vez y evitas que uno borre al otro.', dialogue: 'La inscripción cambia al oír tu voz y muestra dos caminos.' },
     Semiorco: { verb: 'Imponerse', promise: 'Nombras el daño sin dejar que te conviertan en una caricatura.', dialogue: 'El mercader reconoce tu determinación y ofrece una salida justa.' }
->>>>>>> 3fd8390 (feat: active combat and narrative continuity)
   };
   const genderData = [['Mujer', 'woman', '✧'], ['Hombre', 'man', '◆'], ['No binario', 'nonbinary', '◇']];
   const classSubclassPairs = Object.entries(subclassData).flatMap(([className, entries]) => entries.map(entry => ({ class: className, subclass: entry[0] })));
