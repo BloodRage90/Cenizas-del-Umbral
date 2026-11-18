@@ -4,6 +4,7 @@
 
 - Se añadió una tira de orden de turnos accesible en la cabecera de la arena lateral, con estado actual y unidades derrotadas.
 - El orden se desplaza horizontalmente en pantallas estrechas sin recuperar el tablero ni sus controles.
+- Las comprobaciones opcionales de habilidad cubren diez rutas (cerraduras, sigilo, arcano, trepar, información, intención, escritura y mecanismos) sin alterar las rutas principales.
 
 ## 2026-11-18 · Fase 3
 
@@ -27,6 +28,7 @@
 - Se añadieron efectos mecánicos de Guardia, Berserker, Sombra, Explorador, Arcanista y Tejedor.
 - Exploración y combate seleccionan el sprite base según clase y Tejedor; raza, tamaño y género aplican escala/paleta de presentación.
 - La matriz automática cubre 144 combinaciones jugables.
+- Los modificadores de habilidad se leen desde el mismo módulo que usa la hoja y el combate; se retiraron de las descripciones los rasgos raciales sin implementación efectiva.
 
 ## 2026-11-18 · Fase 1
 

@@ -6,6 +6,7 @@
    * scripts in the browser and can also be required by Node tests. */
   const names = ['Fuerza', 'Destreza', 'Constitución', 'Inteligencia', 'Sabiduría', 'Carisma'];
   const short = ['FUE', 'DES', 'CON', 'INT', 'SAB', 'CAR'];
+  const skillNames = ['Abrir cerraduras', 'Artesanía', 'Averiguar intenciones', 'Avistar', 'Buscar', 'Concentración', 'Conocimiento de conjuros', 'Descifrar escritura', 'Diplomacia', 'Engañar', 'Equilibrio', 'Escapismo', 'Esconderse', 'Escuchar', 'Inutilizar mecanismo', 'Intimidar', 'Montar', 'Moverse sigilosamente', 'Nadar', 'Reunir información', 'Saber (arcano)', 'Saber (local)', 'Saltar', 'Trato con animales', 'Trepar', 'Piruetas', 'Usar objeto mágico'];
   const costs = { 8: 0, 9: 1, 10: 2, 11: 3, 12: 4, 13: 5, 14: 6, 15: 8, 16: 10, 17: 13, 18: 16 };
 
   const classes = {
@@ -19,11 +20,11 @@
   const raceData = {
     Humano: { mods: [0, 0, 0, 0, 0, 0], speed: 9, size: 'M', skill: '', skillBonuses: {}, acBonus: 0, attackBonus: 0, damageDiePenalty: 0, sigil: '◇', traits: ['Dote adicional', '4 puntos de habilidad adicionales en nivel 1'], text: 'Humano: versatilidad humana, 1 dote adicional y 4 puntos extra de habilidad en nivel 1. Velocidad: 9 m.' },
     Elfo: { mods: [0, 2, -2, 0, 0, 0], speed: 9, size: 'M', skill: 'Avistar|Buscar|Escuchar', skillBonuses: { Avistar: 2, Buscar: 2, Escuchar: 2 }, acBonus: 0, attackBonus: 0, damageDiePenalty: 0, sigil: '✧', traits: ['Visión en la penumbra', 'Sentidos agudos'], text: 'Elfo: +2 Destreza, −2 Constitución, sentidos agudos y visión en la penumbra. Velocidad: 9 m.' },
-    Enano: { mods: [0, 0, 2, 0, 0, -2], speed: 6, size: 'M', skill: '', skillBonuses: {}, acBonus: 0, attackBonus: 0, damageDiePenalty: 0, sigil: '⬟', traits: ['Visión en la oscuridad', 'Resistencia enano'], text: 'Enano: +2 Constitución, −2 Carisma, resistencia y visión en la oscuridad. Velocidad: 6 m.' },
+    Enano: { mods: [0, 0, 2, 0, 0, -2], speed: 6, size: 'M', skill: '', skillBonuses: {}, acBonus: 0, attackBonus: 0, damageDiePenalty: 0, sigil: '⬟', traits: ['Visión en la oscuridad'], text: 'Enano: +2 Constitución, −2 Carisma y visión en la oscuridad. Velocidad: 6 m.' },
     Orco: { mods: [4, 0, 0, -2, -2, -2], speed: 9, size: 'M', skill: 'Intimidar', skillBonuses: { Intimidar: 2 }, acBonus: 0, attackBonus: 0, damageDiePenalty: 0, sigil: '◆', traits: ['Visión en la oscuridad', 'Intimidar'], text: 'Orco: +4 Fuerza, −2 Inteligencia, −2 Sabiduría y −2 Carisma; una presencia intimidante y visión en la oscuridad. Velocidad: 9 m.' },
-    Mediano: { mods: [-2, 2, 0, 0, 0, 0], speed: 6, size: 'S', skill: 'Moverse sigilosamente|Saltar', skillBonuses: { 'Moverse sigilosamente': 2, Saltar: 2 }, acBonus: 1, attackBonus: 1, damageDiePenalty: 2, sigil: '•', traits: ['Bonificador de tamaño pequeño', 'Suerte mediana'], text: 'Mediano: −2 Fuerza, +2 Destreza; tamaño Pequeño: +1 CA, +1 ataque y daño reducido. Velocidad: 6 m.' },
-    Gnomo: { mods: [-2, 0, 2, 0, 0, 0], speed: 6, size: 'S', skill: 'Inutilizar mecanismo|Saber (arcano)', skillBonuses: { 'Inutilizar mecanismo': 2, 'Saber (arcano)': 2 }, acBonus: 1, attackBonus: 1, damageDiePenalty: 2, sigil: '✿', traits: ['Bonificador de tamaño pequeño', 'Ilusión y mecanismos'], text: 'Gnomo: −2 Fuerza, +2 Constitución; tamaño Pequeño: +1 CA, +1 ataque y daño reducido. Afinidad con ilusiones y mecanismos. Velocidad: 6 m.' },
-    Semielfo: { mods: [0, 0, 0, 0, 0, 0], speed: 9, size: 'M', skill: 'Diplomacia|Reunir información', skillBonuses: { Diplomacia: 2, 'Reunir información': 2 }, acBonus: 0, attackBonus: 0, damageDiePenalty: 0, sigil: '◈', traits: ['Sentidos élficos', 'Adaptabilidad'], text: 'Semielfo: herencia dual, adaptable y diplomática; conserva sentidos élficos. Velocidad: 9 m.' },
+    Mediano: { mods: [-2, 2, 0, 0, 0, 0], speed: 6, size: 'S', skill: 'Moverse sigilosamente|Saltar', skillBonuses: { 'Moverse sigilosamente': 2, Saltar: 2 }, acBonus: 1, attackBonus: 1, damageDiePenalty: 2, sigil: '•', traits: ['Bonificador de tamaño pequeño'], text: 'Mediano: −2 Fuerza, +2 Destreza; tamaño Pequeño: +1 CA, +1 ataque y daño reducido. Velocidad: 6 m.' },
+    Gnomo: { mods: [-2, 0, 2, 0, 0, 0], speed: 6, size: 'S', skill: 'Inutilizar mecanismo|Saber (arcano)', skillBonuses: { 'Inutilizar mecanismo': 2, 'Saber (arcano)': 2 }, acBonus: 1, attackBonus: 1, damageDiePenalty: 2, sigil: '✿', traits: ['Bonificador de tamaño pequeño', '+2 a mecanismos e ilusiones'], text: 'Gnomo: −2 Fuerza, +2 Constitución; tamaño Pequeño: +1 CA, +1 ataque y daño reducido. +2 a Inutilizar mecanismo y Saber (arcano). Velocidad: 6 m.' },
+    Semielfo: { mods: [0, 0, 0, 0, 0, 0], speed: 9, size: 'M', skill: 'Diplomacia|Reunir información', skillBonuses: { Diplomacia: 2, 'Reunir información': 2 }, acBonus: 0, attackBonus: 0, damageDiePenalty: 0, sigil: '◈', traits: ['Adaptabilidad', '+2 Diplomacia y Reunir información'], text: 'Semielfo: herencia dual, adaptable y diplomática; +2 Diplomacia y Reunir información. Velocidad: 9 m.' },
     Semiorco: { mods: [2, 0, 0, 0, 0, -2], speed: 9, size: 'M', skill: 'Intimidar', skillBonuses: { Intimidar: 2 }, acBonus: 0, attackBonus: 0, damageDiePenalty: 0, sigil: '✹', traits: ['Visión en la oscuridad', 'Intimidar'], text: 'Semiorco: +2 Fuerza, −2 Carisma; vigor de orco con más dominio de las ciudades. Velocidad: 9 m.' }
   };
 
@@ -44,7 +45,7 @@
   const genderData = [['Mujer', 'woman', '✧'], ['Hombre', 'man', '◆'], ['No binario', 'nonbinary', '◇']];
   const classSubclassPairs = Object.entries(subclassData).flatMap(([className, entries]) => entries.map(entry => ({ class: className, subclass: entry[0] })));
 
-  const api = { names, short, costs, classes, raceData, subclassData, subclassRules, genderData, classSubclassPairs };
+  const api = { names, short, skillNames, costs, classes, raceData, subclassData, subclassRules, genderData, classSubclassPairs };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.CenizasCharacterData = api;
 })(typeof window !== 'undefined' ? window : globalThis);

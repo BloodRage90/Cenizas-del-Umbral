@@ -11,6 +11,7 @@ const chapterCss=read('dist/chapter.css');
 const music=read('dist/music.js');
 const html=read('dist/chapter.html');
 const index=read('dist/index.html');
+const characterData=read('dist/character-data.js');
 
 for(const name of ['renderPortrait','identity','sheet','updateHero','changed','bind'])assert.equal((app.match(new RegExp('function '+name+'\\(','g'))||[]).length,1,'app.js no duplica '+name);
 assert(!app.includes('issues()'),'app.js no conserva la hoja muerta que llamaba a issues()');
@@ -18,6 +19,8 @@ assert(!app.includes('Historia personal</h3>'),'la historia personal fue retirad
 assert(combat.includes('function migrate(raw)')&&combat.includes('range:1'),'el motor expone migración y alcance');
 assert(combat.includes("bonus:(cls==='Mago'?m[3]:m[0])"),'el Mago usa Inteligencia');
 assert(combat.includes('subclassRules')&&combat.includes('raceData'),'las reglas de personaje están centralizadas');
+assert(chapter.includes('CD.raceData')&&chapter.includes('skillNames')&&!chapter.includes('mods={Elfo:'),'chapter.js usa el módulo compartido para bonificadores raciales');
+assert(characterData.includes('const skillNames')&&characterData.includes('skillNames,'),'los nombres de habilidad viven en el módulo compartido');
 assert.equal((chapter.match(/function bindBattleTargets/g)||[]).length,1,'solo existe un enlace de objetivos de combate lateral');
 assert(!chapter.includes('bindBattleBoard')&&!html.includes('id="board"')&&!html.includes('id="combat-arrows"'),'el combate no conserva tablero ni control de movimiento');
 assert(chapter.includes('noBoard=true')&&combat.includes('this.s.noBoard'),'el motor resuelve el combate sin casillas cuando se juega en la arena lateral');
