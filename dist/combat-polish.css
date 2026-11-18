@@ -1,8 +1,8 @@
 /* One visual scale and pose system shared by the field and attack close-ups. */
 .combat-art{width:100%;aspect-ratio:1;flex:none;background-repeat:no-repeat;image-rendering:auto;transform-origin:50% 88%;filter:drop-shadow(0 5px 3px #07121bbb);animation:battle-breathe 2.6s ease-in-out infinite}
 .combat-art[data-kind=elara]{background-image:url('combat-elara.png');background-size:200% 200%}
-.combat-art[data-kind=echo]{background-image:url('combat-echo.png');background-size:200% 200%;animation:echo-drift 3.4s ease-in-out infinite}
-.combat-art[data-kind=construct]{background:url('custodian.png') center / contain no-repeat}
+.combat-art[data-kind=echo]{background-image:url('combat-echo.webp');background-size:200% 200%;animation:echo-drift 3.4s ease-in-out infinite}
+.combat-art[data-kind=construct]{background:url('custodian.webp') center / contain no-repeat}
 .combat-art[data-pose=windup]{background-position-x:100%}
 .combat-art[data-pose=strike]{background-position:0 100%;animation:none}
 .combat-art[data-pose=hurt]{background-position:100% 100%;animation:none}

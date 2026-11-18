@@ -10,6 +10,7 @@
 - Escenas y mapas convertidos a WebP sin retirar los originales que todavía usa el compositor del prólogo.
 - `chapter.js` precarga únicamente la zona actual y el siguiente destino; las demás escenas se solicitan al viajar.
 - Se centralizó la versión de caché en `dist/assets.js` y se aplicó a música y fuentes de la banda sonora.
+- Los sprites de exploración, NPC y encuentros tienen variantes WebP para que la carga estimada del capítulo quede por debajo de 15 MiB.
 - Se añadió `dist/favicon.ico` y el servidor de pruebas reconoce WebP, MP4, MP3 e ICO.
 - Se retiraron ocho assets huérfanos verificados: siete retratos raciales genéricos y `scenes/plaza.png`.
 - El panel lateral de combate en horizontal mantiene todas las acciones visibles con objetivos táctiles de 48 px; la arena sigue siendo lateral y sin tablero.

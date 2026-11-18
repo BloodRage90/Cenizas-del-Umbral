@@ -35,5 +35,6 @@ assert(fs.existsSync(path.join(root,'dist','assets.js'))&&index.includes('assets
 assert(!music.includes('resonancias-combate-2')&&!music.includes('resonancias-combate-3'),'la música no conserva versiones de caché duplicadas');
 assert(chapterCss.includes('orientation:landscape')&&chapterCss.includes('min-height:48px')&&chapterCss.includes('white-space:nowrap'),'el carril horizontal conserva objetivos táctiles y nombres legibles');
 assert(fs.existsSync(path.join(root,'dist','valdara.webp'))&&fs.existsSync(path.join(root,'dist','region-map.webp')),'el mapa y el mundo tienen formatos comprimidos');
+assert(!chapter.includes("'hero-walk-v2.png'")&&!chapter.includes("'npc-clergy.png'")&&!chapter.includes("'combat-echo.png'"),'el capítulo usa sprites comprimidos en ejecución');
 assert(!index.includes('Practicar combate ATB'),'la ayuda principal no ofrece el laboratorio ATB heredado como combate de campaña');
 console.log('PASS: auditoría estática del informe.');

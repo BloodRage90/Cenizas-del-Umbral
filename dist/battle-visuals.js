@@ -5,8 +5,8 @@ window.CenizasBattleVisuals=(()=>{
  const sprites={
   anchor:{file:'scenes/umbral.png',scale:1.25,frames:Array(4).fill([646,20,891,335,770,332])},
   pylon:{file:'scenes/umbral.png',scale:1.25,frames:Array(4).fill([204,86,362,407,282,404])},
-  construct:{file:'custodian.png',scale:.72,frames:Array(4).fill([0,0,1280,1280,640,1280])},
-  hero:{classFiles:{Guerrero:'identity-warrior-pixel.png',Pícaro:'identity-rogue-pixel.png',Mago:'identity-mage-pixel.png'},grid:[2,2],scale:1},
+  construct:{file:'custodian.webp',scale:.72,frames:Array(4).fill([0,0,1280,1280,640,1280])},
+  hero:{classFiles:{Guerrero:'identity-warrior-pixel.webp',Pícaro:'identity-rogue-pixel.webp',Mago:'identity-mage-pixel.webp'},grid:[2,2],scale:1},
   enemy:{files:{
    'ash-warden':'enemies/ash-warden.png','rootbound-sentinel':'enemies/rootbound-sentinel.png','bell-moth':'enemies/bell-moth.png','river-wisp':'enemies/river-wisp.png','ember-wolf':'enemies/ember-wolf.png',
    'thorn-goblin':'enemies/thorn-goblin.png','marsh-hag':'enemies/marsh-hag.png','rune-beetle':'enemies/rune-beetle.png','drowned-knight':'enemies/drowned-knight.png','candle-imp':'enemies/candle-imp.png',
@@ -14,7 +14,7 @@ window.CenizasBattleVisuals=(()=>{
    'iron-boar':'enemies/iron-boar.png','willow-spirit':'enemies/willow-spirit.png','redcap-miner':'enemies/redcap-miner.png','frost-revenant':'enemies/frost-revenant.png','umbral-spider':'enemies/umbral-spider.png'
   },grid:[1,1],scale:1},
   elara:{file:'combat-elara.png',scale:420/538,frames:[[101,68,619,614,330,610],[709,24,1167,619,990,610],[33,679,745,1184,315,1178],[780,685,1219,1192,995,1185]]},
-  echo:{file:'combat-echo.png',scale:420/619,frames:[[88,16,578,643,330,635],[693,13,1227,643,980,635],[12,666,686,1219,375,1212],[705,646,1240,1241,980,1233]]}
+  echo:{file:'combat-echo.webp',scale:420/619,frames:[[88,16,578,643,330,635],[693,13,1227,643,980,635],[12,666,686,1219,375,1212],[705,646,1240,1241,980,1233]]}
  };
  const images={};
  const enemyDefaults={ash:'ash-warden',custodian:'rootbound-sentinel',sentinel:'rune-beetle',echo:'bell-moth',whisper:'river-wisp'};
@@ -22,7 +22,7 @@ window.CenizasBattleVisuals=(()=>{
  const heroSpec=()=>{
    const cls=document.body.dataset.heroClass==='Pícaro'?'Pícaro':document.body.dataset.heroClass==='Mago'?'Mago':'Guerrero';
    const subclass=document.body.dataset.heroSubclass||'';
-   const file=cls==='Mago'&&subclass==='Tejedor'?'identity-mage-ash-pixel.png':sprites.hero.classFiles[cls];
+   const file=cls==='Mago'&&subclass==='Tejedor'?'identity-mage-ash-pixel.webp':sprites.hero.classFiles[cls];
    return {...sprites.hero,file,key:'hero|'+file};
  };
  const specFor=a=>{
