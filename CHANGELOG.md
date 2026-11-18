@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-11-18 · Fase 4
+
+- Se añadió una tira de orden de turnos accesible en la cabecera de la arena lateral, con estado actual y unidades derrotadas.
+- El orden se desplaza horizontalmente en pantallas estrechas sin recuperar el tablero ni sus controles.
+
 ## 2026-11-18 · Fase 3
 
 - Escenas y mapas convertidos a WebP sin retirar los originales que todavía usa el compositor del prólogo.

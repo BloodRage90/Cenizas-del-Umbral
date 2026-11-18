@@ -87,6 +87,7 @@ window.CenizasBattleVisuals=(()=>{
    previous.set(u.id,{x:u.x,y:u.y,hp:u.hp});
   }
   $('party-status').replaceChildren(...party.map(u=>{const el=document.createElement('span');el.className='party-chip'+(u.id===s.order[s.index]?' current':'');el.textContent=`${u.name} ${u.hp}/${u.max}`;return el;}));
+  const turnOrder=$('turn-order');if(turnOrder)turnOrder.replaceChildren(...s.order.map(id=>{const u=s.units.find(unit=>unit.id===id);if(!u)return null;const chip=document.createElement('span');chip.className='turn-chip'+(id===s.order[s.index]?' current':'')+(u.hp<=0?' down':'');chip.setAttribute('role','listitem');chip.setAttribute('aria-current',id===s.order[s.index]?'step':'false');chip.textContent=u.name;return chip;}).filter(Boolean));
  }
  function reset(){previous.clear();}
  async function sequence(stage,attacker,target,{magic=false,impact}={}){

@@ -21,6 +21,7 @@ assert(combat.includes('subclassRules')&&combat.includes('raceData'),'las reglas
 assert.equal((chapter.match(/function bindBattleTargets/g)||[]).length,1,'solo existe un enlace de objetivos de combate lateral');
 assert(!chapter.includes('bindBattleBoard')&&!html.includes('id="board"')&&!html.includes('id="combat-arrows"'),'el combate no conserva tablero ni control de movimiento');
 assert(chapter.includes('noBoard=true')&&combat.includes('this.s.noBoard'),'el motor resuelve el combate sin casillas cuando se juega en la arena lateral');
+assert(html.includes('id="turn-order"')&&visuals.includes("turn-chip"),'la arena muestra el orden de turnos sin tablero');
 assert(combat.includes('moveToward(actor,target){if(this.s.noBoard)return;'),'la IA enemiga no mueve unidades durante el combate lateral');
 const enemyFiles=['ash-warden','rootbound-sentinel','bell-moth','river-wisp','ember-wolf','thorn-goblin','marsh-hag','rune-beetle','drowned-knight','candle-imp','glass-serpent','fungal-brute','clockwork-raven','mirror-shade','ash-drake','iron-boar','willow-spirit','redcap-miner','frost-revenant','umbral-spider'];
 assert.equal(enemyFiles.length,20,'hay 20 variantes de enemigos');
