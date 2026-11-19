@@ -19,8 +19,15 @@ const party = [
 assert(Systems.canUseTech('filoUmbrio', party, 2));
 assert(Systems.canUseTech('llamaArcana', party, 3));
 assert(!Systems.canUseTech('llamaArcana', party.slice(0, 2), 3));
+assert.deepEqual([...Systems.partyClasses([{ class: 'Pícaro', classes: ['Pícaro', 'Mago'], hp: 10 }])].sort(), ['Mago', 'Pícaro']);
 assert.equal(Systems.racialSecret('Orco', 'plaza').verb, 'Intimidar');
-assert.equal(Systems.classVerbs.Mago.combat, 'Canalizar');
+assert.equal(Systems.classVerbs.Guerrero.combat, 'Provocar');
+
+for (const heroClass of ['Guerrero', 'Pícaro', 'Mago']) {
+  const hero = R.profile({ ...R.defaults, class: heroClass, base: R.defaults.base, feats: [] });
+  const available = Object.keys(Systems.TECHS).filter(id => Systems.canUseTech(id, [hero, R.elara], 5));
+  assert(available.length >= 3, `${heroClass} conserva técnicas combinadas con Elara: ${available.join(', ')}`);
+}
 
 const makePartyBattle = () => {
   const hero = R.profile({ ...R.defaults, class: 'Pícaro', subclass: 'Sombra', base: [12, 16, 14, 14, 10, 8], feats: [] });
@@ -48,6 +55,12 @@ for (const [id, cost, minimum] of [['filoUmbrio', 2, 1.5], ['llamaArcana', 3, 1.
   assert(minimum >= 1.5, `${id} conserva el multiplicador mínimo`);
   assert.equal(b.s.action, false, `${id} consume la acción del turno`);
 }
+
+const provoke = new R.Battle('whisper', R.profile({ ...R.defaults, class: 'Guerrero' }), { ...R.fresh(), flags: { elara: false }, pi: 1 }, n => n);
+const acBeforeProvoke = provoke.enemy.ac;
+assert.equal(provoke.useTech('provocar'), true, 'el Guerrero tiene un verbo propio con coste PI');
+assert.equal(provoke.s.pi, 0, 'Provocar consume un punto de impulso');
+assert.equal(provoke.enemy.ac, acBeforeProvoke - 2, 'Provocar rompe la CA del objetivo');
 
 const capped = makePartyBattle();
 capped.s.pi = 5;

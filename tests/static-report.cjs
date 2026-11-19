@@ -38,6 +38,8 @@ for(const name of enemyFiles){assert(fs.existsSync(path.join(root,'dist','enemie
 assert(chapter.includes("state.place==='plaza'")&&chapter.includes('preloadPlaces'),'la cinemática y la carga de escenas están acotadas');
 assert(!chapter.includes('libera los nombres antes de atacar el ancla'),'no queda el aviso residual del jefe final');
 assert(visuals.includes('classFiles')&&visuals.includes('actor-portrait'),'los sprites y retratos dependen del personaje');
+assert(app.includes("portraits/humano-mujer.webp")&&visuals.includes("+'.webp'"),'los retratos se sirven como WebP');
+assert(!fs.existsSync(path.join(root,'dist','scenes','plaza.png'))&&!fs.readdirSync(path.join(root,'dist','scenes')).some(name=>name.endsWith('.png')),'las escenas no mantienen PNG pesados en producción');
 assert(heroVisuals.includes('const raceData')&&heroVisuals.includes('const genderData')&&heroVisuals.includes('function profile'),'el perfil visual centraliza raza, género, clase y subclase');
 assert(index.includes('hero-visuals.js')&&html.includes('hero-visuals.js'),'el perfil visual se carga antes de mapa y combate');
 assert(chapter.includes("document.body.dataset.heroClass=character?.class"),'el combate recibe el nombre canónico de la clase');

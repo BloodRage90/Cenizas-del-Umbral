@@ -27,6 +27,14 @@
       cost: 2,
       multiplier: 1.5,
       description: 'El Mago ralentiza y el Pícaro garantiza el ataque furtivo.'
+    }),
+    provocar: Object.freeze({
+      id: 'provocar',
+      name: 'Provocar',
+      requires: ['Guerrero'],
+      cost: 1,
+      multiplier: 1,
+      description: 'El Guerrero quiebra la defensa del objetivo: −2 CA durante este encuentro.'
     })
   });
 
@@ -67,7 +75,15 @@
     return { success, reduction: block.reduction, piGain: block.piGain, attempts: block.attempts };
   }
 
-  function partyClasses(party = []) { return new Set(party.filter(u => u && u.hp > 0).map(u => u.class).filter(Boolean)); }
+  function partyClasses(party = []) {
+    const classes = new Set();
+    for (const unit of party) {
+      if (!unit || unit.hp <= 0) continue;
+      const declared = Array.isArray(unit.classes) ? unit.classes : [unit.class];
+      for (const name of declared) if (name) classes.add(name);
+    }
+    return classes;
+  }
   function canUseTech(id, party = [], pi = 0) {
     const tech = TECHS[id];
     if (!tech || pi < tech.cost) return false;
@@ -80,7 +96,7 @@
     return { id: `${place}:${race}`, race, place, verb: data.verb, promise: data.promise, dialogue: data.dialogue };
   }
 
-  const api = { MAX_PI, TECHS, classVerbs, raceVerbs, resources, beginBlock, resolveBlock, canUseTech, racialSecret };
+  const api = { MAX_PI, TECHS, classVerbs, raceVerbs, resources, beginBlock, resolveBlock, partyClasses, canUseTech, racialSecret };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.CenizasCombatSystems = api;
 })(typeof window !== 'undefined' ? window : globalThis);

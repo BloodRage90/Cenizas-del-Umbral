@@ -43,7 +43,7 @@
     Tejedor: { class: 'Mago', label: 'Tejedor', ac: 0, damage: 1, initiative: 0, sneakDie: 0, spellSlots: 0, ranged: 2, spellDC: 0, action: 'canalizar', description: 'Proyectil de ceniza: +2 alcance y +1 daño mágico.' }
   };
   const classVerbs = {
-    Guerrero: { explore: 'Embate', combat: 'Postura de Guardia', promise: 'Aguantas golpes y generas ventaja para tu equipo.', example: 'Guardia → bloquea un golpe → devuelve un impacto pesado.' },
+    Guerrero: { explore: 'Embate', combat: 'Provocar', cost: 1, promise: 'Aguantas golpes, rompes guardias y generas ventaja para tu equipo.', example: 'Provocar · 1 PI → −2 CA al objetivo → golpe pesado.' },
     Pícaro: { explore: 'Registro rápido', combat: 'Marca del Cazador', promise: 'Creas aperturas: marcas, distraes y castigas al distraído.', example: 'Marca → espera la apertura → remata con furtivo.' },
     Mago: { explore: 'Discernir', combat: 'Canalizar', promise: 'Controlas el campo: conviertes un turno en tres.', example: 'Canaliza 1 PI → acepta −2 CA → lanza sin gastar espacio.' }
   };

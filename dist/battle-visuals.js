@@ -3,8 +3,8 @@ window.CenizasBattleVisuals=(()=>{
  const $=id=>document.getElementById(id),HV=window.CenizasHeroVisuals,previous=new Map();
  const reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
  const sprites={
-  anchor:{file:'scenes/umbral.png',scale:1.25,frames:Array(4).fill([646,20,891,335,770,332])},
-  pylon:{file:'scenes/umbral.png',scale:1.25,frames:Array(4).fill([204,86,362,407,282,404])},
+  anchor:{file:'scenes/umbral.webp',scale:1.25,frames:Array(4).fill([646,20,891,335,770,332])},
+  pylon:{file:'scenes/umbral.webp',scale:1.25,frames:Array(4).fill([204,86,362,407,282,404])},
   construct:{file:'custodian.webp',scale:.72,frames:Array(4).fill([0,0,1280,1280,640,1280])},
   hero:{classFiles:{Guerrero:'identity-warrior-pixel.webp',Pícaro:'identity-rogue-pixel.webp',Mago:'identity-mage-pixel.webp'},grid:[2,2],scale:1},
   enemy:{files:{
@@ -85,7 +85,7 @@ window.CenizasBattleVisuals=(()=>{
  function portraitFor(u){
    if(u.id!=='hero')return null;
    const race=slug(document.body.dataset.heroRace)||'humano',gender=slug(document.body.dataset.heroGender)||'no-binario';
-   return 'portraits/'+race+'-'+gender+'.png';
+   return 'portraits/'+race+'-'+gender+'.webp';
  }
  function render(s,room){
   const stage=$('battle-stage');if(!stage)return;stage.style.backgroundImage=`linear-gradient(#07141db8,#0c1823d9),url(scenes/${room==='plaza'?'plaza-forest':room}.webp)`;

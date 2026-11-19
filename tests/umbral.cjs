@@ -4,7 +4,7 @@ for(const key of ['montana','antesala','umbral']){
  const r=rooms[key],queue=[{x:r.start[0],y:r.start[1]}],seen=new Set([r.start.join(',')]);assert(Nav.walkable(r,...r.start),key+' start');
  for(let i=0;i<queue.length;i++)for(const [dx,dy]of [[10,0],[-10,0],[0,10],[0,-10]]){const p=queue[i],q={x:p.x+dx,y:p.y+dy},k=q.x+','+q.y;if(!seen.has(k)&&Nav.clear(r,p,q)){seen.add(k);queue.push(q);}}
  for(const [id,,x,y]of r.spots){assert(Nav.walkable(r,x,y),key+'/'+id+' on floor');assert(queue.some(p=>Math.hypot(p.x-x,p.y-y)<60&&Nav.clear(r,p,{x,y})),key+'/'+id+' reachable');}
- const save={...R.fresh(),place:key,level:5};assert(R.valid(save));assert(fs.existsSync('dist/'+r.img));assert(fs.existsSync('dist/music/'+key+'.mp3'));
+ const save={...R.fresh(),place:key,level:5};assert(R.valid(save));const sceneAsset=r.img.replace(/\.png$/i,'.webp');assert(fs.existsSync('dist/'+sceneAsset));assert(fs.existsSync('dist/music/'+key+'.mp3'));
 }
 assert(!Nav.walkable(rooms.antesala,450,495));assert(!Nav.walkable(rooms.umbral,770,550));assert(!Nav.walkable(rooms.montana,1000,700));
 const make=(cls='Guerrero')=>new B(R.profile({...R.defaults,class:cls},5),{flags:{elara:true},potions:3},()=>10);

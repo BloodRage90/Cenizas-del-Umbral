@@ -1,5 +1,18 @@
 # Changelog
 
+## 2026-11-19 · Fase 1 — combate accesible y recursos ligeros
+
+- Elara declara sus tres disciplinas de apoyo, así que Guerrero, Pícaro y Mago conservan técnicas combinadas alcanzables; se añadió `Provocar` (1 PI, −2 CA) como verbo propio del Guerrero.
+- La arena anuncia `TU TURNO`, `ENEMIGO` o fin de encuentro; las previsualizaciones del mapa usan la etiqueta legible `ENEMIGO VISIBLE` en lugar del marcador geométrico de depuración.
+- El carril de acciones en horizontal móvil tiene cabecera compacta, controles táctiles de 46 px, scroll real y una indicación visible para descubrir todas las acciones sin tapar la arena.
+- Los retratos raciales y las escenas de producción se sirven como WebP; se retiraron los PNG duplicados y `scenes/plaza.png`. El tamaño de `dist/` baja a aproximadamente 112 MiB.
+- El texto del creador describe la campaña real (4 actos y 14 zonas), y las pruebas cubren las técnicas disponibles con aliados reales, el nuevo verbo y la migración de assets.
+
+### Validación
+
+- `node --test tests/*.cjs`: 37/37 pasados.
+- `node --check` sobre los módulos modificados: sin errores.
+
 ## 2026-11-18 · Fase 5 — combate activo y continuidad narrativa
 
 - Se añadió defensa activa: cada descarga enemiga abre una ventana temporal bloqueable, con resolución única, reducción de daño y PI persistente (máximo 5).

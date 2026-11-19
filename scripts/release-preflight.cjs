@@ -11,7 +11,7 @@ function assertPrologueAssets(){
   for(const marker of ['id="intro-cinema"','id="intro-video"','src="intro.mp4"','id="skip-intro"'])if(!html.includes(marker))throw new Error(`Falta el ancla del prólogo: ${marker}`);
   const menu=fs.readFileSync(path.join(root,'dist','menu.js'),'utf8');
   for(const marker of ['PRÓLOGO CINEMÁTICO · VALDARA','intro.dataset.stage=\'video\'','video.onended=finish'])if(!menu.includes(marker))throw new Error(`Falta la transición narrativa del prólogo: ${marker}`);
-  const pixelScenes=['intro-pixel-plaza.png','intro-pixel-montana.png','intro-pixel-capilla.png','intro-pixel-umbral.png'];
+  const pixelScenes=['intro-pixel-plaza.webp','intro-pixel-montana.webp','intro-pixel-capilla.webp','intro-pixel-umbral.webp'];
   for(const scene of pixelScenes)if(!fs.existsSync(path.join(root,'dist','scenes',scene)))throw new Error(`Falta el plano pixel-art: ${scene}`);
   if(!fs.existsSync(path.join(root,'scripts','compose-intro-pixel.cjs')))throw new Error('Falta el compositor reproducible del prólogo pixel-art.');
   const video=path.join(root,'dist','intro.mp4');

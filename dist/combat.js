@@ -5,10 +5,11 @@ const mod=n=>Math.floor((n-10)/2),sign=n=>n>=0?'+'+n:String(n);
 const Data=typeof module!=='undefined'&&module.exports?require('./character-data.js'):root.CenizasCharacterData;
 const Systems=typeof module!=='undefined'&&module.exports?require('./combat-systems.js'):root.CenizasCombatSystems||{
  MAX_PI:5,classVerbs:Data.classVerbs||{},raceVerbs:Data.raceVerbs||{},
- TECHS:{filoUmbrio:{id:'filoUmbrio',name:'Filo Umbrío',requires:['Pícaro','Guerrero'],cost:2,multiplier:1.5},llamaArcana:{id:'llamaArcana',name:'Llama Arcana',requires:['Mago','Guerrero'],cost:3,multiplier:1.6},sombraDoble:{id:'sombraDoble',name:'Sombra Doble',requires:['Pícaro','Mago'],cost:2,multiplier:1.5}},
+ TECHS:{filoUmbrio:{id:'filoUmbrio',name:'Filo Umbrío',requires:['Pícaro','Guerrero'],cost:2,multiplier:1.5},llamaArcana:{id:'llamaArcana',name:'Llama Arcana',requires:['Mago','Guerrero'],cost:3,multiplier:1.6},sombraDoble:{id:'sombraDoble',name:'Sombra Doble',requires:['Pícaro','Mago'],cost:2,multiplier:1.5},provocar:{id:'provocar',name:'Provocar',requires:['Guerrero'],cost:1,multiplier:1}},
  beginBlock:(targetId='hero',o={})=>({targetId,startedAt:o.startedAt??Date.now(),duration:o.duration??1200,windowStart:o.windowStart??.38,windowEnd:o.windowEnd??.7,attempts:0,status:'pending',reduction:0}),
  resolveBlock:(b,elapsed)=>{if(!b||b.status!=='pending')return{success:false,ignored:true,reduction:0,piGain:0};b.attempts=(b.attempts||0)+1;const p=elapsed>1?elapsed/b.duration:elapsed,success=p>=b.windowStart&&p<=b.windowEnd;b.status=success?'success':'fail';b.reduction=success?.5:0;return{success,reduction:b.reduction,piGain:success?1:0,attempts:b.attempts};},
- canUseTech:(id,party,pi)=>{const t=Systems.TECHS[id];return !!t&&pi>=t.cost&&t.requires.every(c=>party.some(u=>u.hp>0&&u.class===c));}
+ partyClasses:party=>new Set((party||[]).filter(u=>u&&u.hp>0).flatMap(u=>Array.isArray(u.classes)?u.classes:[u.class]).filter(Boolean)),
+ canUseTech:(id,party,pi)=>{const t=Systems.TECHS[id],classes=Systems.partyClasses(party);return !!t&&pi>=t.cost&&t.requires.every(c=>classes.has(c));}
 };
 const {raceData,classes,subclassRules}=Data;
 const raceMods=Object.fromEntries(Object.entries(raceData).map(([name,value])=>[name,value.mods])),raceSpeed=Object.fromEntries(Object.entries(raceData).map(([name,value])=>[name,value.speed]));
@@ -49,7 +50,7 @@ function profile(c=defaults,level=1){
   'rootbound-sentinel':{name:'Centinela de raíces',max:23,ac:15,attack:5,damage:5,bonus:2,init:0,ref:3,behavior:'root'},
   'umbral-spider':{name:'Araña umbría',max:14,ac:16,attack:4,damage:4,bonus:1,init:5,ref:3,behavior:'web'}
  };
-const elara={id:'elara',name:'Elara',max:16,ac:16,flat:15,attack:4,damage:8,bonus:2,threat:19,init:1,ref:1,move:6,range:1};
+ const elara={id:'elara',name:'Elara',class:'Guerrero',classes:['Guerrero','Pícaro','Mago'],max:16,hp:16,ac:16,flat:15,attack:4,damage:8,bonus:2,threat:19,init:1,ref:1,move:6,range:1,role:'Guardia de Valdara'};
 const places=['plaza','taller','criptas','bosque','lindero','embarcadero','molino','monasterio','archivo','enfermeria','capilla','montana','antesala','umbral'];
 Object.values(enemies).forEach(e=>{e.range=1;});
 function fresh(){return {v:2,place:'plaza',flags:{},branch:null,level:1,hp:null,spells:null,potions:2,gold:12,items:[],log:[],combat:null,elaraHP:16,elaraMode:'manual',tactic:'protect',position:null,pi:0,piMax:Systems.MAX_PI,blockStreak:0,techsUsed:[]};}
@@ -105,7 +106,8 @@ class Battle{
  availableTechs(){const party=this.s.units.filter(u=>u.team==='party'&&u.hp>0);return Object.values(Systems.TECHS).filter(t=>Systems.canUseTech(t.id,party,this.s.pi||0));}
  useTech(id,target=this.enemy){const tech=Systems.TECHS[id];if(!tech||!target||target.hp<=0)return false;const party=this.s.units.filter(u=>u.team==='party'&&u.hp>0);if(!Systems.canUseTech(id,party,this.s.pi||0)||!this.s.action)return false;if(!this.spendPI(tech.cost))return false;const striker=party.find(u=>u.class==='Guerrero'&&tech.requires.includes('Guerrero'))||this.actor;const rogue=party.find(u=>u.class==='Pícaro'),mage=party.find(u=>u.class==='Mago');if(id==='filoUmbrio'){this.s.markedTarget=target.id;target.ac=Math.max(1,target.ac-2);const base=Math.max(1,this.die(striker.damage)+striker.bonus),damage=Math.max(1,Math.floor(base*tech.multiplier));target.hp=Math.max(0,target.hp-damage);this.log(`Filo Umbrío: ${rogue?.name||'El Pícaro'} marca y ${striker.name} rompe la defensa · ${damage} PG.`);}
   else if(id==='llamaArcana'){this.s.techEffects.flame=true;const base=Math.max(1,this.die(striker.damage)+striker.bonus),damage=Math.max(1,Math.floor(base*tech.multiplier));target.hp=Math.max(0,target.hp-damage);this.log(`Llama Arcana: ${mage?.name||'El Mago'} imbuye el arma · ${damage} PG de fuego.`);}
-  else if(id==='sombraDoble'){this.s.shadowFeint=true;target.slowed=true;const rogueActor=rogue||this.actor,base=Math.max(1,this.die(rogueActor.damage)+rogueActor.bonus),damage=Math.max(1,Math.floor(base*tech.multiplier)+(rogueActor.sneakDie?this.die(rogueActor.sneakDie):0));target.hp=Math.max(0,target.hp-damage);this.log(`Sombra Doble: ${mage?.name||'El Mago'} ralentiza y ${rogueActor.name} ejecuta furtivo · ${damage} PG.`);}
+	  else if(id==='sombraDoble'){this.s.shadowFeint=true;target.slowed=true;const rogueActor=rogue||this.actor,base=Math.max(1,this.die(rogueActor.damage)+rogueActor.bonus),damage=Math.max(1,Math.floor(base*tech.multiplier)+(rogueActor.sneakDie?this.die(rogueActor.sneakDie):0));target.hp=Math.max(0,target.hp-damage);this.log(`Sombra Doble: ${mage?.name||'El Mago'} ralentiza y ${rogueActor.name} ejecuta furtivo · ${damage} PG.`);}
+	  else if(id==='provocar'){target.ac=Math.max(1,target.ac-2);target.taunted=true;this.log(`${striker.name} provoca a ${target.name}: −2 CA y guardia quebrada.`);}
   this.s.techsUsed.push(id);this.s.techsUsed=this.s.techsUsed.slice(-20);this.s.action=false;this.check();return true;}
  occupied(x,y){return this.s.units.some(u=>u.hp>0&&u.x===x&&u.y===y)}
  move(dx,dy){if(this.s.result||this.actor.team!=='party'||Math.abs(dx)+Math.abs(dy)!==1||this.s.movement<1)return false;const a=this.actor,x=a.x+dx,y=a.y+dy;if(!inside(x,y)||this.occupied(x,y))return false;a.x=x;a.y=y;this.s.movement--;return true;}

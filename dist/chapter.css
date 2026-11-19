@@ -174,3 +174,32 @@ body[data-hero-subclass="Tejedor"] #battle [data-unit="hero"] .combat-art{filter
  #block-timing .block-track{min-height:12px;}
 }
 .umbral-wall-names{position:absolute;left:50%;top:7%;z-index:2;transform:translateX(-50%);display:grid;gap:3px;width:min(530px,78%);padding:8px 14px;border:1px solid #d7c27766;border-radius:10px;background:linear-gradient(180deg,#07151bcc,#0b2026b8);box-shadow:0 8px 25px #0007,inset 0 1px #f8e6a022;text-align:center;color:#edddb4;pointer-events:none;text-shadow:0 2px 4px #000;font-family:Georgia,serif}.umbral-wall-names span{font:700 9px/1.2 system-ui;letter-spacing:.18em;color:#f0ca74}.umbral-wall-names b{font-size:15px;font-weight:600}.umbral-wall-names small{font:11px/1.2 system-ui;color:#b5d7ce}@media(max-width:650px){.umbral-wall-names{top:4%;width:82%;padding:6px 9px}.umbral-wall-names b{font-size:12px}.umbral-wall-names small{font-size:10px}}
+
+/* Compact landscape battle HUD: the arena keeps its space while the command
+   rail remains scrollable and discoverable on short touch screens. */
+.turn-state{display:inline-block;margin-right:8px;color:#f2cc72!important;font:800 10px/1 system-ui!important;letter-spacing:.16em;text-transform:uppercase;white-space:nowrap}
+.turn-state:has(+ #turn){vertical-align:middle}
+@media (orientation:landscape) and (max-width:900px) and (max-height:500px){
+ #battle{grid-template-columns:minmax(0,1fr) minmax(218px,34vw);grid-template-rows:58px minmax(0,1fr) auto;gap:5px;padding:5px 6px max(6px,env(safe-area-inset-bottom));}
+ #battle .battle-header{display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:24px 25px;align-content:center;gap:1px 7px;max-height:58px;padding:4px 7px;overflow:hidden}
+ #battle .battle-header .turn-state{grid-column:1;grid-row:1;align-self:center;margin:0;font-size:9px!important}
+ #battle .battle-header #turn{grid-column:2;grid-row:1;align-self:center;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px}
+ #battle .battle-header #economy{grid-column:1;grid-row:2;font-size:10px;line-height:1.1;white-space:nowrap}
+ #battle .battle-header #warning,#battle .battle-header #battle-prompt{grid-column:2;grid-row:2;min-width:0;max-height:24px;margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px;line-height:1.2}
+ #battle .battle-header #turn-order{grid-column:1/-1;grid-row:3;display:flex;gap:4px;min-width:0;max-width:100%;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;white-space:nowrap}
+ #battle .turn-chip{font-size:9px;padding:2px 6px;flex:0 0 auto}
+ #battle #battle-stage{grid-column:1;grid-row:2;min-height:0;height:auto;align-self:stretch}
+ #battle #party-status{grid-column:1;grid-row:3;min-height:25px;max-height:30px;overflow:hidden;padding:2px 5px}
+ #battle #battle-controls{grid-column:2;grid-row:2/4;min-height:0;height:100%;max-height:none;overflow-y:auto;overflow-x:hidden;align-self:stretch;scrollbar-gutter:stable;padding:5px 6px 8px}
+ #battle #battle-controls::after{content:'Desliza para ver más acciones ↓';display:block;padding:6px 2px 1px;color:#d8c486;font:700 10px/1.2 system-ui;text-align:center;letter-spacing:.03em;position:sticky;bottom:0;background:linear-gradient(transparent,#0b1b25 45%)}
+ #battle .battle-preference{display:grid;grid-template-columns:1fr;gap:4px;margin:0 0 5px}
+ #battle .battle-preference button{min-height:42px;font-size:11px;padding:5px}
+ #battle .combat-actions{display:grid;grid-template-columns:1fr;gap:5px;max-height:none;overflow:visible}
+ #battle #combat-actions button{min-height:46px;padding:6px 7px;font-size:11px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ #battle #combat-actions button[title]{text-align:left}
+ #battle #combat-actions button:where(:not(:disabled)){touch-action:manipulation}
+ #battle #combat-actions label{font-size:10px}
+ #battle #combat-actions select{min-height:42px;max-width:100%;font-size:11px}
+ #battle #pi-meter{max-width:150px;margin:1px 0;font-size:10px}
+ #battle #block-timing{bottom:5%;max-width:86%;padding:6px 8px}
+}
