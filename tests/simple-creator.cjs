@@ -5,7 +5,7 @@ const css=fs.readFileSync('dist/style.css','utf8');
 const names=['guardia','berserker','sombra','explorador','arcanista','tejedor'];
 assert.equal((app.match(/id:'(?:guardia|berserker|sombra|explorador|arcanista|tejedor)'/g)||[]).length,6,'el modo simple ofrece seis arquetipos');
 for(const id of names)assert(app.includes(`id:'${id}'`),`arquetipo simple conectado: ${id}`);
-for(const marker of ['simpleMode','simple-start','advanced-mode','simpleSuggestions','creatorMode','advancedIssues','Corregir automáticamente','Continuar de todos modos'])assert(app.includes(marker),`el creador conserva ${marker}`);
+for(const marker of ['simpleMode','simple-start','advanced-mode','simpleSuggestions','creatorMode','advancedIssues','Corregir automáticamente','Continuar de todos modos','saveButton'])assert(app.includes(marker),`el creador conserva ${marker}`);
 assert(app.includes("s.class==='Mago'&&scores()[3]<11"),'el modo avanzado advierte cuando INT deja al Mago sin conjuros');
 for(const marker of ['.simple-creator','.simple-archetypes','.simple-start','.simple-preview','.simple-card-art'])assert(css.includes(marker),`estilo responsive presente: ${marker}`);
 assert(app.includes('simple-card-art')&&app.includes('simple-card-sprite')&&app.includes('simple-card-portrait'),'cada tarjeta simple muestra retrato y sprite de combate');
