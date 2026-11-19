@@ -4,6 +4,7 @@ Estas referencias se consultaron como patrones de diseño. No se copió código 
 
 | Repositorio | Tareas | Qué se estudió/adaptó | Licencia / integración |
 |---|---|---|---|
+| [googlechrome/modern-web-guidance](https://github.com/googlechrome/modern-web-guidance) | RSI / responsive UI | Recomendaciones de controles táctiles, accesibilidad y carga de imágenes | Referencia; no se copió código. La búsqueda CLI no pudo ejecutarse porque `npx` no está instalado en este entorno |
 | [donth77/reach-the-relay](https://github.com/donth77/reach-the-relay) | 1, 8 | Orden de turnos y lectura de la línea temporal | Referencia; no se integró código |
 | [luigi3141/aetheria](https://github.com/luigi3141/aetheria) | 1 | Separación de escena y estado de combate | Referencia; no se integró código |
 | [jvandeus/TriggerBattleSystem](https://github.com/jvandeus/TriggerBattleSystem) | 2 | Modelo declarativo de técnicas combinadas | Adaptado a `dist/combat-systems.js`; no se copió código |

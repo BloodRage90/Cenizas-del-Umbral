@@ -29,14 +29,14 @@ async function show(){
  document.body.append(dialog);dialog.showModal();
  const canvas=dialog.querySelector('canvas'),ctx=canvas.getContext('2d'),title=dialog.querySelector('h2'),caption=dialog.querySelector('p'),next=dialog.querySelector('[data-next]'),pause=dialog.querySelector('[data-pause]'),leave=dialog.querySelector('[data-leave]'),sound=dialog.querySelector('[data-sound]');
  let index=0,elapsed=0,last=null,raf=0,paused=false,finished=false,done,audio=null,soundOn=false;
- try{soundOn=localStorage.getItem('cenizas-cinema-sound')==='true';}catch{}
+ try{soundOn=localStorage.getItem('cenizas-cinema-sound')==='true';}catch{/* optional storage/API unavailable; safe fallback */}
  function updateSound(){sound.textContent=soundOn?'Sonido: sí':'Sonido: no';sound.setAttribute('aria-pressed',String(soundOn));}updateSound();
  function tone(kind){if(!soundOn||document.hidden||!focused)return;try{audio??=new (window.AudioContext||window.webkitAudioContext)();if(audio.state==='suspended')audio.resume().catch(()=>{});const at=audio.currentTime,gain=audio.createGain();gain.gain.value=.075;gain.connect(audio.destination);
  const notes=kind==='wood'?[95,173,241]:kind==='bounce'?[180,431,733]:kind==='impact'?[116,271,539,837,1250]:[164,247,493],length=kind==='echo'?2.5:kind==='impact'?2:kind==='bounce'?.65:.28;
  notes.forEach((hz,i)=>{const o=audio.createOscillator(),g=audio.createGain();o.type=kind==='wood'?'triangle':'sine';o.frequency.setValueAtTime(hz,at);o.frequency.exponentialRampToValueAtTime(hz*.94,at+length);g.gain.setValueAtTime(.001,at);g.gain.linearRampToValueAtTime(1/(i+1),at+.008);g.gain.exponentialRampToValueAtTime(.001,at+length);o.connect(g);g.connect(gain);o.start(at);o.stop(at+length+.03);});setTimeout(()=>gain.disconnect(),(length+.2)*1000);
  }catch{soundOn=false;updateSound();}}
  function audioPause(){audio?.suspend().catch(()=>{});}function audioResume(){if(soundOn&&!paused&&!document.hidden&&focused)audio?.resume().catch(()=>{});}
- sound.onclick=()=>{soundOn=!soundOn;updateSound();try{localStorage.setItem('cenizas-cinema-sound',String(soundOn));}catch{}if(soundOn&&!paused)tone('echo');else audioPause();};
+ sound.onclick=()=>{soundOn=!soundOn;updateSound();try{localStorage.setItem('cenizas-cinema-sound',String(soundOn));}catch{/* optional storage/API unavailable; safe fallback */}if(soundOn&&!paused)tone('echo');else audioPause();};
  const result=new Promise(r=>done=r),reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
  function finish(value){if(finished)return;finished=true;cancelAnimationFrame(raf);audio?.close().catch(()=>{});document.removeEventListener('visibilitychange',visibility);window.removeEventListener('blur',blur);window.removeEventListener('focus',focus);dialog.close();dialog.remove();busy=false;done(value);}
  let focused=document.hasFocus();const blur=()=>{focused=false;last=null;audioPause()},focus=()=>{focused=true;last=null;audioResume()},visibility=()=>{last=null;if(document.hidden)audioPause();else audioResume()};

@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "type": "commonjs",
   "scripts": {
-    "test": "node scripts/run-tests.cjs && node tests/regressions.cjs && node tests/static-report.cjs",
+    "test": "node scripts/run-tests.cjs && node tests/regressions.cjs && node tests/static-report.cjs && node scripts/rsi-audit.cjs",
     "test:unit": "node scripts/run-tests.cjs",
     "test:static": "node tests/static-report.cjs",
     "lint": "eslint scripts tests",

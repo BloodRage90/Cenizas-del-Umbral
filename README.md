@@ -20,6 +20,12 @@ Se requiere Node.js. Desde la raíz:
 node --test tests/*.cjs
 ```
 
+La auditoría estática RSI se puede ejecutar de forma independiente:
+
+```sh
+node scripts/rsi-audit.cjs
+```
+
 ## Estructura
 
 - `dist/`: código fuente servido directamente, imágenes, música y librería Phaser incluida. No borrar como si fuera una carpeta de compilación.

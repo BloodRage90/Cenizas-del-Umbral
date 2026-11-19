@@ -1,5 +1,21 @@
 # Changelog
 
+## 2026-11-19 · RSI — correcciones de motor, narrativa y pruebas de regresión
+
+- FIX-1: `enemyTurn()` ya no duplica golpes ni daña durante la apertura; se cubren Ash, Eco y Custodio con turnos anunciados.
+- FIX-2/FIX-3: el archivo se resuelve con sus tres fuentes obligatorias, el registro de Mara es opcional y la relación queda como «hija de Sereth».
+- FIX-4/FIX-5: el Guardián de ceniza exige soportes para recomponerse, pero gana al cerrar ambos; las reducciones temporales de CA se restauran al ciclo siguiente.
+- FIX-6/FIX-7/FIX-8: datos defensivos sin `character-data.js`, ocho verbos raciales únicos y secreto racial del monasterio separado de la inscripción.
+- TAREA 2/3/5/11/12: técnicas con efectos diferidos verificables, verbos de clase explorables, promesa racial en el creador, combate de prueba sin consecuencias, campanas y pared de nombres, y veinte variantes enemigas conectadas.
+- Se añadieron diez suites RSI focalizadas y `scripts/rsi-audit.cjs`; la suite completa queda en 49/49 y la auditoría estática no detecta `TODO`, `FIXME`, `catch` vacío ni duplicados conocidos.
+
+### Validación RSI
+
+- `node --test tests/*.cjs`: 49/49 pasados.
+- `node --check dist/*.js`: sin errores.
+- `node scripts/rsi-audit.cjs`: limpio.
+- Playwright/E2E no se ejecutó en este entorno porque no están disponibles `npm` ni `node_modules`; queda documentado en `REPORT.md`.
+
 ## 2026-11-19 · Fase 5 — identidad fijada y silueta jugable limpia
 
 - Tras guardar un personaje válido, la partida fija raza, clase, subclase, género/presentación y nombre. La hoja que se abre desde la exploración usa `mode=view`, desactiva los controles y explica que es solo de consulta; «Juego nuevo» sigue creando una identidad nueva explícitamente.
