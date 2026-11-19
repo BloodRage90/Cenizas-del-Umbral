@@ -110,7 +110,7 @@
     }
     if (spec.raceFeature === 'tusks' || spec.raceFeature === 'half-tusks') {
       const amount = spec.raceFeature === 'tusks' ? 10 : 6;
-      ctx.globalAlpha = .42; ctx.fillStyle = '#6a814b'; ctx.fillRect(cx - 25 * u, headY - 6 * u, 50 * u, 35 * u); ctx.globalAlpha = 1;
+      ctx.globalAlpha = spec.raceFeature === 'tusks' ? .3 : .2; ctx.fillStyle = skin; ctx.beginPath(); ctx.ellipse(cx, headY + 9 * u, 21 * u, 22 * u, 0, 0, Math.PI * 2); ctx.fill(); ctx.globalAlpha = 1;
       polygon(ctx, [[cx - 11 * u, headY + 18 * u], [cx - 3 * u, headY + 18 * u], [cx - 7 * u, headY + (18 + amount) * u]], '#f7e3b1', dark, 2);
       polygon(ctx, [[cx + 11 * u, headY + 18 * u], [cx + 3 * u, headY + 18 * u], [cx + 7 * u, headY + (18 + amount) * u]], '#f7e3b1', dark, 2);
     }
@@ -119,7 +119,7 @@
       ctx.strokeStyle = '#f3d68f'; ctx.lineWidth = 3 * u; ctx.beginPath(); ctx.moveTo(cx - 20 * u, headY - 11 * u); ctx.lineTo(cx + 20 * u, headY - 11 * u); ctx.stroke();
     }
     if (spec.raceFeature === 'small') {
-      ctx.strokeStyle = race; ctx.lineWidth = 3 * u; ctx.strokeRect(cx - 24 * u, bodyY + 18 * u, 48 * u, 26 * u);
+      ctx.fillStyle = race; ctx.globalAlpha = .9; ctx.fillRect(cx - 20 * u, bodyY + 34 * u, 40 * u, 4 * u); ctx.globalAlpha = 1;
     }
 
     /* Gender presentation is an actual accessory with a different shape. */
@@ -135,24 +135,22 @@
       ctx.fillStyle = spec.genderAccent; ctx.fillRect(cx + 19 * u, bodyY + 24 * u, 10 * u, 7 * u);
     }
 
-    /* Subclass equipment is large enough to read in the small exploration actor. */
+    /* Subclass equipment is a small physical cue, never a floating debug glyph. */
     const gearX = x + width * .78, gearY = y + height * .53;
     ctx.strokeStyle = sub; ctx.fillStyle = sub; ctx.lineWidth = 3 * u;
     if (spec.mark === 'shield') {
-      polygon(ctx, [[gearX - 12 * u, gearY - 16 * u], [gearX + 12 * u, gearY - 16 * u], [gearX + 10 * u, gearY + 13 * u], [gearX, gearY + 21 * u], [gearX - 10 * u, gearY + 13 * u]], sub, dark, 3);
-      ctx.strokeStyle = '#f9e6a9'; ctx.strokeRect(gearX - 2 * u, gearY - 10 * u, 4 * u, 18 * u);
+      polygon(ctx, [[gearX - 7 * u, gearY - 9 * u], [gearX + 7 * u, gearY - 9 * u], [gearX + 6 * u, gearY + 8 * u], [gearX, gearY + 13 * u], [gearX - 6 * u, gearY + 8 * u]], sub, dark, 2);
+      ctx.strokeStyle = '#f9e6a9'; ctx.lineWidth = 2 * u; ctx.beginPath(); ctx.moveTo(gearX, gearY - 5 * u); ctx.lineTo(gearX, gearY + 6 * u); ctx.stroke();
     } else if (spec.mark === 'rage') {
-      ctx.strokeStyle = '#e47f5f'; ctx.lineWidth = 6 * u; ctx.beginPath(); ctx.moveTo(gearX - 18 * u, gearY - 15 * u); ctx.lineTo(gearX + 17 * u, gearY + 17 * u); ctx.moveTo(gearX - 18 * u, gearY + 17 * u); ctx.lineTo(gearX + 17 * u, gearY - 15 * u); ctx.stroke();
+      ctx.strokeStyle = '#e47f5f'; ctx.lineWidth = 4 * u; ctx.beginPath(); ctx.moveTo(gearX - 5 * u, gearY + 10 * u); ctx.lineTo(gearX + 7 * u, gearY - 11 * u); ctx.stroke(); ctx.lineWidth = 3 * u; ctx.beginPath(); ctx.moveTo(gearX + 2 * u, gearY - 10 * u); ctx.lineTo(gearX + 11 * u, gearY - 4 * u); ctx.stroke();
     } else if (spec.mark === 'crescent') {
-      ctx.strokeStyle = '#8fc8b1'; ctx.lineWidth = 5 * u; ctx.beginPath(); ctx.arc(gearX, gearY, 15 * u, -1.15, 1.15); ctx.stroke();
+      ctx.strokeStyle = '#8fc8b1'; ctx.lineWidth = 3 * u; ctx.beginPath(); ctx.moveTo(gearX - 8 * u, gearY + 10 * u); ctx.lineTo(gearX + 9 * u, gearY - 12 * u); ctx.stroke();
     } else if (spec.mark === 'compass') {
-      ctx.strokeStyle = '#c7d98c'; ctx.lineWidth = 3 * u; ctx.strokeRect(gearX - 13 * u, gearY - 13 * u, 26 * u, 26 * u);
-      ctx.beginPath(); ctx.moveTo(gearX - 9 * u, gearY - 9 * u); ctx.lineTo(gearX + 9 * u, gearY + 9 * u); ctx.moveTo(gearX + 9 * u, gearY - 9 * u); ctx.lineTo(gearX - 9 * u, gearY + 9 * u); ctx.stroke();
+      ctx.strokeStyle = '#c7d98c'; ctx.lineWidth = 2 * u; ctx.beginPath(); ctx.arc(gearX, gearY, 8 * u, 0, Math.PI * 2); ctx.moveTo(gearX - 10 * u, gearY); ctx.lineTo(gearX + 10 * u, gearY); ctx.stroke();
     } else if (spec.mark === 'rune') {
-      ctx.strokeStyle = '#b9aaf4'; ctx.lineWidth = 4 * u; ctx.strokeRect(gearX - 15 * u, gearY - 15 * u, 30 * u, 30 * u);
-      ctx.beginPath(); ctx.moveTo(gearX - 12 * u, gearY); ctx.lineTo(gearX, gearY - 12 * u); ctx.lineTo(gearX + 12 * u, gearY); ctx.lineTo(gearX, gearY + 12 * u); ctx.closePath(); ctx.stroke();
+      ctx.strokeStyle = '#b9aaf4'; ctx.lineWidth = 3 * u; ctx.beginPath(); ctx.moveTo(gearX, gearY + 12 * u); ctx.lineTo(gearX, gearY - 7 * u); ctx.stroke(); ctx.fillStyle = '#dcd3ff'; ctx.beginPath(); ctx.arc(gearX, gearY - 10 * u, 7 * u, 0, Math.PI * 2); ctx.fill();
     } else if (spec.mark === 'ember') {
-      ctx.shadowColor = '#d6a17c'; ctx.shadowBlur = 12 * u; polygon(ctx, [[gearX, gearY - 22 * u], [gearX + 13 * u, gearY + 10 * u], [gearX - 13 * u, gearY + 10 * u]], '#d6a17c', '#fff0d0', 2); ctx.shadowBlur = 0;
+      ctx.shadowColor = '#d6a17c'; ctx.shadowBlur = 8 * u; ctx.fillStyle = '#d6a17c'; ctx.beginPath(); ctx.arc(gearX, gearY - 3 * u, 8 * u, 0, Math.PI * 2); ctx.fill(); ctx.shadowBlur = 0;
     }
     ctx.restore();
   }

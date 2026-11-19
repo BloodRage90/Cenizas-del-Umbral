@@ -1,5 +1,18 @@
 # Changelog
 
+## 2026-11-19 · Fase 5 — identidad fijada y silueta jugable limpia
+
+- Tras guardar un personaje válido, la partida fija raza, clase, subclase, género/presentación y nombre. La hoja que se abre desde la exploración usa `mode=view`, desactiva los controles y explica que es solo de consulta; «Juego nuevo» sigue creando una identidad nueva explícitamente.
+- Los guardados antiguos incompletos no se bloquean: se abren en el creador para completar/migrar la identidad, sin sobrescribirlos en silencio.
+- Exploración y vista de combate dejan de pintar los cuadrados, cruces y triángulos de depuración sobre el héroe. Se conserva el sprite de clase y las variantes generadas de raza, género y subclase (orejas, barba, escala, paleta y arma física).
+- Las marcas de subclase en el sprite generado se redujeron a equipo legible (escudo, hacha, daga, brújula, bastón y foco), manteniendo la diferenciación sin overlays flotantes.
+
+### Validación
+
+- `node --test tests/*.cjs`: 39/39 pasados.
+- `node --check dist/app.js dist/game.js dist/chapter.js dist/hero-visuals.js`: sin errores.
+- `tests/character-lock.cjs` cubre bloqueo de identidad, modo consulta y reparación de guardados antiguos incompletos.
+
 ## 2026-11-19 · Fase 4 — creador simple y modo avanzado
 
 - El creador abre ahora en modo simple con seis arquetipos jugables, tarjetas con retrato y sprite de combate, nombre obligatorio, tres sugerencias opcionales, género/presentación, raza compatible y una vista previa compartida con exploración y combate.
