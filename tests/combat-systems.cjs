@@ -22,6 +22,7 @@ assert(!Systems.canUseTech('llamaArcana', party.slice(0, 2), 3));
 assert.deepEqual([...Systems.partyClasses([{ class: 'Pícaro', classes: ['Pícaro', 'Mago'], hp: 10 }])].sort(), ['Mago', 'Pícaro']);
 assert.equal(Systems.racialSecret('Orco', 'plaza').verb, 'Intimidar');
 assert.equal(Systems.classVerbs.Guerrero.combat, 'Provocar');
+assert(R.profile({ ...R.defaults, class: 'Mago', feats: [] }).max >= 10, 'el Mago de nivel 1 supera el umbral de supervivencia inicial');
 
 for (const heroClass of ['Guerrero', 'Pícaro', 'Mago']) {
   const hero = R.profile({ ...R.defaults, class: heroClass, base: R.defaults.base, feats: [] });

@@ -27,12 +27,15 @@ node --test tests/*.cjs
 - `dist/combat.js`, `dist/umbral-battle.js`: combate por turnos.
 - `dist/bell-cinema.js`: cinemática de la campana.
 - `tests/`: pruebas de navegación, reglas, guardado y progresión.
+- `ART_ASSET_MATRIX.md`: catálogo de arte disponible, marcadores y pendientes del creador simple.
 - `AGENTS.md`: preferencias y reglas para el asistente de desarrollo.
 - `docs/CONTINUIDAD.md`: contexto para continuar en Codex.
 
 ## Guardado y publicación
 
 La partida se guarda en el navegador mediante localStorage. No está incluida en GitHub. Otra dirección web o navegador tendrá un guardado independiente.
+
+El editor abre en modo simple para llegar al primer combate con una build validada. `Personalizar (avanzado)` conserva la hoja completa de D&D 3.5; los guardados anteriores se mantienen y se abren en ese modo para evitar cambios silenciosos.
 
 Sitio existente: https://cenizas-del-umbral.bloodrage.chatgpt.site
 

@@ -1,43 +1,71 @@
 const {test,expect}=require('@playwright/test');
-const Rules=require('../../dist/combat.js');
 
-const places=[
-  'plaza','taller','criptas','bosque','lindero','embarcadero','molino',
-  'monasterio','archivo','enfermeria','capilla','montana','antesala','umbral'
-];
-const character={name:'Prueba de campaña',race:'Elfo',class:'Pícaro',subclass:'Explorador',gender:'Mujer',base:[14,16,12,10,10,10],ranks:{},feats:['Dureza']};
-
-function campaign(place){
-  const flags={intro:true,branchDone:true,workshop:true,custodian:true,elara:true,dockVisited:true,millAccepted:true,millRecovered:true,monasteryEntered:true,archiveOpen:true,archiveCompared:true,captivesFreed:true,chapelRevealed:true,chapelWon:true,mountainStarted:true,mountainEcho:true,namesUnbound:true};
-  return {...Rules.fresh(),place,flags,position:null};
+async function clickChoice(page,name){
+  const button=page.getByRole('button',{name});
+  await expect(button).toBeVisible({timeout:15000});
+  await button.click();
 }
 
-test('crea personaje, recorre las 14 zonas y completa un combate lateral',async({page})=>{
-  await page.goto('/character.html');
-  await page.locator('#name').fill(character.name);
-  await page.locator('[data-class="Pícaro"]').click();
-  await page.locator('[data-subclass="Explorador"]').click();
-  await page.locator('[data-gender="Mujer"]').click();
-  await page.locator('#name').fill(character.name);
-  await page.locator('#save').click();
-  await expect(page.locator('#status')).toContainText('Personaje guardado');
+async function walk(page,key,milliseconds){
+  await page.keyboard.down(key);
+  await page.waitForTimeout(milliseconds);
+  await page.keyboard.up(key);
+}
 
-  for(const place of places){
-    await page.evaluate(({c,s})=>{localStorage.setItem('cenizas-character-v1',JSON.stringify(c));localStorage.setItem('cenizas-campaign-v2',JSON.stringify(s));},{c:character,s:campaign(place)});
-    await page.goto('/chapter.html');
-    await expect(page.locator('#scene canvas')).toBeVisible({timeout:15000});
-    await expect(page.locator('#place')).not.toHaveText('');
-  }
+test('crea personaje, camina desde el puente y llega a un combate por la interfaz',async({page})=>{
+  await page.goto('/index.html');
+  await clickChoice(page,'Juego nuevo');
+  await expect(page.locator('#intro-cinema')).toBeVisible();
+  await clickChoice(page,'Continuar al creador');
 
-  const save=campaign('plaza');
-  const battle=new Rules.Battle('echo',Rules.profile(character),save,()=>10);
-  battle.s.noBoard=true;
-  save.combat=battle.s;
-  await page.evaluate(({c,s})=>{localStorage.setItem('cenizas-character-v1',JSON.stringify(c));localStorage.setItem('cenizas-campaign-v2',JSON.stringify(s));},{c:character,s:save});
-  await page.goto('/chapter.html');
+  const creator=page.locator('#sheet-frame').contentFrame();
+  await expect(creator.locator('#name')).toBeVisible({timeout:15000});
+  await creator.locator('#name').fill('Prueba de campaña');
+  await creator.locator('#race').selectOption('Elfo');
+  await creator.locator('[data-class="Pícaro"]').click();
+  await creator.locator('[data-subclass="Explorador"]').click();
+  await creator.locator('[data-gender="Mujer"]').click();
+  await creator.locator('#save').click();
+  await expect(creator.locator('#status')).toContainText('Personaje guardado');
+  await expect(page.locator('#sheet-modal')).toBeHidden({timeout:10000});
+
+  // The index game supplies the pathing, dialogue and gate; no state is
+  // injected and no localStorage write is performed by this test.
+  await page.getByRole('button',{name:'Conversar con Elara'}).click();
+  await clickChoice(page,'Mostrar la carta sellada');
+  await clickChoice(page,/Sí\. Dice que mi nombre/);
+  await clickChoice(page,/Iré a buscarlo/);
+  await clickChoice(page,'Acercarme a la puerta');
+  await expect(page.locator('#continue-adventure')).toBeVisible({timeout:15000});
+  await page.locator('#continue-adventure').click();
+  await page.waitForURL('**/chapter.html');
+
+  // Dismiss the plaza arrival staging via its visible Continue control.
+  for(let i=0;i<5;i++)await clickChoice(page,'Continuar');
+  await clickChoice(page,'Explorar la plaza');
+  await expect(page.locator('#scene canvas')).toBeVisible({timeout:15000});
+
+  // Walk to Maela, choose the witness route and enter Ordan's workshop.
+  await walk(page,'ArrowLeft',1700);
+  await walk(page,'ArrowUp',900);
+  await expect(page.locator('#interact')).toBeEnabled({timeout:10000});
+  await page.locator('#interact').click();
+  await clickChoice(page,/Proteger a los testigos/);
+  await clickChoice(page,/Pedir que permanezcan juntos/);
+  await clickChoice(page,'Tirar dados');
+  await clickChoice(page,'Continuar');
+  await clickChoice(page,/Buscar a Ordan/);
+  await expect(page.locator('#place')).toContainText('taller');
+
+  await walk(page,'ArrowUp',550);
+  await walk(page,'ArrowLeft',950);
+  await expect(page.locator('#interact')).toBeEnabled({timeout:10000});
+  await page.locator('#interact').click();
+  await clickChoice(page,'Prepararme para el encuentro');
+  await clickChoice(page,'Comenzar');
   await expect(page.locator('#battle')).toBeVisible({timeout:15000});
-  await page.getByRole('button',{name:'Atacar'}).click();
-  await expect(page.locator('#dice-dialog')).toBeVisible();
-  await page.getByRole('button',{name:'Tirar dados'}).click();
+  await expect(page.locator('#turn-order')).toBeVisible();
+  await clickChoice(page,'Atacar');
+  await clickChoice(page,'Tirar dados');
   await expect(page.locator('#dice-result')).not.toHaveText('');
 });

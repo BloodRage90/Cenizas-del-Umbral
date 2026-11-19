@@ -15,6 +15,11 @@
     Mago: { icon: '✧', tag: 'Conocimiento arcano', hp: 4, bab: 0, saves: [0, 0, 2], sp: 2, armor: 0, maxDex: 99, acp: 0, shield: 0, weapon: 'Bastón (dos manos)', damage: '1d6', damageDie: 6, critical: '20 / ×2', pres: [8, 14, 14, 16, 12, 10], gear: 'Bastón, libro de conjuros, bolsa de componentes, mochila, pedernal, odre y raciones para 3 días.', features: 'Mago generalista. Inscribir rollo de pergamino como dote de clase. Familiar: sapo, que otorga +3 PG mientras permanece a 1,5 km o menos (incluido en la hoja).' }
   };
 
+  /* The campaign gives the level-1 wizard a small survivability floor. The
+   * familiar remains a narrative feature, while the extra hit die keeps one
+   * early mistake from ending a run before the player learns timing. */
+  classes.Mago.hp = 6;
+
   /* D&D 3.5 modifiers. The Orc has −2 INT, −2 WIS and −2 CHA; the
    * Half-orc has +2 STR and −2 CHA. Small races get the size package below. */
   const raceData = {

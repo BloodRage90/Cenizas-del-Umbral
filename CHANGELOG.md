@@ -1,5 +1,31 @@
 # Changelog
 
+## 2026-11-19 · Fase 4 — creador simple y modo avanzado
+
+- El creador abre ahora en modo simple con seis arquetipos jugables, nombre obligatorio, tres sugerencias opcionales, género/presentación, raza compatible y una vista previa compartida con exploración y combate.
+- `Personalizar (avanzado)` conserva las cuatro pestañas D&D 3.5. El cambio entre modos no pierde nombre ni elecciones; los guardados antiguos se abren en avanzado y los nuevos persisten `creatorMode`.
+- Las builds recomendadas asignan automáticamente atributos, habilidades, dotes y equipo de nivel 1. El modo avanzado avisa de INT insuficiente para conjuros, atributo clave bajo, puntos sin gastar y ranuras de dote vacías, con corrección automática o continuación explícita.
+- El modo simple limita la raza a las opciones compatibles de cada arquetipo y tiene una composición compacta específica para móvil horizontal. La matriz de arte y los marcadores pendientes están en `ART_ASSET_MATRIX.md`.
+- El texto del creador mantiene el alcance actual: 4 actos y 14 zonas.
+
+### Validación
+
+- `node --test tests/*.cjs`: 38/38 pasados.
+- `node --check dist/app.js`: sin errores.
+- Playwright está declarado en `package.json`, pero no está instalado en este entorno; las pruebas E2E quedaron actualizadas y pendientes de ejecución con `npm install` y los navegadores de Playwright.
+
+## 2026-11-19 · Fase 3 — timing, telegráficos y sonido de combate
+
+- La animación de ataque tiene una ventana opcional de timing (corta, estándar o amplia), resolución única y bloqueo mientras la escena está ocupada.
+- Los ataques enemigos muestran un telegráfico sobre el actor; se mantienen los números flotantes, la pausa de impacto y el temblor de cámara.
+- Se añadió `combat-sfx.js` con señales procedurales para golpe, crítico, fallo, bloqueo, timing y telegráfico, además de un volumen de efectos independiente.
+- La preferencia de cierre automático de tiradas parte activada y puede cambiarse desde el panel de combate.
+
+### Validación
+
+- `node --test tests/*.cjs`: 38/38 pasados.
+- `node --check` sobre los módulos de combate modificados: sin errores.
+
 ## 2026-11-19 · Fase 1 — combate accesible y recursos ligeros
 
 - Elara declara sus tres disciplinas de apoyo, así que Guerrero, Pícaro y Mago conservan técnicas combinadas alcanzables; se añadió `Provocar` (1 PI, −2 CA) como verbo propio del Guerrero.
