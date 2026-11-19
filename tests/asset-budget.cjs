@@ -9,7 +9,7 @@ const base = [
   'umbral-battle.js', 'chest.js', 'equipment.js', 'investigation.js', 'interaction-cues.js',
   'npc-visuals.js', 'bell-cinema.js', 'character-data.js', 'assets.js', 'battle-preferences.js',
   'locomotion.js', 'navigation.js', 'dice.js', 'music.js', 'joystick.js', 'chapter.css',
-  'combat-polish.css', 'hero-walk-v2.webp', 'hero-vigilia.webp', 'elara-walk.webp',
+  'combat-polish.css', 'hero-vigilia.webp', 'elara-walk.webp',
   'guard.webp', 'npc-atlas.webp', 'npc-citizens.webp', 'npc-clergy.webp', 'trail-sign.webp',
   'combat-echo.webp', 'custodian.webp', 'chest.webp',
 ].reduce((sum, file) => sum + bytes(file), 0);

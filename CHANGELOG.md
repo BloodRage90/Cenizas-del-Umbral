@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-11-19 · Poda final de estilos y sprites no usados
+
+- Se eliminaron `hero-sprites.png`, `hero-walk-v2.webp`, `combat-elara.png` y `enemy-sprite-sheet.png`: no tenían una ruta de ejecución activa.
+- Se retiraron las reglas CSS heredadas de tablero, duelo y movimiento (`#board`, `.cell`, `.unit`, `#duel` y controles asociados) de las superficies de juego actuales; el laboratorio `training.html` conserva su tablero aislado.
+- Las previsualizaciones y marcadores del mapa usan la identidad vigente o `traveler-portrait.png`; se conserva `hero-vigilia.webp` porque todavía alimenta la previsualización de la capa equipada.
+- `tests/legacy-assets.cjs` ahora bloquea el regreso de esos archivos y selectores legacy.
+
 ## 2026-11-19 · Limpieza de recursos legacy
 
 - Se retiró `battle-renders.html`, un prototipo visual que ya no participa en ninguna ruta del juego.

@@ -13,7 +13,6 @@ window.CenizasBattleVisuals=(()=>{
    'glass-serpent':'enemies/glass-serpent.png','fungal-brute':'enemies/fungal-brute.png','clockwork-raven':'enemies/clockwork-raven.png','mirror-shade':'enemies/mirror-shade.png','ash-drake':'enemies/ash-drake.png',
    'iron-boar':'enemies/iron-boar.png','willow-spirit':'enemies/willow-spirit.png','redcap-miner':'enemies/redcap-miner.png','frost-revenant':'enemies/frost-revenant.png','umbral-spider':'enemies/umbral-spider.png'
   },grid:[1,1],scale:1},
-  elara:{file:'combat-elara.png',scale:420/538,frames:[[101,68,619,614,330,610],[709,24,1167,619,990,610],[33,679,745,1184,315,1178],[780,685,1219,1192,995,1185]]},
   echo:{file:'combat-echo.webp',scale:420/619,frames:[[88,16,578,643,330,635],[693,13,1227,643,980,635],[12,666,686,1219,375,1212],[705,646,1240,1241,980,1233]]}
  };
  const images={};
