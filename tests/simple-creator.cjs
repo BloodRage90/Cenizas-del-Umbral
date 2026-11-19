@@ -7,7 +7,8 @@ assert.equal((app.match(/id:'(?:guardia|berserker|sombra|explorador|arcanista|te
 for(const id of names)assert(app.includes(`id:'${id}'`),`arquetipo simple conectado: ${id}`);
 for(const marker of ['simpleMode','simple-start','advanced-mode','simpleSuggestions','creatorMode','advancedIssues','Corregir automáticamente','Continuar de todos modos'])assert(app.includes(marker),`el creador conserva ${marker}`);
 assert(app.includes("s.class==='Mago'&&scores()[3]<11"),'el modo avanzado advierte cuando INT deja al Mago sin conjuros');
-for(const marker of ['.simple-creator','.simple-archetypes','.simple-start','.simple-preview'])assert(css.includes(marker),`estilo responsive presente: ${marker}`);
+for(const marker of ['.simple-creator','.simple-archetypes','.simple-start','.simple-preview','.simple-card-art'])assert(css.includes(marker),`estilo responsive presente: ${marker}`);
+assert(app.includes('simple-card-art')&&app.includes('simple-card-sprite')&&app.includes('simple-card-portrait'),'cada tarjeta simple muestra retrato y sprite de combate');
 assert(app.includes('autoAllocatePoints()')&&app.includes('simpleBuilds'),'la build simple asigna habilidades y dotes recomendadas');
 assert(app.includes('compatible.map')&&app.includes('!compatible.includes(s.race)'),'la raza simple queda limitada a las opciones compatibles');
 assert(css.includes('max-height:520px')&&css.includes('orientation:landscape'),'el creador simple tiene una composición compacta para móvil horizontal');

@@ -2,7 +2,7 @@
 
 ## 2026-11-19 · Fase 4 — creador simple y modo avanzado
 
-- El creador abre ahora en modo simple con seis arquetipos jugables, nombre obligatorio, tres sugerencias opcionales, género/presentación, raza compatible y una vista previa compartida con exploración y combate.
+- El creador abre ahora en modo simple con seis arquetipos jugables, tarjetas con retrato y sprite de combate, nombre obligatorio, tres sugerencias opcionales, género/presentación, raza compatible y una vista previa compartida con exploración y combate.
 - `Personalizar (avanzado)` conserva las cuatro pestañas D&D 3.5. El cambio entre modos no pierde nombre ni elecciones; los guardados antiguos se abren en avanzado y los nuevos persisten `creatorMode`.
 - Las builds recomendadas asignan automáticamente atributos, habilidades, dotes y equipo de nivel 1. El modo avanzado avisa de INT insuficiente para conjuros, atributo clave bajo, puntos sin gastar y ranuras de dote vacías, con corrección automática o continuación explícita.
 - El modo simple limita la raza a las opciones compatibles de cada arquetipo y tiene una composición compacta específica para móvil horizontal. La matriz de arte y los marcadores pendientes están en `ART_ASSET_MATRIX.md`.

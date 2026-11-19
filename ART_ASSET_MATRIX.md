@@ -22,6 +22,12 @@ capas CSS/Phaser correspondientes: orejas élficas, barba enana, gorro gnomo,
 tamaño Pequeño, paleta orca y colmillos semiorcos. El género cambia detalles
 de presentación (trenza, cinta o fajín), no los atributos.
 
+Cada tarjeta del modo simple combina el retrato de referencia compatible con
+la hoja de clase (`identity-warrior-pixel.webp`, `identity-rogue-pixel.webp`,
+`identity-mage-pixel.webp` o `identity-mage-ash-pixel.webp`). Así el jugador ve
+la clase y el equipo antes de elegir; el retrato grande de la derecha sigue
+siendo la vista viva de su raza y género actuales.
+
 ## Marcadores y trabajo de arte pendiente
 
 - No existe todavía una hoja pixel-art definitiva para cada combinación raza ×
