@@ -4,7 +4,9 @@ Fecha: 19 de noviembre de 2026
 
 ## Estado ejecutivo
 
-El motor y las rutas narrativas cubiertas por la auditoría están corregidos y tienen regresiones automatizadas. La suite local queda en 49/49, la sintaxis de `dist/` es válida y la auditoría estática no encuentra duplicados conocidos, `TODO`/`FIXME` ni `catch` vacíos.
+El motor y las rutas narrativas cubiertas por la auditoría están corregidos y tienen regresiones automatizadas. La suite local queda en 50/50, la sintaxis de `dist/` es válida y la auditoría estática no encuentra duplicados conocidos, `TODO`/`FIXME` ni `catch` vacíos.
+
+La limpieza del 19 de noviembre retiró el prototipo `battle-renders.html`, los duplicados raster sin referencias y los retratos genéricos reemplazados por las variantes con género. `training.html` no se considera huérfano: sigue enlazado como laboratorio independiente y mantiene su prueba ATB.
 
 La aceptación final de navegador todavía no puede declararse: este entorno no contiene `npm`, `node_modules` ni Playwright. Tampoco se simularon campañas completas ni FPS; se dejan como tareas verificables, no como resultados inventados.
 
@@ -36,7 +38,7 @@ El texto proporcionado enumera las tareas 2, 3, 5, 11 y 12 con criterios concret
 ## Métricas RSI
 
 - Iteraciones ejecutadas: 2.
-- Suites Node: 49/49 pasadas.
+- Suites Node: 50/50 pasadas.
 - Archivos revisados por auditoría estática: 79.
 - Variantes enemigas: 20.
 - Matriz visual existente: 144 combinaciones.

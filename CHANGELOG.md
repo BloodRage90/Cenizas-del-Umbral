@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-11-19 · Limpieza de recursos legacy
+
+- Se retiró `battle-renders.html`, un prototipo visual que ya no participa en ninguna ruta del juego.
+- Se eliminaron duplicados PNG/WebP y retratos de raza sin género que no tienen referencias en el runtime; las versiones comprimidas y los sprites de enemigos conectados se conservan.
+- Se añadió `tests/legacy-assets.cjs` para impedir que vuelvan a entrar prototipos o recursos huérfanos.
+- Se conserva `training.html` porque sigue siendo la ruta de práctica independiente enlazada desde la música y el fallback del creador.
+
 ## 2026-11-19 · RSI — correcciones de motor, narrativa y pruebas de regresión
 
 - FIX-1: `enemyTurn()` ya no duplica golpes ni daña durante la apertura; se cubren Ash, Eco y Custodio con turnos anunciados.
