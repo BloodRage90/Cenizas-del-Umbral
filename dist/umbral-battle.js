@@ -4,17 +4,19 @@
 const R=typeof module!=='undefined'&&module.exports?require('./combat.js'):root.CenizasRules;
 class UmbralBattle extends R.Battle{
  constructor(profile,save={},rng){
-  super('ash',profile,save,rng);if(save.combat)return;
+  super('ash',profile,save,rng);if(save.combat){this.s.wallNames??=Array.isArray(save.flags?.umbralWallNames)?save.flags.umbralWallNames.slice():[];this.s.lastName??=this.s.wallNames.at(-1)||'Mara';return;}
   const party=this.s.units.filter(u=>u.team==='party');this.events=[];this.rolls=[];
   const object=(id,name,x,y,hp,ac=12)=>({id,name,x,y,hp,max:hp,ac,flat:ac,team:'object',construct:true,move:0,init:0,ref:0});
   const armor=(id,x)=>({...object(id,'Armadura '+(x===2?'izquierda':'derecha'),x,1,14,15),max:31,attack:3,damage:6,bonus:1,threat:20,move:4});
-  Object.assign(this.s,{kind:'coro',units:[...party,{...object('enemy','Piedra ancla',3,0,24,14),team:'enemy'},object('left','Conductor izquierdo',0,1,8),object('right','Conductor derecho',6,1,8),armor('armorL',2),armor('armorR',4)],history:[],warning:null,opening:true,envTurns:0,names:0,fracture:0,serethRescued:false,pulseQueue:[],targetId:'left',exposed:false,index:0,round:1,acted:[]});
+  const wallNames=Array.isArray(save.flags?.umbralWallNames)&&save.flags.umbralWallNames.length?save.flags.umbralWallNames.slice():['Mara','Ada','Bren','Sira'];
+  Object.assign(this.s,{kind:'coro',units:[...party,{...object('enemy','Piedra ancla',3,0,24,14),team:'enemy'},object('left','Conductor izquierdo',0,1,8),object('right','Conductor derecho',6,1,8),armor('armorL',2),armor('armorR',4)],history:[],warning:null,opening:true,envTurns:0,names:0,fracture:0,serethRescued:false,pulseQueue:[],targetId:'left',exposed:false,index:0,round:1,acted:[],wallNames,lastName:wallNames.at(-1)||'Mara'});
   this.s.order=party.map(u=>{const d=this.die();this.log(`${u.name}: iniciativa ${d}+${u.init}`);return {id:u.id,n:d+u.init};}).sort((a,b)=>b.n-a.n).map(u=>u.id);this.s.order.push('enemy');this.begin();
  }
  unit(id){return this.s.units.find(u=>u.id===id)}
  get enemy(){return this.unit(this.s.targetId||'enemy')}
  get powered(){return this.unit('left').hp>0||this.unit('right').hp>0}
  select(id){const u=this.unit(id);if(u&&u.team!=='party'&&u.hp>0){this.s.targetId=id;return true;}return false;}
+ consumeWallName(){if(!this.s.wallNames?.length)return null;const name=this.s.wallNames.shift();this.s.lastName=this.s.wallNames.at(-1)||name;this.log(`Un nombre desaparece de la pared: ${name}.`);return name;}
  check(){
   for(const [c,a]of [['left','armorL'],['right','armorR']])if(this.unit(c).hp<=0){this.unit(a).hp=0;delete this.unit(a).warning;}
   if(!this.powered&&this.s.warning?.regular)this.s.warning=null;
@@ -32,7 +34,7 @@ class UmbralBattle extends R.Battle{
   }
   if(kind==='mechanism'){
    const c=['left','right'].map(id=>this.unit(id)).find(u=>u.hp>0);
-   if(!c)return this.fail('Los dos conductores ya están apagados.');c.hp=0;this.log(c.name+' apagado; su armadura pierde energía.');
+   if(!c)return this.fail('Los dos conductores ya están apagados.');c.hp=0;this.consumeWallName();this.log(c.name+' apagado; su armadura pierde energía.');
   }else if(kind==='names'){
    if(this.powered)return this.fail('Apaga los dos conductores antes de abrir el registro.');
    if(this.s.names>=2)return this.fail('Los nombres ya fueron liberados.');

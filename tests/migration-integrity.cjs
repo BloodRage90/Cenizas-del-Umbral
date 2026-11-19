@@ -1,0 +1,5 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm'),R=require('../dist/combat.js');
+const raw={...R.fresh(),place:'umbral',level:9,hp:'bad',gold:Infinity,flags:{intro:true,forest:true},position:{x:700,y:400},items:['Capa de la Vigilia'],log:['registro']};
+const migrated=R.migrate(raw);assert.equal(migrated.state.place,'umbral');assert.equal(migrated.state.flags.intro,true);assert.equal(migrated.state.flags.forest,true);assert.deepEqual(migrated.state.position,{x:700,y:400});assert.deepEqual(migrated.state.items,['Capa de la Vigilia']);assert.equal(migrated.state.level,5);assert.equal(migrated.state.hp,null);assert(migrated.changed);assert.deepEqual(R.migrate(JSON.parse(JSON.stringify(migrated.state))).state.position,{x:700,y:400});
+const isolated={};vm.runInNewContext(fs.readFileSync('dist/combat.js','utf8'),isolated);assert.equal(isolated.CenizasRules.profile().class,'Guerrero','el motor tiene perfiles defensivos sin datos opcionales');
+console.log('PASS: field-level save migration preserves valid campaign progress.');

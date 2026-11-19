@@ -10,6 +10,7 @@ assert(app.includes("s.class==='Mago'&&scores()[3]<11"),'el modo avanzado advier
 for(const marker of ['.simple-creator','.simple-archetypes','.simple-start','.simple-preview','.simple-card-art'])assert(css.includes(marker),`estilo responsive presente: ${marker}`);
 assert(app.includes('simple-card-art')&&app.includes('simple-card-sprite')&&app.includes('simple-card-portrait'),'cada tarjeta simple muestra retrato y sprite de combate');
 assert(app.includes('autoAllocatePoints()')&&app.includes('simpleBuilds'),'la build simple asigna habilidades y dotes recomendadas');
+assert(app.includes("type:'practice-combat'")&&fs.readFileSync('dist/chapter.js','utf8').includes("s.practice=!!practice"),'el combate de prueba no altera la campaña');
 assert(app.includes('compatible.map')&&app.includes('!compatible.includes(s.race)'),'la raza simple queda limitada a las opciones compatibles');
 assert(css.includes('max-height:520px')&&css.includes('orientation:landscape'),'el creador simple tiene una composición compacta para móvil horizontal');
 console.log('PASS: creador simple/avanzado conserva identidad, seis arquetipos y build validada.');

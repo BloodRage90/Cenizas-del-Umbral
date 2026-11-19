@@ -1,0 +1,6 @@
+const assert=require('node:assert/strict'),R=require('../dist/combat.js');
+const make=()=>{const hero=R.profile({...R.defaults,class:'Guerrero'});const b=new R.Battle('whisper',hero,{...R.fresh(),flags:{elara:false},techsLearned:['filoUmbrio','llamaArcana','sombraDoble'],pi:5},n=>n);b.s.noBoard=true;b.s.units.push({id:'rogue',name:'Sombra',class:'Pícaro',team:'party',hp:15,max:15,damage:6,bonus:1,attack:4,ac:14,flat:12,sneakDie:6,x:1,y:2});b.s.units.push({id:'mage',name:'Arcanista',class:'Mago',team:'party',hp:15,max:15,damage:6,bonus:2,attack:3,ac:13,flat:11,x:1,y:3});b.s.order=['hero','rogue','mage','enemy'];b.s.index=0;b.s.action=true;return b;};
+let b=make();const hp=b.enemy.hp;assert(b.useTech('filoUmbrio'));assert.equal(b.enemy.hp,hp);b.s.index=0;b.begin();assert(b.act('attack'));assert(b.events.some(x=>x.includes('Filo Umbrío potencia')));
+b=make();assert(b.useTech('llamaArcana'));assert.equal(b.enemy.hp,hp);b.s.index=0;b.begin();assert(b.act('attack'));assert(b.events.some(x=>x.includes('Llama Arcana añade')));
+b=make();assert(b.useTech('sombraDoble'));assert(b.enemy.hp<hp);assert.equal(b.s.shadowFeint,true);
+console.log('PASS: combined techniques reserve and consume their promised effects.');
