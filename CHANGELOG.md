@@ -13,6 +13,17 @@
 - `node --test tests/*.cjs`: 37/37 pasados.
 - `node --check` sobre los módulos modificados: sin errores.
 
+## 2026-11-19 · Fase 2 — grupo y técnicas con progreso
+
+- El combate lateral admite hasta dos aliados además del protagonista. Elara, Ordan, Iria y Darien tienen perfiles de clase propios; el menú de grupo limita la selección y conserva sus PG.
+- Los aliados usan el sprite de su clase en la arena, no el sprite genérico del enemigo. La tira de técnicas muestra coste, requisitos implícitos y descripción legible.
+- `Provocar` está disponible desde el inicio; Filo Umbrío, Llama Arcana y Sombra Doble se desbloquean por vínculos narrativos antes de aparecer en el menú.
+- Se añadió el selector de ritmo Turnos/Activo a las preferencias de combate y se guardó la elección sin alterar el modo D&D por defecto.
+
+### Validación
+
+- La suite de Node sigue en 37/37; cubre selección de dos aliados, técnicas bloqueadas por aprendizaje y técnicas habilitadas por las clases reales del grupo.
+
 ## 2026-11-18 · Fase 5 — combate activo y continuidad narrativa
 
 - Se añadió defensa activa: cada descarga enemiga abre una ventana temporal bloqueable, con resolución única, reducción de daño y PI persistente (máximo 5).

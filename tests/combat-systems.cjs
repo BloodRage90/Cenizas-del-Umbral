@@ -29,9 +29,17 @@ for (const heroClass of ['Guerrero', 'Pícaro', 'Mago']) {
   assert(available.length >= 3, `${heroClass} conserva técnicas combinadas con Elara: ${available.join(', ')}`);
 }
 
+const partySave = { ...R.fresh(), flags: { elara: true, ordanMet: true, iriaJoined: true, darienMet: true }, party: ['elara', 'ordan', 'iria'], techsLearned: Object.keys(Systems.TECHS), pi: 5 };
+assert.deepEqual(R.selectedParty(partySave), ['elara', 'ordan'], 'el grupo limita los aliados activos a dos');
+const partyBattle = new R.Battle('whisper', R.profile({ ...R.defaults, class: 'Mago' }), partySave, n => n);
+assert.deepEqual(partyBattle.s.units.filter(u => u.team === 'party').map(u => u.id), ['hero', 'elara', 'ordan'], 'el combate materializa al héroe y los dos aliados seleccionados');
+assert(partyBattle.availableTechs().some(t => t.id === 'provocar'), 'el Guerrero aliado habilita su verbo propio');
+const unlearned = new R.Battle('whisper', R.profile({ ...R.defaults, class: 'Guerrero' }), { ...R.fresh(), flags: { elara: true }, pi: 5 }, n => n);
+assert(!unlearned.availableTechs().some(t => t.id === 'filoUmbrio'), 'las técnicas combinadas no aparecen antes de aprenderse');
+
 const makePartyBattle = () => {
   const hero = R.profile({ ...R.defaults, class: 'Pícaro', subclass: 'Sombra', base: [12, 16, 14, 14, 10, 8], feats: [] });
-  const b = new R.Battle('whisper', hero, { ...R.fresh(), flags: { elara: false }, pi: 5 }, n => n);
+  const b = new R.Battle('whisper', hero, { ...R.fresh(), flags: { elara: false }, techsLearned: Object.keys(Systems.TECHS), pi: 5 }, n => n);
   const enemy = b.enemy;
   b.s.noBoard = true;
   b.s.units.push(

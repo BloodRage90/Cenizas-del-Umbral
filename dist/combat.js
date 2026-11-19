@@ -51,9 +51,20 @@ function profile(c=defaults,level=1){
   'umbral-spider':{name:'Araña umbría',max:14,ac:16,attack:4,damage:4,bonus:1,init:5,ref:3,behavior:'web'}
  };
  const elara={id:'elara',name:'Elara',class:'Guerrero',classes:['Guerrero','Pícaro','Mago'],max:16,hp:16,ac:16,flat:15,attack:4,damage:8,bonus:2,threat:19,init:1,ref:1,move:6,range:1,role:'Guardia de Valdara'};
+ const allyProfiles={
+  elara,
+  ordan:{id:'ordan',name:'Ordan',class:'Guerrero',classes:['Guerrero'],max:18,hp:18,ac:15,flat:14,attack:5,damage:8,bonus:2,threat:19,init:0,ref:1,move:6,range:1,role:'Campanero del taller'},
+  iria:{id:'iria',name:'Iria',class:'Pícaro',classes:['Pícaro'],max:14,hp:14,ac:15,flat:14,attack:5,damage:6,bonus:2,threat:19,init:4,ref:4,move:7,range:2,role:'Guardabosques',sneakDie:6,action:'marcar'},
+  darien:{id:'darien',name:'Darien',class:'Mago',classes:['Mago'],max:12,hp:12,ac:12,flat:11,attack:2,damage:6,bonus:3,threat:20,init:2,ref:3,move:6,range:3,spells:3,action:'canalizar',spellDC:1,role:'Archivista'}
+ };
+ const allyUnlock=(id,save={})=>id==='elara'?!!save.flags?.elara:id==='ordan'?!!(save.flags?.ordanMet||save.flags?.workshop||save.flags?.mountainStarted):id==='iria'?!!save.flags?.iriaJoined:id==='darien'?!!save.flags?.darienMet:false;
+ function selectedParty(save={}){
+  const raw=Array.isArray(save.party)?save.party:['elara'];
+  return [...new Set(raw)].filter(id=>allyProfiles[id]&&allyUnlock(id,save)).slice(0,2);
+ }
 const places=['plaza','taller','criptas','bosque','lindero','embarcadero','molino','monasterio','archivo','enfermeria','capilla','montana','antesala','umbral'];
 Object.values(enemies).forEach(e=>{e.range=1;});
-function fresh(){return {v:2,place:'plaza',flags:{},branch:null,level:1,hp:null,spells:null,potions:2,gold:12,items:[],log:[],combat:null,elaraHP:16,elaraMode:'manual',tactic:'protect',position:null,pi:0,piMax:Systems.MAX_PI,blockStreak:0,techsUsed:[]};}
+ function fresh(){return {v:2,place:'plaza',flags:{},branch:null,level:1,hp:null,spells:null,potions:2,gold:12,items:[],log:[],combat:null,party:['elara'],allyHP:{elara:16},elaraHP:16,elaraMode:'manual',tactic:'protect',atbMode:'turn',position:null,pi:0,piMax:Systems.MAX_PI,blockStreak:0,techsUsed:[],techsLearned:['provocar']};}
 function valid(s){return s&&s.v===2&&places.includes(s.place)&&[1,2,3,4,5].includes(s.level)&&s.flags&&typeof s.flags==='object'&&Array.isArray(s.items)&&Array.isArray(s.log)&&Number.isFinite(s.potions)&&Number.isFinite(s.gold);}
 function migrate(raw){
  const base=fresh(),fields=[];
@@ -72,7 +83,12 @@ function migrate(raw){
  s.techsUsed=Array.isArray(raw.techsUsed)?raw.techsUsed.filter(x=>typeof x==='string').slice(-20):[];
  if(raw.hp===null||raw.hp===undefined)s.hp=null;else if(!Number.isFinite(raw.hp)){s.hp=null;fields.push('hp');}else s.hp=Math.max(0,Math.floor(raw.hp));
  if(raw.spells===null||raw.spells===undefined)s.spells=null;else if(!Number.isFinite(raw.spells)){s.spells=null;fields.push('spells');}else s.spells=Math.max(0,Math.floor(raw.spells));
- s.elaraHP=Number.isFinite(raw.elaraHP)?Math.max(0,Math.floor(raw.elaraHP)):base.elaraHP;
+ s.party=Array.isArray(raw.party)?[...new Set(raw.party.filter(x=>typeof x==='string'))].slice(0,2):base.party.slice();
+ s.allyHP=raw.allyHP&&typeof raw.allyHP==='object'&&!Array.isArray(raw.allyHP)?Object.fromEntries(Object.entries(raw.allyHP).filter(([id,hp])=>allyProfiles[id]&&Number.isFinite(hp)).map(([id,hp])=>[id,Math.max(0,Math.floor(hp))])):{...base.allyHP};
+ s.elaraHP=Number.isFinite(raw.elaraHP)?Math.max(0,Math.floor(raw.elaraHP)):Number.isFinite(s.allyHP.elara)?s.allyHP.elara:base.elaraHP;
+ s.allyHP.elara=s.elaraHP;
+ s.atbMode=raw.atbMode==='active'?'active':'turn';
+ s.techsLearned=Array.isArray(raw.techsLearned)?raw.techsLearned.filter(x=>typeof x==='string'&&Systems.TECHS[x]).slice(-30):base.techsLearned.slice();
  s.position=raw.position&&Number.isFinite(raw.position.x)&&Number.isFinite(raw.position.y)?{x:raw.position.x,y:raw.position.y}:null;
  if(raw.combat!==null&&raw.combat!==undefined){if(raw.combat&&typeof raw.combat==='object'&&Array.isArray(raw.combat.units)&&typeof raw.combat.kind==='string')s.combat=raw.combat;else{s.combat=null;fields.push('combat');}}else s.combat=null;
  return {state:s,changed:fields.length>0||raw.v!==2,invalidFields:fields};
@@ -80,10 +96,10 @@ function migrate(raw){
 const distance=(a,b)=>Math.abs(a.x-b.x)+Math.abs(a.y-b.y),inside=(x,y)=>x>=0&&x<7&&y>=0&&y<5;
 class Battle{
  constructor(kind,p,save={},rng){this.rng=rng||null;this.events=[];this.rolls=[];
- if(save.combat){this.s=JSON.parse(JSON.stringify(save.combat));this.s.pi=Math.max(0,Math.min(Systems.MAX_PI,Math.floor(this.s.pi??save.pi??0)));this.s.piMax=Systems.MAX_PI;this.s.block=null;this.s.blockStreak=Math.max(0,Math.floor(this.s.blockStreak??save.blockStreak??0));this.s.techsUsed=Array.isArray(this.s.techsUsed)?this.s.techsUsed.slice(-20):[];this.s.channeling=!!this.s.channeling;this.s.techEffects=this.s.techEffects||{};return;}
+ if(save.combat){this.s=JSON.parse(JSON.stringify(save.combat));this.s.pi=Math.max(0,Math.min(Systems.MAX_PI,Math.floor(this.s.pi??save.pi??0)));this.s.piMax=Systems.MAX_PI;this.s.block=null;this.s.blockStreak=Math.max(0,Math.floor(this.s.blockStreak??save.blockStreak??0));this.s.techsUsed=Array.isArray(this.s.techsUsed)?this.s.techsUsed.slice(-20):[];this.s.techsLearned=Array.isArray(this.s.techsLearned)?this.s.techsLearned.slice(-30):(Array.isArray(save.techsLearned)?save.techsLearned.slice(-30):['provocar']);this.s.channeling=!!this.s.channeling;this.s.techEffects=this.s.techEffects||{};return;}
  const h={...p,hp:save.hp??p.max,x:1,y:3,team:'party'},e={...enemies[kind],id:'enemy',kind,hp:enemies[kind].max,x:['custodian','sentinel','ash'].includes(kind)?3:4,y:['custodian','sentinel','ash'].includes(kind)?1:2,team:'enemy'};
- this.s={kind,units:[h,e],round:1,index:0,order:[],action:true,movement:h.move,acted:[],wheels:[],valve:false,exposed:false,spellArmor:false,spells:save.spells??p.spells,potions:save.potions??2,warning:null,history:[],result:null,opening:true,shadowFeint:false,markedTarget:null,arcaneFocus:false,pi:Math.max(0,Math.min(Systems.MAX_PI,Math.floor(save.pi??0))),piMax:Systems.MAX_PI,block:null,blockStreak:Math.max(0,Math.floor(save.blockStreak??0)),techsUsed:Array.isArray(save.techsUsed)?save.techsUsed.slice(-20):[],channeling:false,techEffects:{}};
- if(['whisper','sentinel','ash'].includes(kind)&&save.flags?.elara)this.s.units.push({...elara,hp:save.elaraHP??16,x:1,y:2,team:'party'});
+ this.s={kind,units:[h,e],round:1,index:0,order:[],action:true,movement:h.move,acted:[],wheels:[],valve:false,exposed:false,spellArmor:false,spells:save.spells??p.spells,potions:save.potions??2,warning:null,history:[],result:null,opening:true,shadowFeint:false,markedTarget:null,arcaneFocus:false,pi:Math.max(0,Math.min(Systems.MAX_PI,Math.floor(save.pi??0))),piMax:Systems.MAX_PI,block:null,blockStreak:Math.max(0,Math.floor(save.blockStreak??0)),techsUsed:Array.isArray(save.techsUsed)?save.techsUsed.slice(-20):[],techsLearned:Array.isArray(save.techsLearned)?save.techsLearned.slice(-30):['provocar'],channeling:false,techEffects:{}};
+ for(const id of selectedParty(save)){const ally=allyProfiles[id];const hp=Number.isFinite(save.allyHP?.[id])?save.allyHP[id]:id==='elara'?(save.elaraHP??ally.max):ally.max;this.s.units.push({...ally,hp:Math.max(0,Math.min(ally.max,Math.floor(hp))),x:1,y:2,team:'party'});}
  this.s.order=this.s.units.map(u=>{const die=this.die();this.log(`${u.name} · iniciativa ${die} ${sign(u.init)} = ${die+u.init}`);return {id:u.id,n:die+u.init,dex:u.init}}).sort((a,b)=>b.n-a.n||b.dex-a.dex).map(x=>x.id);
  if(kind==='ash')this.s.warning={type:'radius',x:3,y:1};this.begin();
  }
@@ -103,8 +119,8 @@ class Battle{
  resolveBlock(elapsed){if(!this.s.block)return {success:false,ignored:true,reduction:0,piGain:0};const result=Systems.resolveBlock(this.s.block,elapsed);if(result.success){this.s.blockStreak=(this.s.blockStreak||0)+1;this.gainPI(1,'bloqueo perfecto');}else this.s.blockStreak=0;this.s.block.result=result;this.log(result.success?'¡Bloqueo perfecto! Daño reducido.':'Bloqueo fallido: recibes el daño completo.');return result;}
  consumeBlock(target){const block=this.s.block;if(!block||block.targetId!==target.id)return {reduction:0,success:false};if(block.status==='pending')this.resolveBlock(block.duration+1);const result=block.result||block;this.s.block=null;return {reduction:result.reduction||0,success:!!result.success};}
  incoming(target,damage){if(!target||target.team!=='party')return damage;const block=this.consumeBlock(target);let reduced=block.success?Math.max(0,Math.floor(damage*(1-block.reduction))):damage;if(target.guard){this.gainPI(1,'postura de guardia');reduced=Math.floor(reduced*.65);}return this.mitigate(target,reduced);}
- availableTechs(){const party=this.s.units.filter(u=>u.team==='party'&&u.hp>0);return Object.values(Systems.TECHS).filter(t=>Systems.canUseTech(t.id,party,this.s.pi||0));}
- useTech(id,target=this.enemy){const tech=Systems.TECHS[id];if(!tech||!target||target.hp<=0)return false;const party=this.s.units.filter(u=>u.team==='party'&&u.hp>0);if(!Systems.canUseTech(id,party,this.s.pi||0)||!this.s.action)return false;if(!this.spendPI(tech.cost))return false;const striker=party.find(u=>u.class==='Guerrero'&&tech.requires.includes('Guerrero'))||this.actor;const rogue=party.find(u=>u.class==='Pícaro'),mage=party.find(u=>u.class==='Mago');if(id==='filoUmbrio'){this.s.markedTarget=target.id;target.ac=Math.max(1,target.ac-2);const base=Math.max(1,this.die(striker.damage)+striker.bonus),damage=Math.max(1,Math.floor(base*tech.multiplier));target.hp=Math.max(0,target.hp-damage);this.log(`Filo Umbrío: ${rogue?.name||'El Pícaro'} marca y ${striker.name} rompe la defensa · ${damage} PG.`);}
+ availableTechs(){const party=this.s.units.filter(u=>u.team==='party'&&u.hp>0),learned=new Set(this.s.techsLearned||[]);return Object.values(Systems.TECHS).filter(t=>learned.has(t.id)&&Systems.canUseTech(t.id,party,this.s.pi||0));}
+ useTech(id,target=this.enemy){const tech=Systems.TECHS[id];if(!tech||!target||target.hp<=0||!(this.s.techsLearned||[]).includes(id))return false;const party=this.s.units.filter(u=>u.team==='party'&&u.hp>0);if(!Systems.canUseTech(id,party,this.s.pi||0)||!this.s.action)return false;if(!this.spendPI(tech.cost))return false;const striker=party.find(u=>u.class==='Guerrero'&&tech.requires.includes('Guerrero'))||this.actor;const rogue=party.find(u=>u.class==='Pícaro'),mage=party.find(u=>u.class==='Mago');if(id==='filoUmbrio'){this.s.markedTarget=target.id;target.ac=Math.max(1,target.ac-2);const base=Math.max(1,this.die(striker.damage)+striker.bonus),damage=Math.max(1,Math.floor(base*tech.multiplier));target.hp=Math.max(0,target.hp-damage);this.log(`Filo Umbrío: ${rogue?.name||'El Pícaro'} marca y ${striker.name} rompe la defensa · ${damage} PG.`);}
   else if(id==='llamaArcana'){this.s.techEffects.flame=true;const base=Math.max(1,this.die(striker.damage)+striker.bonus),damage=Math.max(1,Math.floor(base*tech.multiplier));target.hp=Math.max(0,target.hp-damage);this.log(`Llama Arcana: ${mage?.name||'El Mago'} imbuye el arma · ${damage} PG de fuego.`);}
 	  else if(id==='sombraDoble'){this.s.shadowFeint=true;target.slowed=true;const rogueActor=rogue||this.actor,base=Math.max(1,this.die(rogueActor.damage)+rogueActor.bonus),damage=Math.max(1,Math.floor(base*tech.multiplier)+(rogueActor.sneakDie?this.die(rogueActor.sneakDie):0));target.hp=Math.max(0,target.hp-damage);this.log(`Sombra Doble: ${mage?.name||'El Mago'} ralentiza y ${rogueActor.name} ejecuta furtivo · ${damage} PG.`);}
 	  else if(id==='provocar'){target.ac=Math.max(1,target.ac-2);target.taunted=true;this.log(`${striker.name} provoca a ${target.name}: −2 CA y guardia quebrada.`);}
@@ -175,5 +191,5 @@ class Battle{
  options.sort((p,q)=>score(p)-score(q));if(!options.length||score(options[0])>=score(a))break;this.move(options[0].dx,options[0].dy);}
  if(distance(a,e)===1&&tactic!=='distance')this.act('attack');else this.act('guard');if(!this.s.result)this.end();}
 }
- const api={profile,fresh,valid,migrate,places,Battle,defaults,distance,races:raceData,subclassRules,variants:variantData,systems:Systems,elara:Object.freeze({...elara})};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.CenizasRules=api;
+ const api={profile,fresh,migrate,valid,places,Battle,defaults,distance,races:raceData,subclassRules,variants:variantData,systems:Systems,elara:Object.freeze({...elara}),allies:Object.freeze(Object.fromEntries(Object.entries(allyProfiles).map(([id,u])=>[id,Object.freeze({...u})]))),selectedParty};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.CenizasRules=api;
 })(typeof window!=='undefined'?window:globalThis);
