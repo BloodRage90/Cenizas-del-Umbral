@@ -10,7 +10,7 @@
       requires: ['Pícaro', 'Guerrero'],
       cost: 2,
       multiplier: 1.5,
-      description: 'El Pícaro marca una grieta y el Guerrero golpea ignorando 2 CA.'
+      description: 'El Pícaro abre una grieta: el próximo golpe del Guerrero suma +2 daño y −2 CA durante el ciclo.'
     }),
     llamaArcana: Object.freeze({
       id: 'llamaArcana',
@@ -18,7 +18,7 @@
       requires: ['Mago', 'Guerrero'],
       cost: 3,
       multiplier: 1.6,
-      description: 'El Mago imbuye el arma: fuego en área pequeña en el siguiente golpe.'
+      description: 'El Mago imbuye el arma: el próximo golpe del Guerrero añade 1d4 de fuego.'
     }),
     sombraDoble: Object.freeze({
       id: 'sombraDoble',
@@ -34,13 +34,13 @@
       requires: ['Guerrero'],
       cost: 1,
       multiplier: 1,
-      description: 'El Guerrero quiebra la defensa del objetivo: −2 CA durante este encuentro.'
+      description: 'El Guerrero quiebra la defensa del objetivo: −2 CA hasta el siguiente ciclo.'
     })
   });
 
-  const Data = typeof module !== 'undefined' && module.exports ? require('./character-data.js') : root.CenizasCharacterData;
-  const classVerbs = Data.classVerbs;
-  const raceVerbs = Data.raceVerbs;
+  const Data = typeof module !== 'undefined' && module.exports ? require('./character-data.js') : (root.CenizasCharacterData || {});
+  const classVerbs = Data?.classVerbs || {};
+  const raceVerbs = Data?.raceVerbs || {};
 
   const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
   const resources = (state = {}) => ({
@@ -92,7 +92,7 @@
   }
 
   function racialSecret(race, place) {
-    const data = raceVerbs[race] || raceVerbs.Humano;
+    const data = raceVerbs[race] || raceVerbs.Humano || { verb: 'Recordar', promise: 'Reconocer las señales del Umbral.', dialogue: 'El Umbral escucha a quien conserva su propia voz.' };
     return { id: `${place}:${race}`, race, place, verb: data.verb, promise: data.promise, dialogue: data.dialogue };
   }
 

@@ -11,4 +11,7 @@ I.read(saved,'copies');assert.equal(I.deduce(saved,'substitution','consent'),'so
 assert.equal(I.deduce(saved,'clerical','rations'),'complete','completed progress cannot be reset');
 const old={flags:{archiveCompared:true}};assert.equal(I.deduce(old,'',''),'complete','existing completed saves remain valid');
 assert(!I.hint({flags:{}}).includes('firma'),'early hints do not reveal later clues');
+const optionalMara={flags:{archiveOath:true,archiveCaptives:true,archiveCopies:true}};
+assert.equal(I.ready(optionalMara),true,'el registro de Mara es una pista opcional');
+assert.equal(I.hint(optionalMara),'Distingue una firma copiada de una decisión tomada. ¿Qué acredita cada papel, y qué no puede acreditar?','la pista opcional no bloquea el archivo');
 console.log('PASS: incomplete evidence, deduction and support, review gate, persisted state, old saves and contextual hints.');

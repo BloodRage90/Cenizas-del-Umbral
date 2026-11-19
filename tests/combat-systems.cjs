@@ -54,15 +54,31 @@ const makePartyBattle = () => {
   return b;
 };
 
-for (const [id, cost, minimum] of [['filoUmbrio', 2, 1.5], ['llamaArcana', 3, 1.6], ['sombraDoble', 2, 1.5]]) {
-  const b = makePartyBattle();
-  const before = b.enemy.hp;
-  assert.equal(b.useTech(id), true, `${id} se ejecuta con las clases requeridas`);
-  assert.equal(b.s.pi, 5 - cost, `${id} consume PI`);
-  assert(b.enemy.hp < before, `${id} inflige daño combinado`);
-  assert(b.s.techsUsed.includes(id));
-  assert(minimum >= 1.5, `${id} conserva el multiplicador mínimo`);
-  assert.equal(b.s.action, false, `${id} consume la acción del turno`);
+{
+  const b = makePartyBattle(), before = b.enemy.hp;
+  assert.equal(b.useTech('filoUmbrio'), true, 'Filo Umbrío se ejecuta con las clases requeridas');
+  assert.equal(b.s.pi, 3, 'Filo Umbrío consume PI');
+  assert.equal(b.enemy.hp, before, 'Filo Umbrío reserva el daño para el próximo golpe del Guerrero');
+  assert.equal(b.enemy.ac, 11, 'Filo Umbrío abre una grieta temporal');
+  b.s.index=b.s.order.indexOf('warrior');b.begin();assert(b.act('attack'));assert(b.enemy.hp<before,'el siguiente golpe del Guerrero consume Filo Umbrío');b.s.result=null;b.enemy.hp=20;
+  b.s.index=b.s.order.indexOf('enemy');b.begin();b.end();assert.equal(b.enemy.ac,13,'la CA vuelve al terminar el ciclo');
+  assert(b.s.techsUsed.includes('filoUmbrio'));
+}
+{
+  const b = makePartyBattle(), before = b.enemy.hp;
+  assert.equal(b.useTech('llamaArcana'), true, 'Llama Arcana se ejecuta con las clases requeridas');
+  assert.equal(b.s.pi, 2, 'Llama Arcana consume PI');
+  assert.equal(b.enemy.hp, before, 'Llama Arcana no daña hasta el golpe imbuido');
+  b.s.index=b.s.order.indexOf('warrior');b.begin();assert(b.act('attack'));assert(b.enemy.hp<before,'el golpe del Guerrero recibe fuego adicional');
+  assert(b.s.techsUsed.includes('llamaArcana'));
+}
+{
+  const b = makePartyBattle(), before = b.enemy.hp;
+  assert.equal(b.useTech('sombraDoble'), true, 'Sombra Doble se ejecuta con las clases requeridas');
+  assert.equal(b.s.pi, 3, 'Sombra Doble consume PI');
+  assert(b.enemy.hp < before, 'Sombra Doble resuelve el golpe furtivo inmediato');
+  assert.equal(b.s.shadowFeint, true, 'Sombra Doble garantiza furtivo para el siguiente turno');
+  assert(b.s.techsUsed.includes('sombraDoble'));
 }
 
 const provoke = new R.Battle('whisper', R.profile({ ...R.defaults, class: 'Guerrero' }), { ...R.fresh(), flags: { elara: false }, pi: 1 }, n => n);

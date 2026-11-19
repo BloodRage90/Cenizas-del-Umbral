@@ -3,10 +3,8 @@ const make=()=>new R.Battle('ash',R.profile(R.defaults,4),{flags:{elara:true}},(
 const turn=(b,id)=>{b.s.index=b.s.order.indexOf(id);b.begin();};
 let b=make();assert.equal(b.enemy.max,42);assert.equal(b.enemy.ac,16);assert.equal(b.enemy.attack,8);assert(b.s.units.some(u=>u.id==='elara'));assert.equal(b.s.warning.type,'radius');
 turn(b,'hero');b.hero.x=0;b.hero.y=2;assert(b.act('mechanism'));assert.equal(b.enemy.attack,7);assert.equal(b.s.result,null);
-turn(b,'elara');b.actor.x=6;b.actor.y=2;assert(b.act('mechanism'));assert.equal(b.enemy.attack,6);assert.equal(b.s.result,null,'supports alone do not kill guardian');assert(b.s.cancelNext);
-turn(b,'hero');b.hero.x=3;b.hero.y=3;b.rng=()=>1;assert(b.act('lever'));assert.equal(b.s.result,null,'failed roll spends action but can be retried');
-turn(b,'elara');b.actor.x=3;b.actor.y=2;assert(b.act('lever'));assert.equal(b.s.result,'victory','party can cooperate without retrying rolls');
-b=make();b.enemy.hp=0;b.check();assert.equal(b.s.result,null,'body alone does not finish encounter');turn(b,'hero');b.hero.x=0;b.hero.y=2;b.act('mechanism');turn(b,'hero');b.hero.x=6;b.hero.y=2;b.act('mechanism');assert.equal(b.s.result,'victory');
+turn(b,'elara');b.actor.x=6;b.actor.y=2;assert(b.act('mechanism'));assert.equal(b.enemy.attack,6);assert.equal(b.s.result,'victory','los dos soportes resuelven al Guardián sin una tirada adicional');assert(b.s.cancelNext);
+b=make();b.enemy.hp=0;b.check();assert.equal(b.s.result,null,'body alone does not finish encounter');turn(b,'hero');b.hero.x=0;b.hero.y=2;b.act('mechanism');turn(b,'hero');b.hero.x=6;b.hero.y=2;b.act('mechanism');assert.equal(b.s.result,'victory','los dos soportes bastan para resolver al Guardián');
 b=make();turn(b,'enemy');b.enemyTurn();assert.equal(b.s.warning,null,'pulse has recovery turn');turn(b,'enemy');b.enemyTurn();assert.equal(b.s.warning.type,'radius','hammer turn warns next pulse');
 const saved={...R.fresh(),place:'capilla',level:4,flags:{captivesFreed:true},combat:b.s};assert(R.valid(saved));const resumed=new R.Battle('ash',R.profile(R.defaults,4),saved);assert.deepEqual(resumed.s,b.s);
 console.log('PASS: J02 stats, Elara, both supports, damage route, cooperative lever, pulse cooldown, saved battle.');
