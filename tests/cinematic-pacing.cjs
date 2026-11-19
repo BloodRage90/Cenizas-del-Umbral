@@ -4,7 +4,9 @@ const assert=require('node:assert/strict'),vm=require('node:vm'),fs=require('nod
  let release,impacts=0,sequenceCalls=0;
  const stage={classList:{add(){},remove(){}},querySelector(){return null}};
  const c={window:{CenizasBattleVisuals:{sequence:async(_stage,_from,_to,options)=>{sequenceCalls++;await new Promise(resolve=>release=resolve);return options.impact();}}},document:{getElementById:id=>id==='battle-stage'?stage:null}};
- vm.createContext(c);vm.runInContext(fs.readFileSync('dist/battle-scene.js','utf8'),c);
+ const source=fs.readFileSync('dist/battle-scene.js','utf8');
+ assert(source.includes('timingGate')&&source.includes('data-no-timing'),'la escena ofrece timing opcional y una salida accesible sin timing');
+ vm.createContext(c);vm.runInContext(source,c);
 
  const first=c.window.CenizasBattleScene.show({attacker:'hero',target:'enemy',action:'attack',resolve:()=>{impacts++;return{summary:'OK'}}});
  const blocked=c.window.CenizasBattleScene.show({resolve:()=>{impacts++;return{summary:'NO'}}});

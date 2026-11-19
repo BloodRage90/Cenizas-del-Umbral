@@ -14,6 +14,7 @@ const index=read('dist/index.html');
 const characterData=read('dist/character-data.js');
 const heroVisuals=read('dist/hero-visuals.js');
 const systems=read('dist/combat-systems.js');
+const sfx=read('dist/combat-sfx.js');
 
 for(const name of ['renderPortrait','identity','sheet','updateHero','changed','bind'])assert.equal((app.match(new RegExp('function '+name+'\\(','g'))||[]).length,1,'app.js no duplica '+name);
 assert(!app.includes('issues()'),'app.js no conserva la hoja muerta que llamaba a issues()');
@@ -38,6 +39,8 @@ for(const name of enemyFiles){assert(fs.existsSync(path.join(root,'dist','enemie
 assert(chapter.includes("state.place==='plaza'")&&chapter.includes('preloadPlaces'),'la cinemática y la carga de escenas están acotadas');
 assert(!chapter.includes('libera los nombres antes de atacar el ancla'),'no queda el aviso residual del jefe final');
 assert(visuals.includes('classFiles')&&visuals.includes('actor-portrait'),'los sprites y retratos dependen del personaje');
+assert(visuals.includes('enemy-telegraph')&&chapterCss.includes('.timing-hit'),'los ataques enemigos se anuncian sobre el actor y el timing de golpes es visible');
+assert(chapter.includes('timing-window')&&chapter.includes('timingWindow')&&chapter.includes('Corta · 0,9 s'),'la ventana de timing puede ajustarse desde las preferencias');
 assert(app.includes("portraits/humano-mujer.webp")&&visuals.includes("+'.webp'"),'los retratos se sirven como WebP');
 assert(!fs.existsSync(path.join(root,'dist','scenes','plaza.png'))&&!fs.readdirSync(path.join(root,'dist','scenes')).some(name=>name.endsWith('.png')),'las escenas no mantienen PNG pesados en producción');
 assert(heroVisuals.includes('const raceData')&&heroVisuals.includes('const genderData')&&heroVisuals.includes('function profile'),'el perfil visual centraliza raza, género, clase y subclase');
@@ -48,6 +51,8 @@ assert(index.includes('id="game" role="region"')&&index.includes('intro-video')&
 assert(fs.existsSync(path.join(root,'dist','assets.js'))&&index.includes('assets.js')&&html.includes('assets.js'),'existe un único token de caché compartido');
 assert(!music.includes('resonancias-combate-2')&&!music.includes('resonancias-combate-3'),'la música no conserva versiones de caché duplicadas');
 assert(chapterCss.includes('orientation:landscape')&&chapterCss.includes('min-height:48px')&&chapterCss.includes('white-space:nowrap'),'el carril horizontal conserva objetivos táctiles y nombres legibles');
+assert(read('dist/battle-preferences.js').includes('let auto=true'),'el cierre automático de tiradas está activo por defecto');
+assert(fs.existsSync(path.join(root,'dist','combat-sfx.js'))&&html.includes('combat-sfx.js')&&sfx.includes('effects-volume'),'los efectos tienen módulo y volumen separado');
 assert(chapter.includes('¿Qué llevarás tú cuando cruces el Umbral?')&&chapter.includes('questionAnswer'),'la pregunta recurrente y sus respuestas quedan persistidas');
 assert(chapter.includes('serethConfronted')&&chapter.includes('no busca gobernar'),'el Coro tiene una motivación narrativa explícita');
 assert(chapter.includes('bellSounds')&&chapter.includes('bellSilent'),'el motivo de la campana atraviesa la historia y el desenlace');

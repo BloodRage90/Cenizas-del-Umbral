@@ -64,7 +64,7 @@ function profile(c=defaults,level=1){
  }
 const places=['plaza','taller','criptas','bosque','lindero','embarcadero','molino','monasterio','archivo','enfermeria','capilla','montana','antesala','umbral'];
 Object.values(enemies).forEach(e=>{e.range=1;});
- function fresh(){return {v:2,place:'plaza',flags:{},branch:null,level:1,hp:null,spells:null,potions:2,gold:12,items:[],log:[],combat:null,party:['elara'],allyHP:{elara:16},elaraHP:16,elaraMode:'manual',tactic:'protect',atbMode:'turn',position:null,pi:0,piMax:Systems.MAX_PI,blockStreak:0,techsUsed:[],techsLearned:['provocar']};}
+function fresh(){return {v:2,place:'plaza',flags:{},branch:null,level:1,hp:null,spells:null,potions:2,gold:12,items:[],log:[],combat:null,party:['elara'],allyHP:{elara:16},elaraHP:16,elaraMode:'manual',tactic:'protect',atbMode:'turn',timingMode:'standard',timingWindow:'standard',position:null,pi:0,piMax:Systems.MAX_PI,blockStreak:0,techsUsed:[],techsLearned:['provocar']};}
 function valid(s){return s&&s.v===2&&places.includes(s.place)&&[1,2,3,4,5].includes(s.level)&&s.flags&&typeof s.flags==='object'&&Array.isArray(s.items)&&Array.isArray(s.log)&&Number.isFinite(s.potions)&&Number.isFinite(s.gold);}
 function migrate(raw){
  const base=fresh(),fields=[];
@@ -88,6 +88,8 @@ function migrate(raw){
  s.elaraHP=Number.isFinite(raw.elaraHP)?Math.max(0,Math.floor(raw.elaraHP)):Number.isFinite(s.allyHP.elara)?s.allyHP.elara:base.elaraHP;
  s.allyHP.elara=s.elaraHP;
  s.atbMode=raw.atbMode==='active'?'active':'turn';
+ s.timingMode=raw.timingMode==='off'?'off':'standard';
+ s.timingWindow=['short','standard','wide'].includes(raw.timingWindow)?raw.timingWindow:'standard';
  s.techsLearned=Array.isArray(raw.techsLearned)?raw.techsLearned.filter(x=>typeof x==='string'&&Systems.TECHS[x]).slice(-30):base.techsLearned.slice();
  s.position=raw.position&&Number.isFinite(raw.position.x)&&Number.isFinite(raw.position.y)?{x:raw.position.x,y:raw.position.y}:null;
  if(raw.combat!==null&&raw.combat!==undefined){if(raw.combat&&typeof raw.combat==='object'&&Array.isArray(raw.combat.units)&&typeof raw.combat.kind==='string')s.combat=raw.combat;else{s.combat=null;fields.push('combat');}}else s.combat=null;
