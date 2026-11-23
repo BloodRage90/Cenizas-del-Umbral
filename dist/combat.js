@@ -40,11 +40,11 @@ function profile(c=defaults,level=1){
  const damageType=cls==='Mago'?(c.subclass==='Tejedor'?'fire':'arcane'):cls==='Pícaro'?'piercing':'slash';
  return {id:'hero',name:String(c.name||'Viajero').slice(0,40),class:cls,race,subclass:c.subclass||null,gender:c.gender||null,level:lvl,max:hp,ac,flat:10+armor+Math.min(0,m[1])+(rule?.ac||0),attack,damage,bonus:(cls==='Mago'?m[3]:m[0])+(rule?.damage||0),damageType,threat:cls==='Mago'?20:19,init:m[1]+(has('Iniciativa mejorada')?4:0)+(rule?.initiative||0),ref:(cls==='Pícaro'?(2+Math.floor(lvl/2)):Math.floor(lvl/3))+m[1]+(has('Reflejos rápidos')?2:0),strength:m[0],move:raceSpeed[race]??6,range:1,missileRange:4+(rule?.ranged||0),spells,power:has('Ataque poderoso')&&m[0]>=1,bab,subclassRule:rule?.label||null,sneakDie:rule?.sneakDie||0,spellDC:rule?.spellDC||0,action:rule?.action||null,verb:Systems.classVerbs?.[cls]||null,raceVerb:Systems.raceVerbs?.[race]||null,small};
 }
- const enemies={ash:{name:"Guardián de ceniza",max:42,ac:16,flat:15,attack:8,damage:6,bonus:3,init:1,ref:2,move:4,threat:20,construct:true,weak:'fire',resist:'slash',sprite:'ash-warden'},sentinel:{name:'Centinela del claro',max:22,ac:14,flat:14,attack:3,damage:4,bonus:1,init:0,ref:0,move:0,threat:20,construct:true,weak:'arcane',resist:'slash',sprite:'rootbound-sentinel'},echo:{name:'Eco incipiente',max:4,ac:12,flat:11,attack:1,damage:3,bonus:-1,init:1,ref:1,move:4,threat:20,weak:'slash',resist:'arcane',sprite:'mirror-shade'},custodian:{name:'Custodio de la compuerta',max:16,ac:13,flat:13,attack:2,damage:4,bonus:1,init:-1,ref:0,move:0,threat:20,construct:true,weak:'fire',resist:'slash',sprite:'drowned-knight'},whisper:{name:'Eco del murmullo',max:12,ac:13,flat:11,attack:3,damage:4,bonus:0,init:2,ref:2,move:6,threat:20,weak:'slash',resist:'fire',sprite:'willow-spirit'}};
+ const enemies={ash:{name:"Guardián de ceniza",max:42,ac:16,flat:15,attack:8,damage:6,bonus:3,init:1,ref:2,move:4,threat:20,construct:true,weak:'fire',resist:'slash',sprite:'ash-warden',pattern:['heavy','radius','guard']},sentinel:{name:'Centinela del claro',max:22,ac:14,flat:14,attack:3,damage:4,bonus:1,init:0,ref:0,move:0,threat:20,construct:true,weak:'arcane',resist:'slash',sprite:'rootbound-sentinel',pattern:['strike','guard','pulse']},echo:{name:'Eco incipiente',max:4,ac:12,flat:11,attack:1,damage:3,bonus:-1,init:1,ref:1,move:4,threat:20,weak:'slash',resist:'arcane',sprite:'mirror-shade',pattern:['strike','guard']},custodian:{name:'Custodio de la compuerta',max:16,ac:13,flat:13,attack:2,damage:4,bonus:1,init:-1,ref:0,move:0,threat:20,construct:true,weak:'fire',resist:'slash',sprite:'drowned-knight',pattern:['strike','pulse','guard']},whisper:{name:'Eco del murmullo',max:12,ac:13,flat:11,attack:3,damage:4,bonus:0,init:2,ref:2,move:6,threat:20,weak:'slash',resist:'fire',sprite:'willow-spirit',pattern:['curse','strike','guard']}};
  const variantData={
-  'river-wisp':{name:'Náyade de la compuerta',max:13,ac:13,attack:3,damage:4,bonus:1,init:3,ref:2,behavior:'water'},
-  'candle-imp':{name:'Diablillo de la rueda',max:10,ac:14,attack:4,damage:3,bonus:1,init:4,ref:3,behavior:'haste'},
-  'thorn-goblin':{name:'Trasgo de espinas',max:15,ac:14,attack:3,damage:5,bonus:0,init:1,ref:1,behavior:'bleed'},
+  'river-wisp':{name:'Náyade de la compuerta',max:13,ac:13,attack:3,damage:4,bonus:1,init:3,ref:2,behavior:'water',pattern:['guard','strike','curse']},
+  'candle-imp':{name:'Diablillo de la rueda',max:10,ac:14,attack:4,damage:3,bonus:1,init:4,ref:3,behavior:'haste',pattern:['strike','haste']},
+  'thorn-goblin':{name:'Trasgo de espinas',max:15,ac:14,attack:3,damage:5,bonus:0,init:1,ref:1,behavior:'bleed',pattern:['strike','heavy']},
   'mirror-shade':{name:'Sombra de espejo',max:11,ac:15,attack:3,damage:4,bonus:0,init:4,ref:4,behavior:'mirror'},
   'bell-moth':{name:'Polilla campana',max:12,ac:13,attack:2,damage:4,bonus:2,init:5,ref:3,behavior:'bell'},
   'ember-wolf':{name:'Lobo de brasa',max:16,ac:14,attack:5,damage:5,bonus:0,init:3,ref:2,behavior:'burn'},
@@ -124,6 +124,8 @@ class Battle{
  get actor(){return this.s.units.find(u=>u.id===this.s.order[this.s.index])}
  get hero(){return this.s.units.find(u=>u.id==='hero')}
  get enemy(){return this.s.units.find(u=>u.id==='enemy')}
+ chooseEnemyPattern(enemy){const pattern=Array.isArray(enemy?.pattern)&&enemy.pattern.length?enemy.pattern:['strike'];const roll=this.rng?this.rng(20):Math.floor(Math.random()*20)+1;return pattern[Math.max(0,(Math.floor(roll)-1)%pattern.length)];}
+ enemyPatternTurn(enemy,target){const action=this.chooseEnemyPattern(enemy);if(!['guard','pulse'].includes(action))this.moveToward(enemy,target);this.s.warning={type:'pattern',action};this.s.enemyPattern=action;this.log(`${enemy.name} anuncia: ${action==='heavy'?'golpe pesado':action==='guard'?'guardia':action==='curse'?'maldición':action==='pulse'?'descarga':'ataque'}.`);return action;}
  begin(){const a=this.actor;this.s.action=true;this.s.movement=a.move;this.s.guard=false;this.log(`Turno de ${a.name} · ronda ${this.s.round}`)}
  gainPI(amount=1,reason=''){
   const before=this.s.pi||0;this.s.pi=Math.min(this.s.piMax||Systems.MAX_PI,before+Math.max(0,Math.floor(amount)));
@@ -194,7 +196,7 @@ class Battle{
    else this.log(this.s.kind==='sentinel'?'El Centinela despierta y prepara un golpe.':'El Custodio arranca y prepara un golpe.');
    this.s.warning=this.s.warning?.type==='strike'?{type:'pulse'}:{type:'strike'};this.log(this.s.warning.type==='pulse'?'Próximo turno: descarga anunciada.':'Próximo turno: golpe anunciado.');
   }else if(this.s.opening){this.s.opening=false;this.log(this.s.kind==='echo'?'El eco reúne ceniza. Tienes tiempo para atacar.':'El eco imita el silbato. Elara reconoce la falsificación.');}
-  else {this.moveToward(e,t);this.hit(e,t);}
+  else {const pending=this.s.warning?.type==='pattern',action=pending?this.s.warning.action:this.enemyPatternTurn(e,t);if(pending&&action){this.s.warning=null;if(action==='guard'){e.guard=true;this.log(`${e.name} adopta guardia y prepara su defensa.`);}else if(action==='heavy'){this.moveToward(e,t);this.hit(e,t,2);this.log(`${e.name} descarga un golpe pesado.`);}else if(action==='curse'){this.moveToward(e,t);this.hit(e,t);t._acDebuff=(t._acDebuff||0)+1;this.log(`${t.name} queda marcado por la maldición.`);}else if(action==='pulse'){this.s.warning={type:'pulse'};this.log('La descarga queda anunciada para el próximo turno.');}else{this.moveToward(e,t);this.hit(e,t);}}}
   this.reaction=null;this.check();if(!this.s.result)this.end();}
  autoPlan(tactic){const a=this.actor,e=this.enemy;if(a.id!=='elara'||this.s.result)return {action:'guard'};
  if(a.hp<=5&&this.s.potions)return {action:'potion'};
