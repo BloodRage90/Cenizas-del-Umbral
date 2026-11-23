@@ -3,7 +3,13 @@ const {test,expect}=require('@playwright/test');
 async function clickChoice(page,name){
   const button=page.getByRole('button',{name});
   await expect(button).toBeVisible({timeout:15000});
-  await button.click();
+  for(let attempt=0;attempt<120;attempt++){
+    if(await button.isEnabled()){
+      try{await button.click({timeout:1000});return;}catch{/* the combat turn can refresh the button between checks */}
+    }
+    await page.waitForTimeout(100);
+  }
+  throw new Error(`El botón «${name}» no se habilitó a tiempo.`);
 }
 
 async function walk(page,key,milliseconds){
@@ -41,14 +47,17 @@ test('crea personaje, camina desde el puente y llega a un combate por la interfa
   await page.waitForURL('**/chapter.html');
 
   // Dismiss the plaza arrival staging via its visible Continue control.
-  for(let i=0;i<5;i++)await clickChoice(page,'Continuar');
+  // One pause introduces the plaza bell and five more advance the arrival
+  // staging; keep these explicit so the test follows the visible sequence.
+  for(let i=0;i<6;i++)await clickChoice(page,'Continuar');
   await clickChoice(page,'Explorar la plaza');
   await expect(page.locator('#scene canvas')).toBeVisible({timeout:15000});
+  await page.waitForTimeout(1200);
 
   // Walk to Maela, choose the witness route and enter Ordan's workshop.
   await walk(page,'ArrowLeft',1700);
   await walk(page,'ArrowUp',900);
-  await expect(page.locator('#interact')).toBeEnabled({timeout:10000});
+  await expect(page.locator('#interact')).toHaveText('Maela',{timeout:10000});
   await page.locator('#interact').click();
   await clickChoice(page,/Proteger a los testigos/);
   await clickChoice(page,/Pedir que permanezcan juntos/);
@@ -61,10 +70,11 @@ test('crea personaje, camina desde el puente y llega a un combate por la interfa
   await walk(page,'ArrowLeft',950);
   await expect(page.locator('#interact')).toBeEnabled({timeout:10000});
   await page.locator('#interact').click();
-  await clickChoice(page,'Prepararme para el encuentro');
-  await clickChoice(page,'Comenzar');
+  // The workshop encounter is now visible before combat starts.
+  await clickChoice(page,'Enfrentar a Bruto de hongos');
   await expect(page.locator('#battle')).toBeVisible({timeout:15000});
   await expect(page.locator('#turn-order')).toBeVisible();
+  await clickChoice(page,'Tirar dados');
   await clickChoice(page,'Atacar');
   await clickChoice(page,'Tirar dados');
   await expect(page.locator('#dice-result')).not.toHaveText('');

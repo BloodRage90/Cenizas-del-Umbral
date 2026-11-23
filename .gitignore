@@ -1,3 +1,6 @@
 .soundtrack-work/
 /gcm-diagnose.log
 /artifacts/phase3/*.txt
+node_modules/
+playwright-report/
+test-results/

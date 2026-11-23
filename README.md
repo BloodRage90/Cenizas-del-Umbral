@@ -20,6 +20,25 @@ Se requiere Node.js. Desde la raíz:
 node --test tests/*.cjs
 ```
 
+### Playwright (navegador real)
+
+El runner levanta automáticamente `scripts/serve.cjs` sobre `dist/` y prueba el menú, el creador, la navegación y el primer combate en 1280×720, 844×390, 667×375 y 390×844. La primera vez instala Chromium:
+
+```sh
+pnpm install
+pnpm exec playwright install chromium
+pnpm test:e2e
+```
+
+Para iterar más rápido puedes ejecutar solo escritorio o móviles:
+
+```sh
+pnpm test:e2e:desktop
+pnpm test:e2e:mobile
+```
+
+El informe HTML queda en `playwright-report/` y las trazas, capturas y vídeos de fallos en `test-results/`; ambos directorios se ignoran en Git.
+
 La auditoría estática RSI se puede ejecutar de forma independiente:
 
 ```sh
