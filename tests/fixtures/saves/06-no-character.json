@@ -1,1 +1,12 @@
-{"v":2,"place":"plaza","flags":{"intro":true},"level":1,"hp":null,"gold":12,"items":[],"log":[],"potions":2,"character":null}
+{
+  "v": 2,
+  "place": "plaza",
+  "flags": { "intro": true },
+  "level": 1,
+  "hp": null,
+  "gold": 12,
+  "items": [],
+  "log": [],
+  "potions": 2,
+  "character": null
+}

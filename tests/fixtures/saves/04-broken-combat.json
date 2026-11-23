@@ -1,1 +1,12 @@
-{"v":2,"place":"taller","flags":{"intro":true,"workshop":true},"level":2,"hp":14,"gold":7,"items":[],"log":[],"potions":2,"combat":{"kind":"echo","units":"corrupto","order":null}}
+{
+  "v": 2,
+  "place": "taller",
+  "flags": { "intro": true, "workshop": true },
+  "level": 2,
+  "hp": 14,
+  "gold": 7,
+  "items": [],
+  "log": [],
+  "potions": 2,
+  "combat": { "kind": "echo", "units": "corrupto", "order": null }
+}
