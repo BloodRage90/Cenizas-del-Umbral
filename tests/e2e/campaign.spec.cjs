@@ -19,13 +19,13 @@ test('crea personaje, camina desde el puente y llega a un combate por la interfa
   await clickChoice(page,'Continuar al creador');
 
   const creator=page.locator('#sheet-frame').contentFrame();
-  await expect(creator.locator('#name')).toBeVisible({timeout:15000});
-  await creator.locator('#name').fill('Prueba de campaña');
-  await creator.locator('#race').selectOption('Elfo');
-  await creator.locator('[data-class="Pícaro"]').click();
-  await creator.locator('[data-subclass="Explorador"]').click();
-  await creator.locator('[data-gender="Mujer"]').click();
-  await creator.locator('#save').click();
+  // The creator opens in simple mode: archetype buttons, #simple-* controls.
+  await expect(creator.locator('#simple-name')).toBeVisible({timeout:15000});
+  await creator.locator('#simple-name').fill('Prueba de campaña');
+  await creator.locator('[data-simple-archetype="explorador"]').click();
+  await creator.locator('#simple-race').selectOption('Elfo');
+  await creator.locator('#simple-gender').selectOption('Mujer');
+  await creator.locator('#simple-start').click();
   await expect(creator.locator('#status')).toContainText('Personaje guardado');
   await expect(page.locator('#sheet-modal')).toBeHidden({timeout:10000});
 
@@ -68,4 +68,15 @@ test('crea personaje, camina desde el puente y llega a un combate por la interfa
   await clickChoice(page,'Atacar');
   await clickChoice(page,'Tirar dados');
   await expect(page.locator('#dice-result')).not.toHaveText('');
+});
+
+test('el modo avanzado del creador sigue disponible desde el modo simple',async({page})=>{
+  await page.goto('/index.html');
+  await clickChoice(page,'Juego nuevo');
+  await clickChoice(page,'Continuar al creador');
+  const creator=page.locator('#sheet-frame').contentFrame();
+  await expect(creator.locator('#simple-name')).toBeVisible({timeout:15000});
+  await creator.locator('#advanced-mode').click();
+  await expect(creator.locator('#name')).toBeVisible({timeout:15000});
+  await expect(creator.locator('#race')).toBeVisible();
 });
