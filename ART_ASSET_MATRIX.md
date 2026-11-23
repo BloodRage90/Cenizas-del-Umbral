@@ -41,3 +41,21 @@ siendo la vista viva de su raza y género actuales.
 - Las imágenes raster existentes son arte del proyecto y se conservan; no se
   generaron assets finales nuevos en esta fase.
 
+## Salidas y Criptas · PR 5
+
+Las salidas que ya están pintadas en las escenas se marcan como
+`scene-painted` en `chapter.js`; no se reemplaza el fondo por un icono genérico.
+Las tres salidas que todavía no tienen una puerta/escalera legible quedan
+marcadas explícitamente como arte pendiente:
+
+| Solicitud | Uso | Estado |
+| --- | --- | --- |
+| `spot-door.webp` | Mirador del bosque y salidas que solo tienen poste | Pendiente de aprobación y arte final |
+| `spot-stairs.webp` | Escalera taller → criptas y regreso de las criptas | Pendiente de aprobación y arte final |
+
+La herramienta `scripts/crypts-overlay.cjs --write` produce una superposición
+de QA sobre `dist/scenes/criptas.webp`; los polígonos verdes son transitables y
+los rojos son agua/estructuras bloqueadas. No se genera ni se sustituye arte
+runtime.
+
+

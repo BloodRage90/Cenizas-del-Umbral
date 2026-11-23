@@ -12,3 +12,6 @@ const server=http.createServer((req,res)=>{
 });
 const port=Number(process.env.PORT||4173);
 server.listen(port,'127.0.0.1',()=>console.log('Cenizas test server on '+port));
+const shutdown=()=>{server.closeAllConnections?.();server.close(()=>process.exit(0));};
+process.once('SIGINT',shutdown);
+process.once('SIGTERM',shutdown);

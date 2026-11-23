@@ -62,6 +62,37 @@
     Semielfo: { verb: 'Tender puentes', promise: 'Sostienes dos relatos a la vez y evitas que uno borre al otro.', dialogue: 'La inscripción cambia al oír tu voz y muestra dos caminos.' },
     Semiorco: { verb: 'Imponerse', promise: 'Nombras el daño sin dejar que te conviertan en una caricatura.', dialogue: 'El mercader reconoce tu determinación y ofrece una salida justa.' }
   };
+  /*
+   * The racial interaction is deliberately additive.  Keep the canonical
+   * verb/promise/dialogue above for the creator card, then expose a small
+   * scene-specific contract at raceVerbs[race][place].  The campaign can use
+   * it without adding hidden modifiers or changing any ending flags.
+   */
+  const racialPlaceLines = {
+    plaza: ['Bajo la fuente encuentras una marca que la lluvia no borra.', 'La plaza conserva una respuesta para quien se detiene a escuchar.'],
+    taller: ['El banco de trabajo devuelve un eco cuando reconoces su uso.', 'Ordan ha dejado una señal que solo se entiende desde tu oficio.'],
+    criptas: ['La humedad deja visible una inicial que el registro omitió.', 'El pasillo responde a tu forma de nombrar lo que falta.'],
+    bosque: ['Las raíces se apartan lo justo para revelar el sendero del agua.', 'El bosque devuelve una pista, no una orden.'],
+    lindero: ['Una campana rota marca el borde menos expuesto del camino.', 'El lindero recuerda quién pasó sin romper la senda.'],
+    embarcadero: ['El río trae una astilla con el sello de la Vigilia.', 'La corriente conserva pruebas que no caben en un acta.'],
+    molino: ['El polvo traza una ruta alrededor del eco del molino.', 'La rueda repite un nombre cuando la miras desde el ángulo correcto.'],
+    monasterio: ['La piedra del claustro guarda dos versiones del juramento.', 'El patio deja espacio para que convivan dos testimonios.'],
+    archivo: ['Una ficha desplazada demuestra que el índice fue alterado.', 'El archivo te permite comparar lo escrito con lo que falta.'],
+    enfermeria: ['La cera bajo una cama conserva la inicial de un cautivo.', 'La enfermería guarda una huella pequeña, pero verificable.'],
+    capilla: ['El vitral proyecta una sílaba cuando la campana queda en silencio.', 'La capilla responde con luz a una memoria que no se rinde.'],
+    montana: ['El viento ordena las cenizas en dirección a la antesala.', 'La montaña deja que el relato avance sin empujar a nadie.'],
+    antesala: ['El atril reconoce la forma en que pronuncias el relato.', 'La antesala no pide obediencia: pide una voz precisa.'],
+    umbral: ['La piedra ancla devuelve tu nombre sin borrarlo.', 'El Umbral registra tu decisión y deja intacta la salida.']
+  };
+  for (const data of Object.values(raceVerbs)) {
+    for (const [place, [promise, dialogue]] of Object.entries(racialPlaceLines)) {
+      Object.defineProperty(data, place, {
+        value: { verb: data.verb, promise: `${data.promise} ${promise}`, dialogue: `${data.dialogue} ${dialogue}` },
+        enumerable: false,
+        configurable: false
+      });
+    }
+  }
   const genderData = [['Mujer', 'woman', '✧'], ['Hombre', 'man', '◆'], ['No binario', 'nonbinary', '◇']];
   const classSubclassPairs = Object.entries(subclassData).flatMap(([className, entries]) => entries.map(entry => ({ class: className, subclass: entry[0] })));
 

@@ -91,3 +91,18 @@ La pregunta que aparece, de forma explícita o implícita, en casi todos los act
 - Verificar ambas ramas de plaza, rescate/no rescate de Sereth y las cuatro razones de montaña.
 - Capturar una matriz de personajes y comprobar que raza, género, clase y subclase cambian presentación, verbos y estadísticas sin alterar la continuidad.
 - Mantener este documento como contrato de continuidad: cualquier cambio narrativo posterior debe actualizarlo y añadir una prueba.
+
+## Adenda PR 5 — mundo reactivo e inventario
+
+- `racialSecret` ahora resuelve `raceVerbs[raza][zona]` para las 14 zonas. La
+  entrada base del creador permanece intacta; las variantes son texto
+  adicional y no otorgan bonificadores ocultos.
+- Maela, Ordan, Sereth y el Umbral añaden una línea opcional según clase. La
+  línea solo aparece al interactuar con el secreto y conserva una alternativa
+  neutra; no modifica `mountainReason`, `serethSaved` ni los finales.
+- Las Criptas tienen cuatro corredores transitables y dos polígonos bloqueados
+  para agua/estructuras. `scripts/crypts-overlay.cjs` permite revisar la
+  correspondencia con el fondo sin alterar el arte.
+- La mochila muestra ranuras, descripción contextual, comparación de la capa y
+  acceso al mapa. Es una capa de interfaz sobre los mismos `state.items` y no
+  cambia las reglas de guardado.
