@@ -29,7 +29,7 @@
   mostrar los resultados. La matriz completa se ejecutó con los 20 casos y
   pasó cada caso visible; el cierre del runner debe repetirse en una máquina
   donde el proceso web pueda recibir SIGTERM.
-- `pnpm.cmd format:check`: sigue detectando el formato histórico de 62 archivos
+- `pnpm.cmd format:check`: sigue detectando el formato histórico de 59 archivos
   de `scripts/` y `tests/`; los tres archivos nuevos sí están formateados. No se
   reformateó masivamente código legacy para evitar un diff no funcional.
 
