@@ -1,5 +1,9 @@
 # Changelog
 
+> Nota de base: el plan citaba `7aefb3e`; ese commit sí existe y es ancestro,
+> pero `origin/main` ya había avanzado a `6808c6f`. Las ramas de esta entrega
+> parten de `6808c6f` para conservar las correcciones posteriores.
+
 ## 2026-11-23 · Fase 5/6 — mundo reactivo y composición modular preparada
 
 - Las 14 zonas tienen variantes raciales por ubicación (`raceVerbs[raza][zona]`)
