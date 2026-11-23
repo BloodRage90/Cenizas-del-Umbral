@@ -1,5 +1,35 @@
 # Changelog
 
+## 2026-11-23 · Fase 5/6 — mundo reactivo y composición modular preparada
+
+- Las 14 zonas tienen variantes raciales por ubicación (`raceVerbs[raza][zona]`)
+  y Maela, Ordan, Sereth y el Umbral añaden líneas opcionales por clase. Todo
+  es aditivo: no cambia `mountainReason`, `serethSaved` ni los finales.
+- Las Criptas tienen cuatro corredores transitables y dos áreas bloqueadas. Se
+  añadió `scripts/crypts-overlay.cjs --write` para revisar los polígonos sobre
+  `scenes/criptas.webp` sin sustituir el arte.
+- Las salidas se clasifican como `scene-painted` o como solicitud explícita de
+  `spot-door.webp`/`spot-stairs.webp`; no se presenta un marcador provisional
+  como arte final.
+- La mochila ahora ofrece ranuras con icono, descripción, comparación de capa y
+  acceso al mapa, manteniendo los mismos guardados.
+- `CenizasHeroVisuals.compose()` implementa caché y presupuesto de texturas de
+  15 MiB detrás de `CENIZAS_MODULAR_HERO`. Permanece apagado hasta aprobar el
+  estilo y entregar las capas WebP; no se generó arte final nuevo.
+
+### Validación de esta etapa
+
+- `pnpm.cmd test`: verde, incluidas `world-narrative` y `modular-hero`.
+- `pnpm.cmd lint`: verde.
+- `pnpm.cmd test:e2e:desktop`: los 5 casos pasan; el runner de Playwright queda
+  esperando el cierre del proceso web en este entorno Windows después de
+  mostrar los resultados. La matriz completa se ejecutó con los 20 casos y
+  pasó cada caso visible; el cierre del runner debe repetirse en una máquina
+  donde el proceso web pueda recibir SIGTERM.
+- `pnpm.cmd format:check`: sigue detectando el formato histórico de 62 archivos
+  de `scripts/` y `tests/`; los tres archivos nuevos sí están formateados. No se
+  reformateó masivamente código legacy para evitar un diff no funcional.
+
 ## 2026-11-22 · Auditoría: estabilización y arreglos de identidad interinos
 
 - **Elara en combate ya no es un clon del protagonista.** `combat.js` declara `look` para su unidad y `battle-visuals.js` la dibuja como `ally` con su propia hoja de poses. La hoja se restauró del historial (`dist/combat-elara.png`, eliminada en `7aefb3e` por no tener referencias) como `dist/elara-combat.webp`; los combates ya guardados sin `look` también se resuelven por `id`. Pruebas: `tests/battle-look.cjs`.
