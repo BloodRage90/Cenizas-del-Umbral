@@ -12,8 +12,8 @@ window.CenizasNPCs=(()=>{
    else if(Number.isInteger(frame))n=scene.add.sprite(x,y,'residents',frame).setOrigin(.5,.94).setDisplaySize(110,110);
    else throw new Error('Falta diseño del NPC: '+id);
   }
-  n.npcId=id;n.baseScaleX=n.scaleX;n.baseScaleY=n.scaleY;n.setDepth(y);return n;
+  n.npcId=id;n.npcSpeed=52;n.npcStride=n.npcSpeed/8;n.baseScaleX=n.scaleX;n.baseScaleY=n.scaleY;n.setDepth(y);return n;
  }
- function step(n,dx,dy,dt=16){const d=Math.hypot(dx,dy);if(n.npcRow===undefined)return;n.npcDistance=(n.npcDistance||0)+d;if(d>.001){n.setFlipX(dx<-.01);n.setFrame(n.npcRow*4+Math.floor(n.npcDistance/18)%4);}else n.setFrame(n.npcRow*4);}
+ function step(n,dx,dy,dt=16){const d=Math.hypot(dx,dy);if(n.npcRow===undefined)return false;n.npcDistance=(n.npcDistance||0)+d;const frame=d>.001?n.npcRow*4+Math.floor(n.npcDistance/(n.npcStride||6.5))%4:n.npcRow*4;if(d>.001)n.setFlipX(dx<-.01);if(n.npcFrame!==frame){n.setFrame(frame);n.npcFrame=frame;return true;}return false;}
  return {register,create,step,rows};
 })();

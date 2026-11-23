@@ -40,12 +40,13 @@ function frame(sprite,dx,dy,dt=1000/60){
    const bob=walking?(poseIndex===3?.02:-.02):0;
    sprite.setScale(sprite.walkBaseScaleX,sprite.walkBaseScaleY*(1+bob));
   }
-  if(sprite.walkFrame!==poseIndex){sprite.setFrame(poseIndex);sprite.walkFrame=poseIndex;}
-  return;
+  if(sprite.walkFrame!==poseIndex){sprite.setFrame(poseIndex);sprite.walkFrame=poseIndex;return true;}
+  return false;
  }
  const frameDirection=direction%rows,phase=Math.floor(sprite.walkDistance/stride)%columns;
  const index=frameDirection*columns+phase;
- if(sprite.walkFrame!==index){sprite.setFrame(index);sprite.walkFrame=index;}
+ if(sprite.walkFrame!==index){sprite.setFrame(index);sprite.walkFrame=index;return true;}
+ return false;
 }
 
 const api={Follower,frame};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.CenizasLocomotion=api;
