@@ -254,7 +254,50 @@
     for (let row = 0; row < rows; row++) for (let column = 0; column < columns; column++) drawAnchoredTraits(ctx, column * frameWidth, row * frameHeight, frameWidth, frameHeight, spec);
   }
 
-  const api = { classFiles, raceData, genderData, subclassData, profile, assets, variantKey, render, paintVariantCanvas, heroAnchors, slug };
+  /*
+   * PR 6 contract for the future layered art set.  It is deliberately gated:
+   * no final layer files exist in this repository yet, so the campaign keeps
+   * using the four supplied sheets until the owner approves the visual style.
+   * A composed canvas is cached by variant/frame/size and evicted by an
+   * estimated RGBA budget. performance.memory is recorded when Chromium
+   * exposes it, but the hard cap remains deterministic in every browser.
+   */
+  const composeCache = new Map();
+  const COMPOSE_BUDGET = 15 * 1024 * 1024;
+  function compose(character = {}, options = {}) {
+    const spec = character.variantKey ? character : profile(character);
+    const enabled = options.enabled === true || root.CENIZAS_MODULAR_HERO === true;
+    if (!enabled) return null;
+    const layers = Array.isArray(options.layers) ? options.layers.filter(layer => layer && (layer.source || layer.image)) : [];
+    if (!layers.length) return { variantKey: spec.variantKey, pending: true, reason: 'art-pending', spec };
+    const size = Math.max(32, Math.floor(options.size || 128));
+    const frame = Math.max(0, Math.floor(options.frame || 0));
+    const key = `${spec.variantKey}:${size}:${frame}:${layers.map(layer => layer.id || layer.name || '').join(',')}`;
+    if (composeCache.has(key)) return composeCache.get(key);
+    const canvas = typeof document !== 'undefined' ? document.createElement('canvas') : null;
+    if (!canvas) return { variantKey: spec.variantKey, pending: false, spec, key };
+    canvas.width = size; canvas.height = size; canvas.dataset.variantKey = spec.variantKey; canvas.dataset.composeKey = key;
+    const ctx = canvas.getContext('2d'); ctx.imageSmoothingEnabled = false;
+    for (const layer of layers) {
+      const source = layer.source || layer.image;
+      const columns = Math.max(1, layer.columns || 1), rows = Math.max(1, layer.rows || 1);
+      const frameCount = columns * rows, selected = Math.min(frameCount - 1, frame + (layer.frameOffset || 0));
+      const sw = (source.naturalWidth || source.width) / columns, sh = (source.naturalHeight || source.height) / rows;
+      if (!sw || !sh) continue;
+      const sx = (selected % columns) * sw, sy = Math.floor(selected / columns) * sh;
+      ctx.save(); ctx.filter = layer.filter || 'none'; ctx.drawImage(source, sx, sy, sw, sh, 0, 0, size, size); ctx.restore();
+    }
+    composeCache.set(key, canvas);
+    const estimate = () => composeCache.size * size * size * 4;
+    while (composeCache.size > 1 && estimate() > COMPOSE_BUDGET) composeCache.delete(composeCache.keys().next().value);
+    const browserHeap = typeof performance !== 'undefined' && Number.isFinite(performance.memory?.usedJSHeapSize) ? performance.memory.usedJSHeapSize : null;
+    canvas.dataset.estimatedBytes = String(size * size * 4);
+    if (browserHeap !== null) canvas.dataset.browserHeapBytes = String(browserHeap);
+    return canvas;
+  }
+  compose.stats = () => ({ entries: composeCache.size, estimatedBytes: [...composeCache.values()].reduce((sum, canvas) => sum + (Number(canvas.dataset?.estimatedBytes) || 0), 0), budget: COMPOSE_BUDGET });
+
+  const api = { classFiles, raceData, genderData, subclassData, profile, assets, variantKey, render, paintVariantCanvas, compose, heroAnchors, slug };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.CenizasHeroVisuals = api;
 })(typeof window !== 'undefined' ? window : globalThis);

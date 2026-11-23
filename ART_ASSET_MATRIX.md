@@ -58,4 +58,12 @@ de QA sobre `dist/scenes/criptas.webp`; los polígonos verdes son transitables y
 los rojos son agua/estructuras bloqueadas. No se genera ni se sustituye arte
 runtime.
 
+## Arte modular · PR 6
+
+`CenizasHeroVisuals.compose()` está preparado detrás de la bandera
+`CENIZAS_MODULAR_HERO`. Mientras no exista la decisión del propietario sobre
+pixel art nativo frente a ilustración suave, y mientras no se entreguen las
+capas WebP, la bandera permanece apagada y el juego reutiliza las cuatro hojas
+existentes. No se inventaron capas finales ni se copiaron assets externos.
+
 
