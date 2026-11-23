@@ -50,5 +50,9 @@ const second = Hero.compose(profile, {
 assert.equal(first, second, 'la misma variante reutiliza la textura compuesta');
 assert.equal(Hero.compose.stats().entries, 1);
 assert(Hero.compose.stats().estimatedBytes <= Hero.compose.stats().budget);
+assert.equal(
+  Hero.compose(profile, { enabled: true, size: 4096, layers: [{ id: 'body', source }] }).reason,
+  'texture-budget',
+);
 global.document = previousDocument;
 console.log('PASS: modular hero composition is gated, cached and budgeted without final art.');

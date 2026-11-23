@@ -271,6 +271,7 @@
     const layers = Array.isArray(options.layers) ? options.layers.filter(layer => layer && (layer.source || layer.image)) : [];
     if (!layers.length) return { variantKey: spec.variantKey, pending: true, reason: 'art-pending', spec };
     const size = Math.max(32, Math.floor(options.size || 128));
+    if (size * size * 4 > COMPOSE_BUDGET) return { variantKey: spec.variantKey, pending: true, reason: 'texture-budget', spec };
     const frame = Math.max(0, Math.floor(options.frame || 0));
     const key = `${spec.variantKey}:${size}:${frame}:${layers.map(layer => layer.id || layer.name || '').join(',')}`;
     if (composeCache.has(key)) return composeCache.get(key);
@@ -288,7 +289,7 @@
       ctx.save(); ctx.filter = layer.filter || 'none'; ctx.drawImage(source, sx, sy, sw, sh, 0, 0, size, size); ctx.restore();
     }
     composeCache.set(key, canvas);
-    const estimate = () => composeCache.size * size * size * 4;
+    const estimate = () => [...composeCache.values()].reduce((sum, entry) => sum + (Number(entry.dataset?.estimatedBytes) || 0), 0);
     while (composeCache.size > 1 && estimate() > COMPOSE_BUDGET) composeCache.delete(composeCache.keys().next().value);
     const browserHeap = typeof performance !== 'undefined' && Number.isFinite(performance.memory?.usedJSHeapSize) ? performance.memory.usedJSHeapSize : null;
     canvas.dataset.estimatedBytes = String(size * size * 4);
