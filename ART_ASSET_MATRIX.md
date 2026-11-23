@@ -64,6 +64,5 @@ runtime.
 `CENIZAS_MODULAR_HERO`. Mientras no exista la decisión del propietario sobre
 pixel art nativo frente a ilustración suave, y mientras no se entreguen las
 capas WebP, la bandera permanece apagada y el juego reutiliza las cuatro hojas
-existentes. No se inventaron capas finales ni se copiaron assets externos.
-
+ existentes. No se inventaron capas finales ni se copiaron assets externos.
 
