@@ -55,6 +55,14 @@ body.wearing-vigilia .hero-sprite{background-image:url('hero-vigilia.webp')!impo
 #story h2{font-size:20px;margin:2px 0 6px}#story p{margin:6px 0 12px}#story #voice{color:#d9b56c}#story #choices{grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}#story #choices button{font-size:14px}
 @media(max-height:500px){#story{max-height:48dvh}.story-stage{max-height:45dvh;overflow:auto}}
 
+/* Keep the native dialogue above the exploration controls on short screens. */
+dialog:modal{overscroll-behavior:contain}
+dialog::backdrop{overflow:hidden;overscroll-behavior:contain}
+@media (orientation:landscape) and (max-height:500px){
+  #story{bottom:max(118px,calc(env(safe-area-inset-bottom) + 118px));max-height:min(42dvh,190px);overflow:auto}
+  #story #choices{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+}
+
 .bell-cinema{position:fixed;inset:0;width:100vw;max-width:none;height:100dvh;max-height:none;margin:0;padding:0;border:0;border-radius:0;background:#101b22;color:#fff2d6;display:grid;grid-template-rows:minmax(0,1fr) auto;overflow:hidden}.bell-cinema:not([open]){display:none}.bell-cinema::backdrop{background:#07121c}.bell-cinema-view{position:relative;min-height:0;overflow:hidden}.bell-cinema canvas{width:100%;height:100%;display:block}.bell-cinema-view>small{position:absolute;left:0;right:0;top:0;padding:18px;text-align:center;background:linear-gradient(#09141de8,transparent);font-size:11px;letter-spacing:.15em;text-transform:uppercase}.bell-cinema-caption{padding:14px max(18px,env(safe-area-inset-right)) max(18px,env(safe-area-inset-bottom));max-height:48dvh;overflow:auto;background:#101b22;border-top:1px solid #a88f62;text-align:center}.bell-cinema-caption h2{font-size:clamp(20px,3.5vw,30px);margin:4px 0 8px}.bell-cinema-caption p{max-width:680px;margin:0 auto 12px;font-size:15px;line-height:1.5}.bell-cinema-caption>div{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}.bell-cinema-caption button{min-height:44px;padding:8px 16px;font-size:14px}.bell-cinema-step{color:#c4ae80;font-size:12px}@media(orientation:landscape) and (max-height:550px){.bell-cinema{grid-template-columns:minmax(0,1fr) 300px;grid-template-rows:1fr}.bell-cinema-caption{max-height:none;display:flex;flex-direction:column;justify-content:center;border-top:0;border-left:1px solid #a88f62;padding:12px}.bell-cinema-caption p{font-size:14px}}
 
 /* Faceted d20: a real polyhedral silhouette falls, tumbles, then settles on its value. */
@@ -75,6 +83,13 @@ body.wearing-vigilia .hero-sprite{background-image:url('hero-vigilia.webp')!impo
 @media(max-width:650px){#dice-tray{gap:10px 18px;min-height:176px;padding:10px 4px}.die-wrap{transform:scale(.9)}#dice-tray .die-wrap{min-width:108px;height:150px}#dice-tray .die-3d{--die-size:108px}#dice-tray .die-3d.preview{--die-size:118px}#dice-tray .d20-number{font-size:27px}}
 @media(prefers-reduced-motion:reduce){#dice-tray .die-3d,#dice-tray .die-3d.preview{animation:none;transform:translateX(-50%) rotateZ(var(--settle-rotation,-4deg));opacity:1}}
 @media(max-height:500px){#dice-tray{min-height:156px;padding:6px 4px;gap:8px 18px}#dice-tray .die-wrap{min-width:96px;height:132px}#dice-tray .die-3d{--die-size:94px}#dice-tray .die-3d.preview{--die-size:104px}}
+
+/* Three results stay in one readable row; the tray scales each d20 to its cell. */
+#dice-tray{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;min-width:0}
+#dice-tray .die-wrap{min-width:0;width:100%}
+#dice-tray .die-3d{--die-size:min(156px,100%)}
+@media(max-width:650px){#dice-tray{gap:8px}#dice-tray .die-3d{--die-size:min(108px,100%)}#dice-tray .die-3d.preview{--die-size:min(118px,100%)}}
+@media(max-height:500px){#dice-tray .die-3d{--die-size:min(94px,100%)}#dice-tray .die-3d.preview{--die-size:min(104px,100%)}}
 
 .shop-items{display:grid;gap:8px}.shop-items button{text-align:left;background:#e7dcc0}.shop-items button small{display:block;margin-top:3px;color:#695f48;font:12px system-ui}.shop-items button:disabled{opacity:.5}
 

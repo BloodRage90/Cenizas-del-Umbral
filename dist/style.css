@@ -270,3 +270,12 @@
 @media(max-height:520px) and (orientation:landscape){.simple-card-art{width:28px;height:34px}.simple-archetype{grid-template-columns:28px 18px 1fr}.simple-card-icon{width:18px;height:18px;font-size:12px}}
 .locked-banner{margin:0 0 18px;padding:11px 14px;border:1px solid #8fc8b177;border-left:3px solid #8fc8b1;border-radius:8px;background:#14352a;color:#bfe6ca;font:700 12px/1.4 system-ui;letter-spacing:.02em}.creator-locked .character-visual-preview{filter:saturate(.92)}.creator-locked button:disabled{cursor:default}
 .simple-promise{display:block;margin-top:4px;color:#d7b76a;font-weight:500;line-height:1.35}
+
+/* Creator controls keep a reliable touch target at every viewport. The
+ * landscape rules above may compress typography, never the hit area. */
+.workspace button,.workspace input,.workspace select,.workspace textarea{min-height:44px}
+.workspace .stepper button{min-width:44px;min-height:44px}
+.workspace nav button{min-height:44px}
+.text-button,.name-suggestion{min-height:44px;min-width:44px}
+dialog:modal{overscroll-behavior:contain}
+dialog::backdrop{overflow:hidden;overscroll-behavior:contain}
