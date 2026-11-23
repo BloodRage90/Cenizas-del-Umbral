@@ -63,7 +63,7 @@ function profile(c=defaults,level=1){
   'rootbound-sentinel':{name:'Centinela de raíces',max:23,ac:15,attack:5,damage:5,bonus:2,init:0,ref:3,behavior:'root'},
   'umbral-spider':{name:'Araña umbría',max:14,ac:16,attack:4,damage:4,bonus:1,init:5,ref:3,behavior:'web'}
  };
- const elara={id:'elara',name:'Elara',class:'Guerrero',classes:['Guerrero','Pícaro','Mago'],max:16,hp:16,ac:16,flat:15,attack:4,damage:8,bonus:2,threat:19,init:1,ref:1,move:6,range:1,role:'Guardia de Valdara'};
+ const elara={id:'elara',name:'Elara',look:{sheet:'elara-walk',facing:'right'},class:'Guerrero',classes:['Guerrero','Pícaro','Mago'],max:16,hp:16,ac:16,flat:15,attack:4,damage:8,bonus:2,threat:19,init:1,ref:1,move:6,range:1,role:'Guardia de Valdara'};
  const allyProfiles={
   elara,
   ordan:{id:'ordan',name:'Ordan',class:'Guerrero',classes:['Guerrero'],max:18,hp:18,ac:15,flat:14,attack:5,damage:8,bonus:2,threat:19,init:0,ref:1,move:6,range:1,role:'Campanero del taller'},

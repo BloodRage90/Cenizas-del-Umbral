@@ -6,6 +6,8 @@ window.CenizasBattleVisuals=(()=>{
   anchor:{file:'scenes/umbral.webp',scale:1.25,frames:Array(4).fill([646,20,891,335,770,332])},
   pylon:{file:'scenes/umbral.webp',scale:1.25,frames:Array(4).fill([204,86,362,407,282,404])},
   construct:{file:'custodian.webp',scale:.72,frames:Array(4).fill([0,0,1280,1280,640,1280])},
+  // Elara's own combat poses (idle, wind-up, strike, hurt), restored from history (7b5437e). Same 2x2 format as the hero sheets.
+  ally:{file:'elara-combat.webp',grid:[2,2],scale:1,noTraits:true},
   hero:{classFiles:{Guerrero:'identity-warrior-pixel.webp',Pícaro:'identity-rogue-pixel.webp',Mago:'identity-mage-pixel.webp'},grid:[2,2],scale:1},
   enemy:{files:{
    'ash-warden':'enemies/ash-warden.png','rootbound-sentinel':'enemies/rootbound-sentinel.png','bell-moth':'enemies/bell-moth.png','river-wisp':'enemies/river-wisp.png','ember-wolf':'enemies/ember-wolf.png',
@@ -24,6 +26,7 @@ window.CenizasBattleVisuals=(()=>{
    return {...sprites.hero,...profile,file,key:'hero|'+file+'|'+profile.race+'|'+profile.gender+'|'+profile.subclass};
  };
  const specFor=a=>{
+   if(a.dataset.kind==='ally')return sprites.ally;
    if(a.dataset.kind==='hero')return heroSpec(a);
    if(a.dataset.kind==='enemy'){
      const file=sprites.enemy.files[a.dataset.variant]||sprites.enemy.files[enemyDefaults[a.dataset.baseKind]||'river-wisp'];
@@ -66,7 +69,7 @@ window.CenizasBattleVisuals=(()=>{
    if(spec.grid){
      const cols=spec.grid[0],rows=spec.grid[1],frame=index% (cols*rows),sw=img.naturalWidth/cols,sh=img.naturalHeight/rows;
      ctx.imageSmoothingEnabled=false;
-     const scale=Math.max(.78,Math.min(1.12,spec.scale||1)),dw=720*scale,dh=700*scale;ctx.save();ctx.filter=spec.filter||'none';ctx.drawImage(img,(frame%cols)*sw,Math.floor(frame/cols)*sh,sw,sh,(1024-dw)/2,728-dh,dw,dh);ctx.restore();paintHeroTraits(ctx,spec);
+     const scale=Math.max(.78,Math.min(1.12,spec.scale||1)),dw=720*scale,dh=700*scale;ctx.save();ctx.filter=spec.filter||'none';ctx.drawImage(img,(frame%cols)*sw,Math.floor(frame/cols)*sh,sw,sh,(1024-dw)/2,728-dh,dw,dh);ctx.restore();if(!spec.noTraits)paintHeroTraits(ctx,spec);
      return;
    }
    ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';
@@ -76,8 +79,9 @@ window.CenizasBattleVisuals=(()=>{
  }
  function art(id,kind,variant,unit){
    const a=document.createElement('div');a.className='combat-art';
-   a.dataset.kind=unit?.team==='party'||id==='hero'||id==='elara'?'hero':kind==='coro'?(id==='enemy'?'anchor':['left','right'].includes(id)?'pylon':'construct'):id==='enemy'?'enemy':kind==='ash'?'echo':['custodian','sentinel'].includes(kind)?'construct':'echo';
-   if(unit?.team==='party'){a.dataset.class=unit.class||'Guerrero';a.dataset.race=unit.race||'Humano';a.dataset.gender=unit.gender||'No binario';a.dataset.subclass=unit.subclass||'Guardia';}
+   const ownLook=!!unit?.look||id==='elara';
+   a.dataset.kind=ownLook?'ally':unit?.team==='party'||id==='hero'?'hero':kind==='coro'?(id==='enemy'?'anchor':['left','right'].includes(id)?'pylon':'construct'):id==='enemy'?'enemy':kind==='ash'?'echo':['custodian','sentinel'].includes(kind)?'construct':'echo';
+   if(unit?.team==='party'&&!ownLook){a.dataset.class=unit.class||'Guerrero';a.dataset.race=unit.race||'Humano';a.dataset.gender=unit.gender||'No binario';a.dataset.subclass=unit.subclass||'Guardia';}
    a.dataset.baseKind=kind;a.dataset.variant=variant||'';
    a.dataset.pose='idle';a.setAttribute('aria-hidden','true');const canvas=document.createElement('canvas');canvas.width=1024;canvas.height=768;a.append(canvas);paint(a);return a;
  }
