@@ -24,7 +24,18 @@ function frame(sprite,dx,dy,dt=1000/60){
   sprite.walkIdle=(sprite.walkIdle||0)+elapsed;
   if(sprite.walkIdle>=80)sprite.walkPhase=1;
  }
- const columns=sprite.walkColumns||4,rows=sprite.walkRows||4,frameDirection=direction%rows,phase=Math.floor(sprite.walkPhase??1)%columns;
+ const columns=sprite.walkColumns||4,rows=sprite.walkRows||4;
+ // Pose sheets (2x2: idle, wind-up, slash, recover) are right-facing combat art,
+ // not walk cycles. Never play the attack poses while walking: rest on frame 0,
+ // step between the two neutral poses (0 and 3) and mirror for leftward travel.
+ if(columns*rows<=4){
+  if(distance>.005&&Math.abs(dx)>.005)sprite.facingLeft=dx<0;
+  if(typeof sprite.setFlipX==='function'&&sprite.flipX!==!!sprite.facingLeft)sprite.setFlipX(!!sprite.facingLeft);
+  const walking=(sprite.walkIdle||0)<80,poseIndex=walking?[0,3][Math.floor(sprite.walkPhase??1)%2]:0;
+  if(sprite.walkFrame!==poseIndex){sprite.setFrame(poseIndex);sprite.walkFrame=poseIndex;}
+  return;
+ }
+ const frameDirection=direction%rows,phase=Math.floor(sprite.walkPhase??1)%columns;
  const index=frameDirection*columns+phase;
  if(sprite.walkFrame!==index){sprite.setFrame(index);sprite.walkFrame=index;}
 }
