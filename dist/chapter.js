@@ -642,7 +642,7 @@ class CampaignScene extends Phaser.Scene{
 }
 const originalHeroSprite=CampaignScene.prototype.applyHeroSprite;CampaignScene.prototype.applyHeroSprite=function(c){originalHeroSprite.call(this,c);this.heroFeatures?.clear().setVisible(false);this.heroMark?.clear().setVisible(false);};
 const originalSceneCreate=CampaignScene.prototype.create,originalSceneEnter=CampaignScene.prototype.enter,originalSceneUpdate=CampaignScene.prototype.update;
-CampaignScene.prototype.create=function(){originalSceneCreate.call(this);applyHeroVisual(this);};
+CampaignScene.prototype.create=function(){originalSceneCreate.call(this);if(new URLSearchParams(location.search).get('e2e')==='1')window.__cenizasGame=this.game;applyHeroVisual(this);};
 CampaignScene.prototype.enter=function(){originalSceneEnter.call(this);applyHeroVisual(this);};
 CampaignScene.prototype.update=function(t,dt){originalSceneUpdate.call(this,t,dt);const depth=this.hero?.y||0;[this.heroAura,this.heroFeatures,this.heroMark].forEach((node,index)=>node?.setPosition(this.hero.x,this.hero.y).setDepth(depth-.25+index*.5));};
 $('interact').onclick=()=>scene?.nearest&&interact(scene.nearest.id);$('journal').onclick=journal;$('bag').onclick=inventory;$('quest').onclick=map;$('character').onclick=inventory;

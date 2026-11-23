@@ -16,6 +16,9 @@
 - `CenizasHeroVisuals.compose()` implementa caché y presupuesto de texturas de
   15 MiB detrás de `CENIZAS_MODULAR_HERO`. Permanece apagado hasta aprobar el
   estilo y entregar las capas WebP; no se generó arte final nuevo.
+- Se añadieron ocho fixtures de guardados adversos y una prueba E2E de
+  recuperación. La matriz E2E de 12 perfiles comprueba `variantKey` y que
+  `window.__cenizasGame` solo exista con `?e2e=1`.
 
 ### Validación de esta etapa
 
