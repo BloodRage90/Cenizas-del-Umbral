@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-11-22 · Auditoría: estabilización y arreglos de identidad interinos
+
+- **Elara en combate ya no es un clon del protagonista.** `combat.js` declara `look` para su unidad y `battle-visuals.js` la dibuja como `ally` con su propia hoja de poses. La hoja se restauró del historial (`dist/combat-elara.png`, eliminada en `7aefb3e` por no tener referencias) como `dist/elara-combat.webp`; los combates ya guardados sin `look` también se resuelven por `id`. Pruebas: `tests/battle-look.cjs`.
+- **Locomoción de hojas de pose.** Las hojas de héroe 2×2 son poses de combate orientadas a la derecha; `locomotion.js` ya no cicla poses de tajo al caminar, voltea el sprite al ir a la izquierda y descansa en el fotograma neutro. Las hojas 4×4 (Elara) no cambian. Pruebas: `tests/locomotion-pose-sheet.cjs`.
+- La etiqueta del turno automático de Elara muestra `ALIADA (IA)` en lugar de `TU TURNO`.
+- Se retiró de `chapter.html` un texto de desarrollo visible al jugador.
+- `tests/e2e/campaign.spec.cjs` usa el creador en modo simple (`#simple-*`, `data-simple-archetype`) y se añadió un test del modo avanzado.
+- Pendiente (requiere arte): hojas de caminata de cuatro direcciones, capas por raza y subclase, y unificar las tres rutas de render del héroe.
+
 ## 2026-11-19 · Poda final de estilos y sprites no usados
 
 - Se eliminaron `hero-sprites.png`, `hero-walk-v2.webp`, `combat-elara.png` y `enemy-sprite-sheet.png`: no tenían una ruta de ejecución activa.
