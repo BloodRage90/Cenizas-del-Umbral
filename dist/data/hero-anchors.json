@@ -1,0 +1,30 @@
+{
+  "identity-warrior-pixel.webp": {
+    "frame": 656,
+    "head": [330, 116],
+    "handR": [455, 320],
+    "handL": [245, 320],
+    "feet": [330, 560]
+  },
+  "identity-rogue-pixel.webp": {
+    "frame": 656,
+    "head": [330, 116],
+    "handR": [455, 320],
+    "handL": [245, 320],
+    "feet": [330, 560]
+  },
+  "identity-mage-pixel.webp": {
+    "frame": 627,
+    "head": [318, 116],
+    "handR": [456, 318],
+    "handL": [225, 320],
+    "feet": [318, 580]
+  },
+  "identity-mage-ash-pixel.webp": {
+    "frame": 627,
+    "head": [318, 116],
+    "handR": [456, 318],
+    "handL": [225, 320],
+    "feet": [318, 580]
+  }
+}

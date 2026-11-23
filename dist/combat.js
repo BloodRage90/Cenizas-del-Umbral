@@ -66,9 +66,9 @@ function profile(c=defaults,level=1){
  const elara={id:'elara',name:'Elara',look:{sheet:'elara-walk',facing:'right'},class:'Guerrero',classes:['Guerrero','Pícaro','Mago'],max:16,hp:16,ac:16,flat:15,attack:4,damage:8,bonus:2,threat:19,init:1,ref:1,move:6,range:1,role:'Guardia de Valdara'};
  const allyProfiles={
   elara,
-  ordan:{id:'ordan',name:'Ordan',class:'Guerrero',classes:['Guerrero'],max:18,hp:18,ac:15,flat:14,attack:5,damage:8,bonus:2,threat:19,init:0,ref:1,move:6,range:1,role:'Campanero del taller'},
-  iria:{id:'iria',name:'Iria',class:'Pícaro',classes:['Pícaro'],max:14,hp:14,ac:15,flat:14,attack:5,damage:6,bonus:2,threat:19,init:4,ref:4,move:7,range:2,role:'Guardabosques',sneakDie:6,action:'marcar'},
-  darien:{id:'darien',name:'Darien',class:'Mago',classes:['Mago'],max:12,hp:12,ac:12,flat:11,attack:2,damage:6,bonus:3,threat:20,init:2,ref:3,move:6,range:3,spells:3,action:'canalizar',spellDC:1,role:'Archivista'}
+  ordan:{id:'ordan',name:'Ordan',class:'Guerrero',race:'Enano',gender:'Hombre',subclass:'Guardia',classes:['Guerrero'],max:18,hp:18,ac:15,flat:14,attack:5,damage:8,bonus:2,threat:19,init:0,ref:1,move:6,range:1,role:'Campanero del taller'},
+  iria:{id:'iria',name:'Iria',class:'Pícaro',race:'Elfo',gender:'Mujer',subclass:'Explorador',classes:['Pícaro'],max:14,hp:14,ac:15,flat:14,attack:5,damage:6,bonus:2,threat:19,init:4,ref:4,move:7,range:2,role:'Guardabosques',sneakDie:6,action:'marcar'},
+  darien:{id:'darien',name:'Darien',class:'Mago',race:'Humano',gender:'Hombre',subclass:'Arcanista',classes:['Mago'],max:12,hp:12,ac:12,flat:11,attack:2,damage:6,bonus:3,threat:20,init:2,ref:3,move:6,range:3,spells:3,action:'canalizar',spellDC:1,role:'Archivista'}
  };
  const allyUnlock=(id,save={})=>id==='elara'?!!save.flags?.elara:id==='ordan'?!!(save.flags?.ordanMet||save.flags?.workshop||save.flags?.mountainStarted):id==='iria'?!!save.flags?.iriaJoined:id==='darien'?!!save.flags?.darienMet:false;
  function selectedParty(save={}){

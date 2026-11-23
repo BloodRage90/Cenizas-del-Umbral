@@ -16,7 +16,9 @@ assert(/if\(a\.dataset\.kind==='ally'\)return sprites\.ally;/.test(visuals), 'al
 
 // Her combat poses are a 2x2 sheet like the hero sheets, painted without race/gender overlays.
 assert(/ally:\{file:'elara-combat\.webp',grid:\[2,2\],scale:1,noTraits:true\}/.test(visuals), 'ally uses her own 2x2 combat sheet');
-assert(/if\(!spec\.noTraits\)paintHeroTraits\(ctx,spec\)/.test(visuals), 'hero overlays are skipped for ally');
+assert(/if\(spec\.grid\)[\s\S]*HV\?\.render\?\.\(spec/.test(visuals), 'all grid actors use the shared render API');
+assert(!/paintHeroTraits/.test(visuals), 'legacy floating hero overlay renderer is removed');
+assert(/function render\(character = \{\}, options = \{\}\)/.test(fs.readFileSync(path.join(dist, 'hero-visuals.js'), 'utf8')), 'shared render API exists');
 const sheet = path.join(dist, 'elara-combat.webp');
 assert(fs.existsSync(sheet), 'combat sheet exists');
 const header = fs.readFileSync(sheet).subarray(0, 32);

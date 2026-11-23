@@ -17,14 +17,14 @@
   const classKeys = { Guerrero: 'hero-warrior', Pícaro: 'hero-rogue', Mago: 'hero-mage' };
 
   const raceData = {
-    Humano: { scale: 1, filter: 'none', accent: '#d9b56c', feature: 'round', skin: '#c68b68' },
-    Elfo: { scale: 1.03, filter: 'saturate(1.12) hue-rotate(8deg)', accent: '#a9d6b6', feature: 'ears', skin: '#d3a07f' },
-    Enano: { scale: 0.91, filter: 'sepia(.13) saturate(.92) contrast(1.06)', accent: '#c58d62', feature: 'beard', skin: '#b97b59' },
-    Orco: { scale: 1.12, filter: 'saturate(.72) sepia(.3) hue-rotate(26deg) contrast(1.08)', accent: '#92a85d', feature: 'tusks', skin: '#718a4e' },
-    Mediano: { scale: 0.78, filter: 'saturate(1.08) brightness(1.04)', accent: '#e2bc7a', feature: 'small', skin: '#d39b70' },
-    Gnomo: { scale: 0.83, filter: 'saturate(.98) hue-rotate(-7deg) brightness(1.04)', accent: '#d8a1d2', feature: 'cap', skin: '#d7a27d' },
-    Semielfo: { scale: 1, filter: 'saturate(1.04) hue-rotate(2deg)', accent: '#b9d0b2', feature: 'half-ears', skin: '#c99576' },
-    Semiorco: { scale: 1.08, filter: 'saturate(.82) sepia(.2) hue-rotate(25deg) contrast(1.08)', accent: '#a9a36b', feature: 'half-tusks', skin: '#8f8256' }
+    Humano: { scale: 1, silhouette: [1, 1], filter: 'none', accent: '#d9b56c', feature: 'round', skin: '#c68b68' },
+    Elfo: { scale: 1.03, silhouette: [.97, 1.04], filter: 'saturate(1.12) hue-rotate(8deg)', accent: '#a9d6b6', feature: 'ears', skin: '#d3a07f' },
+    Enano: { scale: .91, silhouette: [1.08, .86], filter: 'sepia(.13) saturate(.92) contrast(1.06)', accent: '#c58d62', feature: 'beard', skin: '#b97b59' },
+    Orco: { scale: 1.12, silhouette: [1.08, 1.1], filter: 'saturate(.72) sepia(.3) hue-rotate(26deg) contrast(1.08)', accent: '#92a85d', feature: 'tusks', skin: '#718a4e' },
+    Mediano: { scale: .78, silhouette: [.8, .8], filter: 'saturate(1.08) brightness(1.04)', accent: '#e2bc7a', feature: 'small', skin: '#d39b70' },
+    Gnomo: { scale: .83, silhouette: [.76, .76], filter: 'saturate(.98) hue-rotate(-7deg) brightness(1.04)', accent: '#d8a1d2', feature: 'cap', skin: '#d7a27d' },
+    Semielfo: { scale: 1, silhouette: [1, 1], filter: 'saturate(1.04) hue-rotate(2deg)', accent: '#b9d0b2', feature: 'half-ears', skin: '#c99576' },
+    Semiorco: { scale: 1.08, silhouette: [1.05, 1.06], filter: 'saturate(.82) sepia(.2) hue-rotate(25deg) contrast(1.08)', accent: '#a9a36b', feature: 'half-tusks', skin: '#8f8256' }
   };
   const genderData = {
     Mujer: { key: 'woman', accent: '#e6a3b8', feature: 'ribbon', hair: '#9a6044' },
@@ -40,6 +40,17 @@
     Tejedor: { class: 'Mago', visual: 'ash-weaver', accent: '#d6a17c', mark: 'ember' }
   };
   const defaults = { Guerrero: 'Guardia', Pícaro: 'Sombra', Mago: 'Arcanista' };
+  // Anchors are expressed in pixels of one source frame. They keep race and
+  // presentation details attached to the actual head/hands instead of
+  // floating at percentages of the card. The four supplied sheets use the
+  // same 2×2 pose layout; the mage sheet has a 627px frame and the warrior /
+  // rogue sheets a 656px frame.
+  const heroAnchors = {
+    'identity-warrior-pixel.webp': { frame: 656, head: [330, 116], handR: [455, 320], handL: [245, 320], feet: [330, 560] },
+    'identity-rogue-pixel.webp': { frame: 656, head: [330, 116], handR: [455, 320], handL: [245, 320], feet: [330, 560] },
+    'identity-mage-pixel.webp': { frame: 627, head: [318, 116], handR: [456, 318], handL: [225, 320], feet: [318, 580] },
+    'identity-mage-ash-pixel.webp': { frame: 627, head: [318, 116], handR: [456, 318], handL: [225, 320], feet: [318, 580] }
+  };
   const slug = value => String(value || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
   const valid = (table, value, fallback) => Object.prototype.hasOwnProperty.call(table, value) ? value : fallback;
 
@@ -63,7 +74,8 @@
       textureKey: key, variantKey: key, scale: raceInfo.scale, filter: raceInfo.filter,
       raceFeature: raceInfo.feature, raceAccent: raceInfo.accent, raceSkin: raceInfo.skin,
       genderFeature: genderInfo.feature, genderAccent: genderInfo.accent, genderHair: genderInfo.hair,
-      accent: subInfo.accent
+      accent: subInfo.accent,
+      silhouette: raceInfo.silhouette || [1, 1]
     };
   }
 
@@ -155,6 +167,83 @@
     ctx.restore();
   }
 
+  function anchorFor(spec) {
+    return heroAnchors[spec.file] || heroAnchors['identity-warrior-pixel.webp'];
+  }
+
+  /* Draw only details that are anchored to the source pose. This replaces the
+   * old card-relative polygons and keeps the visual identity on the head or
+   * hands when the sprite is resized, flipped or shown in combat. */
+  function drawAnchoredTraits(ctx, x, y, width, height, spec) {
+    const anchor = anchorFor(spec), factor = width / anchor.frame;
+    const [headX, headY] = anchor.head.map(value => value * factor);
+    const [handX, handY] = anchor.handR.map(value => value * factor);
+    const [leftX, leftY] = anchor.handL.map(value => value * factor);
+    const skin = spec.raceSkin || '#c68b68';
+    const accent = spec.raceAccent || spec.accent || '#d9b56c';
+    const gender = spec.genderAccent || '#b9aaf4';
+    const cx = x + headX, cy = y + headY;
+    ctx.save();
+    ctx.imageSmoothingEnabled = false;
+    ctx.lineWidth = Math.max(2, factor * 3);
+    ctx.strokeStyle = accent;
+    ctx.fillStyle = accent;
+    if (spec.raceFeature === 'ears' || spec.raceFeature === 'half-ears') {
+      const reach = spec.raceFeature === 'ears' ? 19 : 12;
+      polygon(ctx, [[cx - 7 * factor, cy], [cx - (28 + reach) * factor, cy - 12 * factor], [cx - 19 * factor, cy + 8 * factor]], skin, '#241a16', 2 * factor);
+      polygon(ctx, [[cx + 7 * factor, cy], [cx + (28 + reach) * factor, cy - 12 * factor], [cx + 19 * factor, cy + 8 * factor]], skin, '#241a16', 2 * factor);
+    } else if (spec.raceFeature === 'beard') {
+      polygon(ctx, [[cx - 16 * factor, cy + 9 * factor], [cx + 16 * factor, cy + 9 * factor], [cx, cy + 28 * factor]], '#6d4436', '#241a16', 2 * factor);
+    } else if (spec.raceFeature === 'tusks' || spec.raceFeature === 'half-tusks') {
+      const length = spec.raceFeature === 'tusks' ? 10 : 6;
+      polygon(ctx, [[cx - 9 * factor, cy + 11 * factor], [cx - 3 * factor, cy + 11 * factor], [cx - 6 * factor, cy + (11 + length) * factor]], '#f7e3b1', '#241a16', factor);
+      polygon(ctx, [[cx + 9 * factor, cy + 11 * factor], [cx + 3 * factor, cy + 11 * factor], [cx + 6 * factor, cy + (11 + length) * factor]], '#f7e3b1', '#241a16', factor);
+    } else if (spec.raceFeature === 'cap') {
+      polygon(ctx, [[cx - 20 * factor, cy - 8 * factor], [cx + 20 * factor, cy - 8 * factor], [cx + 2 * factor, cy - 27 * factor], [cx - 6 * factor, cy - 17 * factor]], accent, '#241a16', 2 * factor);
+    }
+    ctx.strokeStyle = gender;
+    ctx.lineWidth = Math.max(2, factor * 3);
+    if (spec.genderFeature === 'ribbon') {
+      ctx.beginPath(); ctx.moveTo(cx + 16 * factor, cy - 12 * factor); ctx.lineTo(cx + 25 * factor, cy + 15 * factor); ctx.stroke();
+    } else if (spec.genderFeature === 'braid') {
+      ctx.beginPath(); ctx.moveTo(cx - 16 * factor, cy - 12 * factor); ctx.lineTo(cx - 25 * factor, cy + 15 * factor); ctx.stroke();
+    } else {
+      ctx.beginPath(); ctx.moveTo(x + leftX, y + leftY + 26 * factor); ctx.lineTo(x + handX, y + handY + 15 * factor); ctx.stroke();
+    }
+    /* Subclass cue follows the hand/weapon anchor, never the card boundary. */
+    ctx.strokeStyle = spec.accent || accent;
+    ctx.lineWidth = Math.max(2, factor * 2);
+    if (spec.mark === 'shield') ctx.strokeRect(x + handX - 7 * factor, y + handY - 12 * factor, 14 * factor, 18 * factor);
+    if (spec.mark === 'rage') { ctx.beginPath(); ctx.moveTo(x + handX - 8 * factor, y + handY - 9 * factor); ctx.lineTo(x + handX + 8 * factor, y + handY + 9 * factor); ctx.stroke(); }
+    if (spec.mark === 'rune' || spec.mark === 'ember') { ctx.beginPath(); ctx.arc(x + handX, y + handY - 10 * factor, 6 * factor, 0, Math.PI * 2); ctx.stroke(); }
+    ctx.restore();
+  }
+
+  function render(character = {}, options = {}) {
+    const spec = character.variantKey ? character : profile(character);
+    const source = options.source;
+    const columns = options.columns || 2, rows = options.rows || 2;
+    const frame = Math.max(0, Math.floor(options.frame || 0));
+    const size = Math.max(32, Math.floor(options.size || 256));
+    const canvas = (typeof document !== 'undefined') ? document.createElement('canvas') : null;
+    if (!canvas) return { variantKey: spec.variantKey, spec };
+    canvas.width = size; canvas.height = size; canvas.dataset.variantKey = spec.variantKey;
+    const ctx = canvas.getContext('2d'); ctx.imageSmoothingEnabled = false;
+    if (source?.naturalWidth || source?.width) {
+      const sw = (source.naturalWidth || source.width) / columns;
+      const sh = (source.naturalHeight || source.height) / rows;
+      const sx = (frame % columns) * sw, sy = Math.floor(frame / columns) * sh;
+      ctx.save(); ctx.filter = spec.filter || 'none';
+      const silhouette = spec.silhouette || [1, 1];
+      const drawW = size * silhouette[0], drawH = size * silhouette[1];
+      ctx.drawImage(source, sx, sy, sw, sh, (size - drawW) / 2, size - drawH, drawW, drawH); ctx.restore();
+      drawAnchoredTraits(ctx, (size - drawW) / 2, size - drawH, drawW, drawH, spec);
+    } else {
+      drawAnchoredTraits(ctx, 0, 0, size, size, spec);
+    }
+    return canvas;
+  }
+
   function paintVariantCanvas(ctx, source, spec, columns = 2, rows = 2) {
     if (!ctx || !source) return;
     const width = source.width, height = source.height;
@@ -162,10 +251,10 @@
     ctx.save(); try { ctx.filter = spec.filter || 'none'; } catch { /* old WebViews ignore canvas filters */ }
     ctx.drawImage(source, 0, 0, width, height); ctx.restore();
     const frameWidth = width / columns, frameHeight = height / rows;
-    for (let row = 0; row < rows; row++) for (let column = 0; column < columns; column++) drawVariantFrame(ctx, column * frameWidth, row * frameHeight, frameWidth, frameHeight, spec);
+    for (let row = 0; row < rows; row++) for (let column = 0; column < columns; column++) drawAnchoredTraits(ctx, column * frameWidth, row * frameHeight, frameWidth, frameHeight, spec);
   }
 
-  const api = { classFiles, raceData, genderData, subclassData, profile, assets, variantKey, paintVariantCanvas, slug };
+  const api = { classFiles, raceData, genderData, subclassData, profile, assets, variantKey, render, paintVariantCanvas, heroAnchors, slug };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.CenizasHeroVisuals = api;
 })(typeof window !== 'undefined' ? window : globalThis);

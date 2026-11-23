@@ -12,6 +12,8 @@ class Follower{
 function frame(sprite,dx,dy,dt=1000/60){
  const distance=Math.hypot(dx,dy),elapsed=Math.max(0,Math.min(dt,50));
  if(sprite.anims?.isPlaying)sprite.anims.stop();
+ const stride=sprite.walkStride||18.75;
+ if(sprite.walkDistance===undefined)sprite.walkDistance=0;
  let direction=sprite.walkDirection??2;
  if(distance>.005){
   sprite.walkIdle=0;
@@ -19,10 +21,11 @@ function frame(sprite,dx,dy,dt=1000/60){
   const useHorizontal=horizontal?ax*1.3>=ay:ax>ay*1.3;
   direction=useHorizontal?(dx>=0?2:1):(dy>=0?0:3);
   sprite.walkDirection=direction;
-  sprite.walkPhase=((sprite.walkPhase??1)+Math.min(distance/28,elapsed/140))%4;
+  sprite.walkDistance+=distance;
+  sprite.walkPhase=(sprite.walkDistance/stride)%4;
  }else{
   sprite.walkIdle=(sprite.walkIdle||0)+elapsed;
-  if(sprite.walkIdle>=80)sprite.walkPhase=1;
+  if(sprite.walkIdle>=80)sprite.walkPhase=0;
  }
  const columns=sprite.walkColumns||4,rows=sprite.walkRows||4;
  // Pose sheets (2x2: idle, wind-up, slash, recover) are right-facing combat art,
@@ -31,11 +34,16 @@ function frame(sprite,dx,dy,dt=1000/60){
  if(columns*rows<=4){
   if(distance>.005&&Math.abs(dx)>.005)sprite.facingLeft=dx<0;
   if(typeof sprite.setFlipX==='function'&&sprite.flipX!==!!sprite.facingLeft)sprite.setFlipX(!!sprite.facingLeft);
-  const walking=(sprite.walkIdle||0)<80,poseIndex=walking?[0,3][Math.floor(sprite.walkPhase??1)%2]:0;
+  const walking=(sprite.walkIdle||0)<80,poseIndex=walking?(Math.floor(sprite.walkDistance/stride)%2?3:0):0;
+  if(typeof sprite.setScale==='function'){
+   sprite.walkBaseScaleX??=sprite.scaleX??1;sprite.walkBaseScaleY??=sprite.scaleY??1;
+   const bob=walking?(poseIndex===3?.02:-.02):0;
+   sprite.setScale(sprite.walkBaseScaleX,sprite.walkBaseScaleY*(1+bob));
+  }
   if(sprite.walkFrame!==poseIndex){sprite.setFrame(poseIndex);sprite.walkFrame=poseIndex;}
   return;
  }
- const frameDirection=direction%rows,phase=Math.floor(sprite.walkPhase??1)%columns;
+ const frameDirection=direction%rows,phase=Math.floor(sprite.walkDistance/stride)%columns;
  const index=frameDirection*columns+phase;
  if(sprite.walkFrame!==index){sprite.setFrame(index);sprite.walkFrame=index;}
 }
