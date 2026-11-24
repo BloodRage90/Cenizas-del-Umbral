@@ -1,5 +1,18 @@
 # Changelog
 
+## 2026-11-24 · PR3 — locomoción diagonal y recuperación de pestaña
+
+- Se centralizó la normalización de vectores para que teclado, joystick y movimiento guionado mantengan la misma velocidad cardinal; las diagonales ya no recorren `√2` veces más distancia.
+- Se añadió `VisibilityGuard`: al ocultar o desenfocar la pestaña se detienen controles, animaciones y seguimiento; se descartan `game.loop.delta`/`elapsed` acumulados y se ignora exactamente el primer frame al volver.
+- Se cubrieron cadencia diagonal/cardinal a 30/60/144 FPS, pausa de cinco segundos, recuperación sin desplazamiento fantasma, sin ráfaga de poses y con un único cambio de pose útil.
+
+### Validación PR3
+
+- `pnpm.cmd test`: todas las suites en verde.
+- `pnpm.cmd lint`: limpio.
+- `node --check dist/locomotion.js dist/game.js dist/chapter.js`: limpio.
+- `tests/locomotion-cadence.cjs`: diagonales dentro de 2% y recuperación de pestaña verificada.
+
 ## 2026-11-22 · Auditoría: estabilización y arreglos de identidad interinos
 
 - **Elara en combate ya no es un clon del protagonista.** `combat.js` declara `look` para su unidad y `battle-visuals.js` la dibuja como `ally` con su propia hoja de poses. La hoja se restauró del historial (`dist/combat-elara.png`, eliminada en `7aefb3e` por no tener referencias) como `dist/elara-combat.webp`; los combates ya guardados sin `look` también se resuelven por `id`. Pruebas: `tests/battle-look.cjs`.
@@ -163,6 +176,7 @@
 - Se estabilizó la migración de guardados, la cinematica de plaza y el combate lateral por turnos.
 - Se actualizaron las pruebas de `battle-scene.js`, incluida la garantía de resolución única y el bloqueo durante una animación.
 - Se exigió nombre de personaje y se corrigieron etiquetas accesibles del creador y del mapa.
+
 ## 2026-11-18 · Variantes de sprites jugables
 
 - Generación determinista de un sprite por combinación de clase, raza, género y subclase (144 variantes), reutilizando las hojas pixel existentes.

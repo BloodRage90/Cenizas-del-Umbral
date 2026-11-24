@@ -7,6 +7,21 @@ class Follower{
  this.x=this.points[0].x;this.y=this.points[0].y;return travel;
  }
 }
+// Keep keyboard, joystick and scripted movement on the same unit-speed vector.
+// Values below a unit vector keep their analog magnitude; only diagonals (or
+// other overlong vectors) are reduced to the requested cardinal speed.
+function normalize(dx,dy){const length=Math.hypot(dx,dy);return length>1?{x:dx/length,y:dy/length}:{x:dx,y:dy};}
+
+// Phaser may report a large loop delta after a tab was backgrounded. The
+// guard drops that delta and skips exactly the first frame after resuming so
+// movement, pose changes and footstep cadence cannot burst on recovery.
+class VisibilityGuard{
+ constructor(){this.active=true;this.resumePending=false;}
+ resetLoop(scene){const loop=scene?.game?.loop;if(!loop)return;loop.delta=0;loop.elapsed=0;}
+ pause(scene){this.active=false;this.resumePending=false;this.resetLoop(scene);}
+ resume(scene){this.active=true;this.resumePending=true;this.resetLoop(scene);}
+ canUpdate(scene){if(!this.active){this.resetLoop(scene);return false;}if(this.resumePending){this.resumePending=false;this.resetLoop(scene);return false;}return true;}
+}
 // A full walk cycle spans 112 world pixels. Advance by actual movement,
 // with a cadence ceiling so catch-up motion never turns into frantic footsteps.
 function frame(sprite,dx,dy,dt=1000/60){
@@ -49,5 +64,5 @@ function frame(sprite,dx,dy,dt=1000/60){
  return false;
 }
 
-const api={Follower,frame};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.CenizasLocomotion=api;
+const api={Follower,VisibilityGuard,normalize,frame};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.CenizasLocomotion=api;
 })(typeof window!=='undefined'?window:globalThis);
