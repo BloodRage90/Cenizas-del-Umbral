@@ -5,14 +5,18 @@
 - Se centralizó la normalización de vectores para que teclado, joystick y movimiento guionado mantengan la misma velocidad cardinal; las diagonales ya no recorren `√2` veces más distancia.
 - Se añadió `VisibilityGuard`: al ocultar o desenfocar la pestaña se detienen controles, animaciones y seguimiento; se descartan `game.loop.delta`/`elapsed` acumulados y se ignora exactamente el primer frame al volver.
 - Se cubrieron cadencia diagonal/cardinal a 30/60/144 FPS, pausa de cinco segundos, recuperación sin desplazamiento fantasma, sin ráfaga de poses y con un único cambio de pose útil.
+- Se reemplazó el fallback plano de d6/d8 por siluetas facetadas con volumen, pips y sombreado; el d20 conserva sus caras numeradas y la animación de caída.
+- El carril de cinco dados de ataque queda en una sola fila acotada en horizontal; ya no intercepta `Tirar dados` en 667×375.
+- La matriz E2E completa pasó en las cuatro resoluciones (`20/20`) y el flujo de campaña aislado pasó (`8/8`) tras el ajuste.
 
 ### Antes → después
 
-| Hallazgo               | Antes                                                                        | Después                                                                                     |
-| ---------------------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| Movimiento diagonal    | Teclado y joystick podían recorrer más distancia que un movimiento cardinal. | Ambos pasan por el mismo normalizador y conservan la velocidad cardinal.                    |
-| Delta acumulado        | Una pestaña oculta podía entregar un delta grande al volver.                 | `VisibilityGuard` pone el delta/elapsed a cero y descarta el primer frame de recuperación.  |
-| Animación al recuperar | El primer frame podía cambiar varias poses o pasos seguidos.                 | La transición no mueve ni cambia poses; el primer frame útil permite como máximo un cambio. |
+| Hallazgo               | Antes                                                                            | Después                                                                                         |
+| ---------------------- | -------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| Movimiento diagonal    | Teclado y joystick podían recorrer más distancia que un movimiento cardinal.     | Ambos pasan por el mismo normalizador y conservan la velocidad cardinal.                        |
+| Delta acumulado        | Una pestaña oculta podía entregar un delta grande al volver.                     | `VisibilityGuard` pone el delta/elapsed a cero y descarta el primer frame de recuperación.      |
+| Animación al recuperar | El primer frame podía cambiar varias poses o pasos seguidos.                     | La transición no mueve ni cambia poses; el primer frame útil permite como máximo un cambio.     |
+| Dados de combate       | d6/d8 se dibujaban como una figura plana y cinco dados podían envolver el botón. | Cada poliedro tiene una silueta 3D legible; el carril conserva una fila y el botón queda libre. |
 
 ### Riesgos conocidos
 

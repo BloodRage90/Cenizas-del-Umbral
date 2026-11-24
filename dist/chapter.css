@@ -135,6 +135,17 @@ dialog button,#choices button,.travel button,.shop-items button{border:1px solid
 /* Readable race and gender silhouettes in the side-view arena. The source
    sprites remain class-specific; these presentation layers add the racial
    scale/palette cues without pretending that a tint is a new asset. */
+/* Readable 3D silhouettes for the other polyhedra used by checks and potions. */
+#dice-tray .d6-svg,#dice-tray .d8-svg{display:block;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 8px 5px #06140dcc)}
+#dice-tray .d6-face{stroke:#4a2d15;stroke-width:2;stroke-linejoin:round}
+#dice-tray .d6-top{fill:#f2d58d}.d6-left{fill:#a87335}.d6-right{fill:#d8aa5d}
+#dice-tray .d6-edge{fill:none;stroke:#3c2614;stroke-width:2.8;stroke-linejoin:round;stroke-linecap:round}
+#dice-tray .d6-pip{fill:#1d392f;stroke:#f8e7b4;stroke-width:1.1}
+#dice-tray .d6-face-label{fill:#65441f;font:bold 8px system-ui,sans-serif;letter-spacing:.04em}
+#dice-tray .d6-number,#dice-tray .d8-number{fill:#fff1bf;font:bold 25px Georgia,serif;paint-order:stroke;stroke:#402713;stroke-width:2px}
+#dice-tray .d8-face{stroke:#4a2d15;stroke-width:2;stroke-linejoin:round}
+#dice-tray .d8-top-left{fill:#f0d18a}.d8-top-right{fill:#bd8740}.d8-bottom-left{fill:#8f5d2d}.d8-bottom-right{fill:#d8a45a}
+#dice-tray .d8-edge{fill:none;stroke:#3c2614;stroke-width:2.8;stroke-linejoin:round;stroke-linecap:round}
 body[data-hero-race="Orco"] #battle [data-unit="hero"] .combat-art{filter:saturate(1.35) hue-rotate(48deg) contrast(1.08) drop-shadow(0 8px 5px #07121bdd)}
 body[data-hero-race="Semiorco"] #battle [data-unit="hero"] .combat-art{filter:saturate(1.18) hue-rotate(28deg) contrast(1.06) drop-shadow(0 8px 5px #07121bdd)}
 body[data-hero-race="Elfo"] #battle [data-unit="hero"] .combat-art{filter:saturate(.88) hue-rotate(8deg) brightness(1.08) drop-shadow(0 8px 5px #07121bdd)}
@@ -239,3 +250,11 @@ body[data-hero-subclass="Tejedor"] #battle [data-unit="hero"] .combat-art{filter
 #dice-dialog.attack-roll .dice-buttons{gap:8px}
 #dice-dialog.attack-roll .dice-buttons button{min-height:44px;padding:7px 14px}
 @media(max-height:500px){#dice-dialog.attack-roll{padding:8px 12px;max-height:34dvh}#dice-dialog.attack-roll h2{margin:2px 0;font-size:20px}#dice-dialog.attack-roll #dice-tray{min-height:56px}#dice-dialog.attack-roll #dice-tray .die-wrap{height:64px}#dice-dialog.attack-roll #dice-tray .die-3d{--die-size:min(62px,100%)}#dice-dialog.attack-roll #dice-tray .die-3d.preview{--die-size:min(68px,100%)}}
+/* Final responsive dice override: the tray is one compact row, never a
+   second grid row that can cover the launch button on landscape phones. */
+#dice-dialog.attack-roll{max-height:min(250px,calc(100dvh - 16px));overflow:hidden}
+#dice-dialog.attack-roll #dice-tray{grid-template-columns:repeat(5,minmax(0,1fr));grid-auto-rows:1fr;min-height:78px;height:78px;overflow:hidden;gap:5px}
+#dice-dialog.attack-roll #dice-tray .die-wrap{height:78px;min-width:0;overflow:visible}
+#dice-dialog.attack-roll #dice-tray .die-3d,#dice-dialog.attack-roll #dice-tray .die-3d.preview{--die-size:min(68px,100%)}
+@media(max-height:500px){#dice-dialog.attack-roll{max-height:min(250px,calc(100dvh - 16px));padding:8px 12px}#dice-dialog.attack-roll #dice-tray{min-height:70px;height:70px;gap:4px}#dice-dialog.attack-roll #dice-tray .die-wrap{height:70px}#dice-dialog.attack-roll #dice-tray .die-3d,#dice-dialog.attack-roll #dice-tray .die-3d.preview{--die-size:min(58px,100%)}#dice-dialog.attack-roll #dice-tray .die-wrap small{font-size:11px}}
+@media(max-width:420px){#dice-dialog.attack-roll{padding-inline:10px}#dice-dialog.attack-roll #dice-tray{gap:3px}#dice-dialog.attack-roll #dice-tray .die-3d,#dice-dialog.attack-roll #dice-tray .die-3d.preview{--die-size:min(52px,100%)}}
