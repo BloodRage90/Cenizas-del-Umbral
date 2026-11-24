@@ -7,6 +7,7 @@
 - Se cubrieron cadencia diagonal/cardinal a 30/60/144 FPS, pausa de cinco segundos, recuperación sin desplazamiento fantasma, sin ráfaga de poses y con un único cambio de pose útil.
 - Se reemplazó el fallback plano de d6/d8 por siluetas facetadas con volumen, pips y sombreado; el d20 conserva sus caras numeradas y la animación de caída.
 - El carril de cinco dados de ataque queda en una sola fila acotada en horizontal; ya no intercepta `Tirar dados` en 667×375.
+- Se aumentó el tamaño mínimo visible, se añadió brillo de material y easing de rebote; se evitó `backface-visibility` porque ocultaba las caras durante el giro.
 - La matriz E2E completa pasó en las cuatro resoluciones (`20/20`) y el flujo de campaña aislado pasó (`8/8`) tras el ajuste.
 
 ### Antes → después
@@ -17,6 +18,7 @@
 | Delta acumulado        | Una pestaña oculta podía entregar un delta grande al volver.                     | `VisibilityGuard` pone el delta/elapsed a cero y descarta el primer frame de recuperación.      |
 | Animación al recuperar | El primer frame podía cambiar varias poses o pasos seguidos.                     | La transición no mueve ni cambia poses; el primer frame útil permite como máximo un cambio.     |
 | Dados de combate       | d6/d8 se dibujaban como una figura plana y cinco dados podían envolver el botón. | Cada poliedro tiene una silueta 3D legible; el carril conserva una fila y el botón queda libre. |
+| Giro de las caras      | El acabado 3D podía dejar las caras ocultas durante la rotación.                 | Las caras permanecen visibles, con brillo y rebote, respetando `prefers-reduced-motion`.        |
 
 ### Riesgos conocidos
 

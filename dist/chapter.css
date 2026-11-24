@@ -258,3 +258,10 @@ body[data-hero-subclass="Tejedor"] #battle [data-unit="hero"] .combat-art{filter
 #dice-dialog.attack-roll #dice-tray .die-3d,#dice-dialog.attack-roll #dice-tray .die-3d.preview{--die-size:min(68px,100%)}
 @media(max-height:500px){#dice-dialog.attack-roll{max-height:min(250px,calc(100dvh - 16px));padding:8px 12px}#dice-dialog.attack-roll #dice-tray{min-height:70px;height:70px;gap:4px}#dice-dialog.attack-roll #dice-tray .die-wrap{height:70px}#dice-dialog.attack-roll #dice-tray .die-3d,#dice-dialog.attack-roll #dice-tray .die-3d.preview{--die-size:min(58px,100%)}#dice-dialog.attack-roll #dice-tray .die-wrap small{font-size:11px}}
 @media(max-width:420px){#dice-dialog.attack-roll{padding-inline:10px}#dice-dialog.attack-roll #dice-tray{gap:3px}#dice-dialog.attack-roll #dice-tray .die-3d,#dice-dialog.attack-roll #dice-tray .die-3d.preview{--die-size:min(52px,100%)}}
+#dice-dialog.attack-roll #dice-tray .die-wrap{transform:none}
+#dice-dialog.attack-roll #dice-tray .die-3d,#dice-dialog.attack-roll #dice-tray .die-3d.preview{--die-size:min(72px,100%);will-change:transform}
+#dice-tray .d6-highlight,#dice-tray .d8-highlight{fill:#fff4c94d;stroke:#fff4c980;stroke-width:1;stroke-linejoin:round;pointer-events:none}
+#dice-tray .d6-pip{filter:drop-shadow(0 1px 1px #06140dcc)}
+@supports (animation-timing-function:linear(0,1)){#dice-tray .die-3d{animation-timing-function:linear(0,0.12 38%,1.08 64%,0.96 82%,1)}}
+@media(max-height:500px){#dice-dialog.attack-roll #dice-tray .die-3d,#dice-dialog.attack-roll #dice-tray .die-3d.preview{--die-size:min(62px,100%)}}
+@media(max-width:420px){#dice-dialog.attack-roll #dice-tray .die-3d,#dice-dialog.attack-roll #dice-tray .die-3d.preview{--die-size:min(58px,100%)}}

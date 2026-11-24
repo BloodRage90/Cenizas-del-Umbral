@@ -10,6 +10,8 @@ assert(dice.includes('function d6Svg'), 'el d6 usa una silueta cúbica');
 assert(dice.includes('function d8Svg'), 'el d8 usa una silueta octaédrica');
 assert(dice.includes('function facePips'), 'el d6 muestra caras con pips');
 assert(css.includes('.d6-face') && css.includes('.d8-face'), 'd6 y d8 tienen caras facetadas');
+assert(css.includes('.d6-highlight') && css.includes('.d8-highlight'), 'los dados tienen brillo de material');
+assert(css.includes('animation-timing-function:linear('), 'la caída usa easing físico con fallback CSS');
 assert(
   css.includes('#dice-dialog.attack-roll #dice-tray{grid-template-columns:repeat(5'),
   'los cinco dados de ataque permanecen en una fila acotada',
