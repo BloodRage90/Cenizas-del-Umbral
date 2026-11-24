@@ -21,6 +21,7 @@
 
 ### Validación PR3
 
+- Regresión de `main` (`pnpm.cmd test`) ejecutada antes de cerrar la rama: todas las suites en verde; no se observan regresiones frente a la línea base.
 - `pnpm.cmd test`: todas las suites en verde.
 - `pnpm.cmd lint`: limpio.
 - `node --check dist/locomotion.js dist/game.js dist/chapter.js`: limpio.
