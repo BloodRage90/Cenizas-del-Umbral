@@ -1,7 +1,7 @@
-Resonancias — Cenizas del Umbral
-24 composiciones y arreglos originales, noviembre de 2026.
-Síntesis instrumental sin muestras ni melodías de terceros.
+Resonancias II — Cenizas del Umbral · pulso y ceniza
+25 composiciones y arreglos originales, noviembre de 2026.
+Síntesis instrumental por capas: cuerdas, arpegios, ganchos de sintetizador, bajo y percusión.
 Fuente reproducible: scripts/compose-soundtrack.cjs (Node y FFmpeg).
 Esta edición no contiene pistas de terceros; la música se genera de forma reproducible con el compositor del repositorio.
 
-Edición combate: siete temas independientes con guitarras sintetizadas, bajo y batería. Melodías originales; no incluye música ni muestras de Mega Man X3.
+Los combates tienen siete temas independientes con riffs, fills y variaciones de batería. Las melodías son propias y no incluyen música ni muestras de Mega Man X3.

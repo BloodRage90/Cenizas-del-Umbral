@@ -1,5 +1,18 @@
 # Changelog
 
+## 2026-11-24 · Resonancias II — pulso y ceniza
+
+- Se reemplazaron las 25 pistas de la edición anterior por una nueva mezcla original: cuerdas sostenidas, arpegios, ganchos de sintetizador, bajo y percusión con variaciones por sección.
+- Los siete temas de combate (`battle`, `forest-battle`, `vigilia-battle`, `custodian`, `ash`, `finale` y `training-battle`) ahora tienen riffs, fills de tom y crashes de cierre para que cada encuentro tenga una identidad propia.
+- El prólogo, la exploración, los espacios de vínculo y el epílogo recibieron la misma revisión de capas, sin muestras ni melodías de terceros.
+- Se actualizó el manifiesto de procedencia a `Resonancias II · pulso y ceniza` y el token global de caché a `2026-11-music-refresh-1`, evitando que el navegador conserve la edición anterior.
+
+### Validación musical
+
+- `node tests/music.cjs`: 25 pistas estéreo decodificadas, con duración, headroom y crossfade válidos.
+- `pnpm.cmd test`: todas las suites en verde.
+- `pnpm.cmd lint`: limpio.
+
 ## 2026-11-24 · PR3 — locomoción diagonal y recuperación de pestaña
 
 - Se centralizó la normalización de vectores para que teclado, joystick y movimiento guionado mantengan la misma velocidad cardinal; las diagonales ya no recorren `√2` veces más distancia.

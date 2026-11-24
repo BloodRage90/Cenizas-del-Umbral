@@ -10,7 +10,7 @@
 
 - Los sprites de clase, raza, subclase y enemigos incluidos en `dist/` son assets del proyecto y sus variantes generadas para esta campaña.
 - Las melodías de `dist/music/` son composiciones/síntesis originales del proyecto.
-- Si una distribución conserva pistas de Kevin MacLeod, debe mantener la atribución CC BY 4.0 correspondiente a cada pista. Esta versión no añade una atribución nueva ni elimina la existente del README.
+- La edición musical actual no contiene pistas ni muestras de terceros. La procedencia reproducible está documentada en [dist/music/CREDITS.txt](dist/music/CREDITS.txt) y en `dist/music/sources.json`.
 
 ## Referencias con licencia
 

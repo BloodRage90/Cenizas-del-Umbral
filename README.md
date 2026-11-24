@@ -70,4 +70,4 @@ El manifiesto `.openai/hosting.json` conserva la identidad de ese Site. Subir ca
 
 Base: versión publicada 36, commit `6a2a68ca10e4d00d577077cce6b2bb41d64f8ea5` del repositorio de Sites. El destino solicitado es `BloodRage90/Cenizas-del-Umbral`.
 
-Las imágenes y melodías originales del proyecto se incluyen. Consultar también los créditos musicales de la interfaz: las pistas de Kevin MacLeod conservan su atribución CC BY 4.0. No se concede una licencia general nueva mediante esta transferencia.
+Las imágenes y melodías originales del proyecto se incluyen. La edición musical actual es **Resonancias II · pulso y ceniza**: 25 pistas originales generadas de forma reproducible por `scripts/compose-soundtrack.cjs`, sin grabaciones, muestras ni melodías de terceros.

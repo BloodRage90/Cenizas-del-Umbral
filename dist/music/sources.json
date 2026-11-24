@@ -1,6 +1,7 @@
 {
-  "edition": "Resonancias · combate rock 16 bits",
-  "composition": "Original melodies, arrangements and synthesized instruments; no third-party samples.",
+  "edition": "Resonancias II · pulso y ceniza",
+  "revision": "2026-11-music-refresh-1",
+  "composition": "Original melodies, layered arrangements and synthesized instruments; no third-party samples.",
   "generator": "scripts/compose-soundtrack.cjs",
   "tracks": [
     {
@@ -11,12 +12,13 @@
       "theme": "city",
       "instruments": [
         "flute",
-        "pluck",
+        "strings",
+        "harp",
         "pad",
         "bass",
         "percussion"
       ],
-      "peakDb": -6.307498226872033,
+      "peakDb": -6.6737960508745875,
       "rmsDb": -18.786043192927767
     },
     {
@@ -27,12 +29,13 @@
       "theme": "city",
       "instruments": [
         "flute",
-        "pluck",
+        "strings",
+        "harp",
         "pad",
         "bass",
         "percussion"
       ],
-      "peakDb": -6.024255454832429,
+      "peakDb": -6.33064588301332,
       "rmsDb": -18.786043192927767
     },
     {
@@ -43,11 +46,12 @@
       "theme": "bond",
       "instruments": [
         "pluck",
-        "pluck",
+        "strings",
+        "harp",
         "pad",
         "bass"
       ],
-      "peakDb": -4.125491231095159,
+      "peakDb": -4.2885597281679715,
       "rmsDb": -18.786043192927767
     },
     {
@@ -58,11 +62,12 @@
       "theme": "forest",
       "instruments": [
         "bell",
-        "pluck",
+        "strings",
+        "harp",
         "pad",
         "bass"
       ],
-      "peakDb": -4.377007186697805,
+      "peakDb": -4.1090202334800905,
       "rmsDb": -18.786043192927767
     },
     {
@@ -73,12 +78,13 @@
       "theme": "forest",
       "instruments": [
         "flute",
-        "pluck",
+        "strings",
+        "harp",
         "pad",
         "bass",
         "percussion"
       ],
-      "peakDb": -6.61984868079481,
+      "peakDb": -6.683034963913295,
       "rmsDb": -18.786043192927767
     },
     {
@@ -89,12 +95,13 @@
       "theme": "city",
       "instruments": [
         "pluck",
-        "pluck",
+        "strings",
+        "harp",
         "pad",
         "bass",
         "percussion"
       ],
-      "peakDb": -5.4007735421577765,
+      "peakDb": -5.182137278080617,
       "rmsDb": -18.786043192927767
     },
     {
@@ -105,11 +112,12 @@
       "theme": "bond",
       "instruments": [
         "flute",
-        "pluck",
+        "strings",
+        "harp",
         "pad",
         "bass"
       ],
-      "peakDb": -5.86925934489053,
+      "peakDb": -5.5825399067464145,
       "rmsDb": -18.786043192927767
     },
     {
@@ -120,12 +128,13 @@
       "theme": "forest",
       "instruments": [
         "pluck",
-        "pluck",
+        "strings",
+        "harp",
         "pad",
         "bass",
         "percussion"
       ],
-      "peakDb": -5.3400711434581085,
+      "peakDb": -5.314894110712828,
       "rmsDb": -18.786043192927767
     },
     {
@@ -136,11 +145,12 @@
       "theme": "city",
       "instruments": [
         "reed",
-        "pluck",
+        "strings",
+        "harp",
         "pad",
         "bass"
       ],
-      "peakDb": -5.487432520497433,
+      "peakDb": -5.506422920741034,
       "rmsDb": -18.786043192927767
     },
     {
@@ -151,11 +161,12 @@
       "theme": "forest",
       "instruments": [
         "pluck",
-        "pluck",
+        "strings",
+        "harp",
         "pad",
         "bass"
       ],
-      "peakDb": -5.030186839112604,
+      "peakDb": -4.931379721484326,
       "rmsDb": -18.786043192927767
     },
     {
@@ -166,11 +177,12 @@
       "theme": "bond",
       "instruments": [
         "flute",
-        "pluck",
+        "strings",
+        "harp",
         "pad",
         "bass"
       ],
-      "peakDb": -6.023584372084718,
+      "peakDb": -6.351990566717948,
       "rmsDb": -18.786043192927767
     },
     {
@@ -181,11 +193,12 @@
       "theme": "bond",
       "instruments": [
         "bell",
-        "pluck",
+        "strings",
+        "harp",
         "pad",
         "bass"
       ],
-      "peakDb": -2.9047377816938384,
+      "peakDb": -3.4651653600440446,
       "rmsDb": -18.786043192927767
     },
     {
@@ -196,12 +209,13 @@
       "theme": "city",
       "instruments": [
         "reed",
-        "pluck",
+        "strings",
+        "harp",
         "pad",
         "bass",
         "percussion"
       ],
-      "peakDb": -5.552428186131923,
+      "peakDb": -5.898510703907101,
       "rmsDb": -18.786043192927767
     },
     {
@@ -212,11 +226,12 @@
       "theme": "bond",
       "instruments": [
         "reed",
-        "pluck",
+        "strings",
+        "harp",
         "pad",
         "bass"
       ],
-      "peakDb": -5.915410625452251,
+      "peakDb": -5.778454005311123,
       "rmsDb": -18.786043192927767
     },
     {
@@ -227,12 +242,13 @@
       "theme": "forest",
       "instruments": [
         "bell",
-        "pluck",
+        "strings",
+        "harp",
         "pad",
         "bass",
         "percussion"
       ],
-      "peakDb": -4.586439185855842,
+      "peakDb": -4.56976882919953,
       "rmsDb": -18.786043192927767
     },
     {
@@ -243,11 +259,12 @@
       "theme": "bond",
       "instruments": [
         "bell",
-        "pluck",
+        "strings",
+        "harp",
         "pad",
         "bass"
       ],
-      "peakDb": -4.109170278275064,
+      "peakDb": -4.061098725436676,
       "rmsDb": -18.786043192927767
     },
     {
@@ -258,12 +275,30 @@
       "theme": "bond",
       "instruments": [
         "flute",
-        "pluck",
+        "strings",
+        "harp",
         "pad",
         "bass",
         "percussion"
       ],
-      "peakDb": -6.431030342974164,
+      "peakDb": -6.533798331821985,
+      "rmsDb": -18.786043192927767
+    },
+    {
+      "id": "intro",
+      "title": "Cenizas del Umbral · El llamado",
+      "bpm": 118,
+      "seconds": 65.08475,
+      "theme": "battle",
+      "instruments": [
+        "reed",
+        "strings",
+        "harp",
+        "pad",
+        "bass",
+        "percussion"
+      ],
+      "peakDb": -6.458969625185668,
       "rmsDb": -18.786043192927764
     },
     {
@@ -276,11 +311,12 @@
         "guitar",
         "rhythm guitar",
         "bass",
-        "pad",
-        "bell",
+        "strings",
+        "synth hook",
+        "tom fills",
         "drums"
       ],
-      "peakDb": -6.726737400358845,
+      "peakDb": -6.53302792858897,
       "rmsDb": -18.786043192927767
     },
     {
@@ -293,11 +329,12 @@
         "fm",
         "rhythm guitar",
         "bass",
-        "pad",
-        "bell",
+        "strings",
+        "synth hook",
+        "tom fills",
         "drums"
       ],
-      "peakDb": -6.561209522682875,
+      "peakDb": -6.278361844537361,
       "rmsDb": -18.786043192927767
     },
     {
@@ -310,11 +347,12 @@
         "guitar",
         "rhythm guitar",
         "bass",
-        "pad",
-        "bell",
+        "strings",
+        "synth hook",
+        "tom fills",
         "drums"
       ],
-      "peakDb": -5.950556220409072,
+      "peakDb": -5.907899770405841,
       "rmsDb": -18.786043192927767
     },
     {
@@ -327,11 +365,12 @@
         "guitar",
         "rhythm guitar",
         "bass",
-        "pad",
-        "bell",
+        "strings",
+        "synth hook",
+        "tom fills",
         "drums"
       ],
-      "peakDb": -5.79164650883982,
+      "peakDb": -5.771181850078754,
       "rmsDb": -18.786043192927767
     },
     {
@@ -344,11 +383,12 @@
         "guitar",
         "rhythm guitar",
         "bass",
-        "pad",
-        "bell",
+        "strings",
+        "synth hook",
+        "tom fills",
         "drums"
       ],
-      "peakDb": -6.042783359952627,
+      "peakDb": -6.189254309732894,
       "rmsDb": -18.786043192927767
     },
     {
@@ -361,11 +401,12 @@
         "fm",
         "rhythm guitar",
         "bass",
-        "pad",
-        "bell",
+        "strings",
+        "synth hook",
+        "tom fills",
         "drums"
       ],
-      "peakDb": -6.599327684404798,
+      "peakDb": -6.391072949074454,
       "rmsDb": -18.786043192927767
     },
     {
@@ -378,28 +419,13 @@
         "guitar",
         "rhythm guitar",
         "bass",
-        "pad",
-        "bell",
+        "strings",
+        "synth hook",
+        "tom fills",
         "drums"
       ],
-      "peakDb": -6.546418026702197,
+      "peakDb": -6.055070067084558,
       "rmsDb": -18.786043192927767
-    },
-    {
-      "id": "intro",
-      "title": "Cenizas del Umbral · El llamado",
-      "bpm": 118,
-      "seconds": 65.08475,
-      "theme": "battle",
-      "instruments": [
-        "reed",
-        "pluck",
-        "pad",
-        "bass",
-        "percussion"
-      ],
-      "peakDb": -6.265163657711086,
-      "rmsDb": -18.786043192927764
     }
   ]
 }

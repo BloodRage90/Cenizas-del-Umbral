@@ -3,7 +3,7 @@
 const fs=require('node:fs'),path=require('node:path'),{execFileSync}=require('node:child_process');
 const root=path.resolve(__dirname,'..'),out=path.join(root,'dist/music'),tmp=path.join(root,'.soundtrack-work');
 fs.mkdirSync(tmp,{recursive:true});
-const SR=24000,TAU=Math.PI*2;
+const SR=24000,TAU=Math.PI*2,EDITION='Resonancias II · pulso y ceniza',REVISION='2026-11-music-refresh-1';
 const major=[0,2,4,5,7,9,11],minor=[0,2,3,5,7,8,10],dorian=[0,2,3,5,7,9,10];
 // Each pair is scale degree / duration in beats. Rests are null.
 const themes={
@@ -40,15 +40,17 @@ function render(s){
  const L=new Float32Array(N),R=new Float32Array(N),cache=new Map();let seed=123456789;
  const rand=()=>{seed^=seed<<13;seed^=seed>>>17;seed^=seed<<5;return (seed>>>0)/4294967296;};
  const pitch=d=>key+12*Math.floor(d/7)+scale[((d%7)+7)%7];
- function voice(type,midi,duration){
+  function voice(type,midi,duration){
   const k=type+':'+midi+':'+duration.toFixed(4);if(cache.has(k))return cache.get(k);
-  const release=type==='bell'?1.8:type==='pad'?.7:.2,n=Math.ceil((duration+release)*SR),a=new Float32Array(n),f=440*2**((midi-69)/12);
+   const release=type==='bell'?1.8:type==='strings'?1.2:type==='pad'?.7:type==='harp'?.9:.2,n=Math.ceil((duration+release)*SR),a=new Float32Array(n),f=440*2**((midi-69)/12);
   for(let i=0;i<n;i++){
    const t=i/SR,p=TAU*f*t,tail=Math.max(0,1-Math.max(0,t-duration)/release);let y=0,env;
    if(type==='pluck'){y=Math.sin(p)+.38*Math.sin(p*2)+.16*Math.sin(p*3)+.08*Math.sin(p*4);env=(1-Math.exp(-t*400))*Math.exp(-t*3.4)*tail;}
+    else if(type==='harp'){y=Math.sin(p)+.34*Math.sin(p*2)+.12*Math.sin(p*3);env=(1-Math.exp(-t*180))*Math.exp(-t*2.8)*tail;}
    else if(type==='bell'){y=Math.sin(p)*Math.exp(-t*1.6)+.45*Math.sin(p*2.76)*Math.exp(-t*3.2)+.2*Math.sin(p*5.4)*Math.exp(-t*5);env=(1-Math.exp(-t*250))*tail;}
    else if(type==='guitar'||type==='rhythm'||type==='fm'){const v=.065*Math.sin(TAU*5.7*t)*Math.min(1,t/.2);const raw=Math.sin(p+v)+.55*Math.sin(2*p)+.32*Math.sin(3*p)+.18*Math.sin(4*p)+.1*Math.sin(5*p);y=type==='fm'?Math.sin(p+1.7*Math.sin(2*p)*Math.exp(-t*2)):Math.tanh(raw*(type==='rhythm'?2.8:1.7))*.75;env=Math.min(1,t/.006)*Math.exp(-t*(type==='rhythm'?9:.8))*tail;}
    else if(type==='bass'){y=Math.sin(p)+.3*Math.sin(p*2)+.12*Math.sin(p*3);env=Math.min(1,t/.012)*Math.exp(-t*.7)*tail;}
+    else if(type==='strings'){const vibrato=.018*Math.sin(TAU*4.6*t),bow=Math.min(1,t/.18);y=(Math.sin(p+vibrato)+.42*Math.sin(2*p+vibrato)+.14*Math.sin(3*p))*((.86+.14*Math.sin(TAU*2.2*t))*bow);env=tail;}
    else if(type==='pad'){y=(Math.sin(p)+Math.sin(p*1.0018+.4)+.3*Math.sin(p*2)+.12*Math.sin(p*3))*.45;env=Math.min(1,t/.24)*tail;}
    else {const vibrato=.045*Math.sin(TAU*5.1*t)*Math.min(1,t/.35);y=Math.sin(p+vibrato)+(type==='reed'?.38:.1)*Math.sin(2*p+vibrato)+.14*Math.sin(3*p+vibrato);env=Math.min(1,t/.035)*(.93+.07*Math.sin(TAU*3*t))*tail;}
    a[i]=y*env;
@@ -56,14 +58,18 @@ function render(s){
  }
  function mix(a,start,gain,pan){const at=Math.round(start*SR),gl=Math.cos((pan+1)*Math.PI/4)*gain,gr=Math.sin((pan+1)*Math.PI/4)*gain;for(let i=0;i<a.length;i++){const j=(at+i)%N;L[j]+=a[i]*gl;R[j]+=a[i]*gr;}}
  const note=(type,d,start,len,gain,pan=0)=>mix(voice(type,pitch(d),len*beat),start*beat,gain,pan);
- function hit(type,start,gain){const n=Math.round(SR*(type==='hat'?.09:.32)),a=new Float32Array(n);for(let i=0;i<n;i++){const t=i/SR,noise=rand()*2-1;a[i]=type==='kick'?Math.sin(TAU*(48*t+7*(1-Math.exp(-t*30))))*Math.exp(-t*17):type==='snare'?(noise*.7+Math.sin(TAU*175*t)*.3)*Math.exp(-t*23):noise*Math.exp(-t*65);}mix(a,start*beat,gain,type==='hat'?.4:-.1);}
+  function hit(type,start,gain){const n=Math.round(SR*(type==='hat'?.09:type==='crash'?1.1:type==='tom'?.28:.32)),a=new Float32Array(n);for(let i=0;i<n;i++){const t=i/SR,noise=rand()*2-1;a[i]=type==='kick'?Math.sin(TAU*(48*t+7*(1-Math.exp(-t*30))))*Math.exp(-t*17):type==='snare'?(noise*.7+Math.sin(TAU*175*t)*.3)*Math.exp(-t*23):type==='tom'?(Math.sin(TAU*(118-46*Math.min(1,t/.28))*t)+noise*.08)*Math.exp(-t*10):type==='crash'?(noise*.48+Math.sin(TAU*2600*t)*.12)*Math.exp(-t*3.8):noise*Math.exp(-t*65);}mix(a,start*beat,gain,type==='hat'?.4:type==='crash'?.35:-.1);}
  for(let bar=0;bar<bars;bar++){
   const section=Math.floor(bar/8),bridge=section===2,chord=progression[(bar+(bridge?2:0))%8],start=bar*4,energy=section===0?.82:section===3?1: .92;
-  // Open chord voicings; the middle section shifts register and thins the rhythm.
-  for(const [j,d]of [chord-7,chord+2,chord+4].entries())note('pad',d,start,3.8,.042*energy,(j-1)*.65);
+   // Open chord voicings; the middle section shifts register and thins the rhythm.
+   for(const [j,d]of [chord-7,chord+2,chord+4].entries())note(section===2?'pad':'strings',d,start,3.8,.032*energy,(j-1)*.65);
   for(let b=0;b<4;b+=drums>=2?1:2)note('bass',chord-14+(b===2?4:0),start+b,drums>=2?.65:1.7,.16*energy,-.05);
   const arp=bridge?[0,4,2,6]:[0,2,4,2,6,4,2,4],step=bridge?1:.5;
-  for(let j=0;j<(rock?0:4/step);j++)note('pluck',chord+arp[j%arp.length]+(id==='archivo'?7:0),start+j*step,.55,.065*energy,j%2?-.48:.48);
+   for(let j=0;j<(rock?0:4/step);j++)note(bridge?'pluck':'harp',chord+arp[j%arp.length]+(id==='archivo'?7:0),start+j*step,.55,.065*energy,j%2?-.48:.48);
+   if(!rock&&section!==2){
+    const counter=[4,3,2,3,5,4,2,1];
+    for(let j=0;j<4;j++){const d=counter[(bar+j)%counter.length];note('harp',chord+d+7,start+j+.25,.42,.035*energy,j%2?-.36:.36);}
+   }
   let cursor=0;const phrase=rock?(bridge?rock.bridge:rock.melody)[bar%4]:themes[theme][bar%8];
   for(const [d,len]of phrase){
    if(d!==null){let degree=d+7+(!rock&&bridge?2:0);if(id==='capilla'&&section===2)degree-=7;
@@ -74,9 +80,13 @@ function render(s){
   if((bar%4===3)&&drums<2)note('bell',chord+14,start+2,1.8,.035,.65);
   if(rock){
    for(const b of rock.riff){note('rhythm',chord-7,start+b,.3,.12,-.7);note('rhythm',chord-3,start+b+.012,.3,.10,.7);note('bass',chord-14+(b%1?0:4),start+b,.35,.12);}
+    const hook=bridge?[7,6,4,2]:[0,2,4,7,6,4,2,4];
+    for(let j=0;j<4;j++)note(lead==='fm'?'fm':'guitar',chord+hook[(bar+j)%hook.length]+7,start+j*.75+.08,.32,.07*energy,j%2?-.3:.3);
    for(const b of rock.kicks)hit('kick',start+b,.3);
    for(const b of (bridge?[2]:[1,3]))hit('snare',start+b,.20);
    for(let j=0;j<8;j++)hit('hat',start+j*.5,j%2?.048:.028);
+    if(bar%4===3)hit('tom',start+3.25,.13);
+    if(bar%8===7)hit('crash',start,.11);
    if(bar%8===7)for(let j=0;j<6;j++)hit('snare',start+2.5+j*.25,.07+j*.014);
    if(bar%8===0)note('bell',chord+14,start,2,.045,.4);
   }
@@ -93,10 +103,10 @@ function render(s){
  for(let i=0;i<N;i++){wav.writeInt16LE(Math.round(L[i]*gain*32767),44+i*4);wav.writeInt16LE(Math.round(R[i]*gain*32767),46+i*4);}
  const file=path.join(tmp,id+'.wav');fs.writeFileSync(file,wav);
  execFileSync('ffmpeg',['-v','error','-y','-i',file,'-ar','44100','-c:a','libmp3lame','-b:a','160k','-metadata','title='+title,'-metadata','artist=Cenizas del Umbral · composición original',path.join(out,id+'.mp3')]);
- fs.unlinkSync(file);const data={id,title,bpm,seconds:N/SR,theme,instruments:rock?[lead,'rhythm guitar','bass','pad','bell','drums']:[lead,'pluck','pad','bass',...(drums?['percussion']:[])],peakDb:20*Math.log10(peak*gain),rmsDb:20*Math.log10(rms*gain)};console.log(JSON.stringify(data));return data;
+ fs.unlinkSync(file);const data={id,title,bpm,seconds:N/SR,theme,instruments:rock?[lead,'rhythm guitar','bass','strings','synth hook','tom fills','drums']:[lead,'strings','harp','pad','bass',...(drums?['percussion']:[])],peakDb:20*Math.log10(peak*gain),rmsDb:20*Math.log10(rms*gain)};console.log(JSON.stringify(data));return data;
 }
 const selected=process.argv.slice(2),all=[...scores.filter(s=>!['battle','finale'].includes(s[0])),...require('./combat-score.cjs')];
 const results=all.filter(s=>!selected.length||selected.includes(s[0])).map(render);
 const previous=selected.length?JSON.parse(fs.readFileSync(path.join(out,'sources.json'))).tracks:[];
 const tracks=[...previous.filter(t=>!results.some(r=>r.id===t.id)),...results];
-fs.writeFileSync(path.join(out,'sources.json'),JSON.stringify({edition:'Resonancias · combate rock 16 bits',composition:'Original melodies, arrangements and synthesized instruments; no third-party samples.',generator:'scripts/compose-soundtrack.cjs',tracks},null,2)+'\n');
+ fs.writeFileSync(path.join(out,'sources.json'),JSON.stringify({edition:EDITION,revision:REVISION,composition:'Original melodies, layered arrangements and synthesized instruments; no third-party samples.',generator:'scripts/compose-soundtrack.cjs',tracks},null,2)+'\n');
