@@ -4,6 +4,25 @@
 > pero `origin/main` ya había avanzado a `6808c6f`. Las ramas de esta entrega
 > parten de `6808c6f` para conservar las correcciones posteriores.
 
+## 2026-11-24 · Auditoría de sprites de combate
+
+- Se corrigieron las marcas ancladas de **Sombra** (media luna) y **Explorador**
+  (brújula). Antes, algunas combinaciones compartían el mismo raster en
+  combate aunque tuvieran `variantKey` distinto.
+- Se añadió `tests/e2e/combat-sprite-matrix.spec.cjs`: renderiza las 144
+  combinaciones jugables (8 razas × 6 subclases × 3 géneros), comprueba que el
+  canvas de combate tenga arte, que los datos elegidos lleguen al actor y que
+  raza, subclase y género produzcan variantes visuales distintas.
+
+### Validación
+
+- `pnpm.cmd test`: verde.
+- `pnpm.cmd lint`: verde.
+- Auditoría Playwright de la matriz: 144/144 renders con arte; ninguna
+  combinación reutiliza la variante de otro género o subclase. El runner
+  mantiene el problema histórico de cierre del servidor en Windows después de
+  mostrar el resultado; el cuerpo del caso termina correctamente.
+
 ## 2026-11-23 · Fase 5/6 — mundo reactivo y composición modular preparada
 
 - Las 14 zonas tienen variantes raciales por ubicación (`raceVerbs[raza][zona]`)

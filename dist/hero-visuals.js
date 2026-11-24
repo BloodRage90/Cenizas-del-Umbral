@@ -215,6 +215,19 @@
     ctx.lineWidth = Math.max(2, factor * 2);
     if (spec.mark === 'shield') ctx.strokeRect(x + handX - 7 * factor, y + handY - 12 * factor, 14 * factor, 18 * factor);
     if (spec.mark === 'rage') { ctx.beginPath(); ctx.moveTo(x + handX - 8 * factor, y + handY - 9 * factor); ctx.lineTo(x + handX + 8 * factor, y + handY + 9 * factor); ctx.stroke(); }
+    if (spec.mark === 'crescent') {
+      ctx.beginPath();
+      ctx.arc(x + handX, y + handY - 2 * factor, 11 * factor, -0.85, 2.15);
+      ctx.stroke();
+    }
+    if (spec.mark === 'compass') {
+      const px = x + handX, py = y + handY - 2 * factor, radius = 10 * factor;
+      ctx.beginPath();
+      ctx.moveTo(px, py - radius); ctx.lineTo(px + radius, py);
+      ctx.lineTo(px, py + radius); ctx.lineTo(px - radius, py); ctx.closePath();
+      ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(px - radius, py); ctx.lineTo(px + radius, py); ctx.stroke();
+    }
     if (spec.mark === 'rune' || spec.mark === 'ember') { ctx.beginPath(); ctx.arc(x + handX, y + handY - 10 * factor, 6 * factor, 0, Math.PI * 2); ctx.stroke(); }
     ctx.restore();
   }
