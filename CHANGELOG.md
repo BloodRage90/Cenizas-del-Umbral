@@ -6,6 +6,19 @@
 - Se añadió `VisibilityGuard`: al ocultar o desenfocar la pestaña se detienen controles, animaciones y seguimiento; se descartan `game.loop.delta`/`elapsed` acumulados y se ignora exactamente el primer frame al volver.
 - Se cubrieron cadencia diagonal/cardinal a 30/60/144 FPS, pausa de cinco segundos, recuperación sin desplazamiento fantasma, sin ráfaga de poses y con un único cambio de pose útil.
 
+### Antes → después
+
+| Hallazgo               | Antes                                                                        | Después                                                                                     |
+| ---------------------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| Movimiento diagonal    | Teclado y joystick podían recorrer más distancia que un movimiento cardinal. | Ambos pasan por el mismo normalizador y conservan la velocidad cardinal.                    |
+| Delta acumulado        | Una pestaña oculta podía entregar un delta grande al volver.                 | `VisibilityGuard` pone el delta/elapsed a cero y descarta el primer frame de recuperación.  |
+| Animación al recuperar | El primer frame podía cambiar varias poses o pasos seguidos.                 | La transición no mueve ni cambia poses; el primer frame útil permite como máximo un cambio. |
+
+### Riesgos conocidos
+
+- El runner HTTP de Playwright no puede abrir `127.0.0.1` en este entorno (`ERR_NETWORK_ACCESS_DENIED`/`ERR_CONNECTION_TIMED_OUT`); la cobertura determinista de locomoción sí corre en Node y la suite completa queda verde.
+- La navegación desde una pestaña oculta depende de los eventos nativos `blur`, `focus` y `visibilitychange`; si un WebView no los emite, el límite de `Math.min(delta, 40)` sigue evitando saltos grandes, pero no puede detectar la suspensión anticipadamente.
+
 ### Validación PR3
 
 - `pnpm.cmd test`: todas las suites en verde.
