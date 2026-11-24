@@ -1,5 +1,20 @@
 # Changelog
 
+## 2026-11-24 · PR0 — protección de guardados antes de «Juego nuevo»
+
+- «Juego nuevo» detecta cualquiera de las tres claves de guardado (`cenizas-valdara-v1`, `cenizas-character-v1` y `cenizas-campaign-v2`) y muestra una confirmación nativa antes de sobrescribir.
+- La confirmación permite conservar la partida, descargar un respaldo JSON y continuar solo después de crear un respaldo local versionado (`cenizas-save-backup-v1`). Cancelar no modifica ninguna clave.
+- Los respaldos conservan los valores crudos, incluidos campos desconocidos de guardados antiguos, y se pueden restaurar desde la API de protección.
+- Si el almacenamiento no está disponible o falla una escritura, se cancela la operación y se conserva la partida anterior.
+- Se añadieron pruebas unitarias, regresión del flujo del menú y una prueba E2E de Playwright. La prueba visual directa con `file://` quedó capturada en `artifacts/pr0-save-protection-dialog.png`; el JSON de respaldo real está en `artifacts/pr0-exported-backup.json`.
+
+### Validación PR0
+
+- `pnpm.cmd test`: todas las suites en verde.
+- `pnpm.cmd lint`: limpio.
+- `node --check dist/save-protection.js dist/menu.js dist/game.js`: limpio.
+- Playwright directo con Chromium: el diálogo abre, exporta el respaldo y cancelar conserva byte a byte los tres guardados. El runner HTTP queda pendiente en este entorno porque la red local devuelve `ERR_NETWORK_ACCESS_DENIED`.
+
 ## 2026-11-22 · Auditoría: estabilización y arreglos de identidad interinos
 
 - **Elara en combate ya no es un clon del protagonista.** `combat.js` declara `look` para su unidad y `battle-visuals.js` la dibuja como `ally` con su propia hoja de poses. La hoja se restauró del historial (`dist/combat-elara.png`, eliminada en `7aefb3e` por no tener referencias) como `dist/elara-combat.webp`; los combates ya guardados sin `look` también se resuelven por `id`. Pruebas: `tests/battle-look.cjs`.
@@ -163,6 +178,7 @@
 - Se estabilizó la migración de guardados, la cinematica de plaza y el combate lateral por turnos.
 - Se actualizaron las pruebas de `battle-scene.js`, incluida la garantía de resolución única y el bloqueo durante una animación.
 - Se exigió nombre de personaje y se corrigieron etiquetas accesibles del creador y del mapa.
+
 ## 2026-11-18 · Variantes de sprites jugables
 
 - Generación determinista de un sprite por combinación de clase, raza, género y subclase (144 variantes), reutilizando las hojas pixel existentes.

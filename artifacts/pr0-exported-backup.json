@@ -1,0 +1,24 @@
+{
+  "format": "cenizas-save-backup",
+  "schemaVersion": 1,
+  "sequence": 1,
+  "createdAt": "2026-11-24T13:46:54.002Z",
+  "reason": "new-game-overwrite",
+  "entries": [
+    {
+      "key": "cenizas-valdara-v1",
+      "present": true,
+      "raw": "{\"stage\":2,\"x\":17}"
+    },
+    {
+      "key": "cenizas-character-v1",
+      "present": true,
+      "raw": "{\"name\":\"Iria\",\"unknown\":\"legacy\"}"
+    },
+    {
+      "key": "cenizas-campaign-v2",
+      "present": true,
+      "raw": "{\"level\":3,\"flags\":{\"intro\":true}}"
+    }
+  ]
+}

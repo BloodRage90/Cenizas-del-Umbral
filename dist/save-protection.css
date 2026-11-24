@@ -1,0 +1,55 @@
+#overwrite-save-modal {
+  width: min(560px, calc(100vw - 32px));
+  padding: clamp(24px, 5vw, 42px);
+  border: 1px solid #d9b86d99;
+  border-radius: 20px;
+  background: linear-gradient(145deg, #102c24f5, #091b17f2 70%);
+  color: #f4ead2;
+  box-shadow: 0 32px 100px #000c, inset 0 1px #fff3;
+}
+
+#overwrite-save-modal::backdrop {
+  background: #020a08cc;
+  backdrop-filter: blur(5px);
+}
+
+#overwrite-save-modal h2 {
+  margin: 14px 0 10px;
+  font: clamp(28px, 5vw, 42px) / 1.05 Georgia, serif;
+  color: #f9efd5;
+}
+
+#overwrite-save-modal p {
+  color: #c7d6c5;
+  font: 15px / 1.55 system-ui, sans-serif;
+}
+
+#overwrite-save-modal form {
+  display: grid;
+  gap: 8px;
+}
+
+.save-warning-status {
+  min-block-size: 1.4em;
+  color: #dfbf79 !important;
+}
+
+.save-warning-actions {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.save-warning-actions button {
+  min-block-size: 46px;
+  padding: 10px 16px;
+  border-radius: 11px;
+  font: 600 15px system-ui, sans-serif;
+}
+
+@media (min-width: 560px) {
+  .save-warning-actions {
+    grid-template-columns: repeat(3, 1fr);
+    align-items: stretch;
+  }
+}
