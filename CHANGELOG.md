@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-11-25 · Protagonistas fijos del modo rápido
+
+- El modo simple presenta seis protagonistas establecidos: Cael (Guardia), Eiren (Explorador), Soren (Tejedor), Kaira (Berserker), Vesper (Sombra) y Nimra (Arcanista).
+- Cada elección conserva nombre, raza y presentación visual propios: Guardia, Explorador y Tejedor son masculinos; Berserker, Sombra y Arcanista son femeninos.
+- Se retiraron los selectores de raza, género y nombre del modo simple para que la identidad elegida no pueda cambiarse durante la partida. La hoja avanzada sigue disponible para partidas antiguas y personalización D&D.
+- El catálogo fijo se centralizó en `dist/character-data.js`; se añadió `tests/fixed-playables.cjs` y se actualizaron las pruebas E2E del creador.
+
 ## 2026-11-25 · Etiqueta de recursos del creador
 
 - La tarjeta del modo simple solo muestra espacios de conjuro para personajes Mago; Guerrero y Pícaro ya no presentan un `0 espacios` engañoso.

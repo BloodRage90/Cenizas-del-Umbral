@@ -1,12 +1,13 @@
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const app=fs.readFileSync('dist/app.js','utf8');
+const data=require('../dist/character-data.js');
 const game=fs.readFileSync('dist/game.js','utf8');
 const css=fs.readFileSync('dist/style.css','utf8');
 const names=['guardia','berserker','sombra','explorador','arcanista','tejedor'];
-assert.equal((app.match(/id:'(?:guardia|berserker|sombra|explorador|arcanista|tejedor)'/g)||[]).length,6,'el modo simple ofrece seis arquetipos');
-for(const id of names)assert(app.includes(`id:'${id}'`),`arquetipo simple conectado: ${id}`);
-for(const marker of ['simpleMode','simple-start','advanced-mode','simpleSuggestions','creatorMode','advancedIssues','Corregir automáticamente','Continuar de todos modos','saveButton'])assert(app.includes(marker),`el creador conserva ${marker}`);
+assert.equal(data.playableCharacters.length,6,'el modo simple ofrece seis arquetipos');
+for(const id of names)assert(data.playableCharacters.some(x=>x.id===id),`arquetipo simple conectado: ${id}`);
+for(const marker of ['simpleMode','simple-start','advanced-mode','creatorMode','advancedIssues','Corregir automáticamente','Continuar de todos modos','saveButton','applyFixedSimpleIdentity','simple-fixed-name'])assert(app.includes(marker),`el creador conserva ${marker}`);
 assert(app.includes("get('creator')==='1'"),'la URL de creación fuerza el modo simple aunque exista un guardado antiguo');
 assert(game.includes("character.html?creator=1"),'Juego nuevo abre el creador simple, no la hoja avanzada');
 assert(app.includes("s.class==='Mago'&&scores()[3]<11"),'el modo avanzado advierte cuando INT deja al Mago sin conjuros');
@@ -15,7 +16,8 @@ assert(app.includes('simple-card-art')&&app.includes('simple-card-sprite')&&app.
 assert(!app.includes("star:'Provocar ·")&&!app.includes("star:'Furia de ceniza ·"),'las tarjetas no duplican el verbo de combate en su técnica');
 assert(app.includes('autoAllocatePoints()')&&app.includes('simpleBuilds'),'la build simple asigna habilidades y dotes recomendadas');
 assert(app.includes("type:'practice-combat'")&&fs.readFileSync('dist/chapter.js','utf8').includes("s.practice=!!practice"),'el combate de prueba no altera la campaña');
-assert(app.includes('compatible.map')&&app.includes('!compatible.includes(s.race)'),'la raza simple queda limitada a las opciones compatibles');
+assert(!app.includes('id="simple-gender"')&&!app.includes('id="simple-race"'),'el modo simple no expone selectores de género o raza');
+assert(app.includes('characterName')&&app.includes('Raza y presentación forman parte del personaje'),'el modo simple fija nombre y presentación del protagonista');
 assert(app.includes("s.class==='Mago'?`")&&app.includes("st.spellSlots===1?'espacio':'espacios'"),'los espacios solo se muestran para magos y respetan el singular');
 assert(css.includes('max-height:520px')&&css.includes('orientation:landscape'),'el creador simple tiene una composición compacta para móvil horizontal');
 console.log('PASS: creador simple/avanzado conserva identidad, seis arquetipos y build validada.');

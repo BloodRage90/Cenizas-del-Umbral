@@ -39,6 +39,19 @@
     Mago: [['Arcanista', 'Arcanista', '✧', 'arcane', '#b9aaf4'], ['Tejedor', 'Tejedor de ceniza', '◌', 'ash-weaver', '#d6a17c']]
   };
 
+  /* The quick creator presents six established protagonists.  Their visual
+   * identity is part of the character contract: no race or gender picker can
+   * swap the sprite after the archetype is chosen.  The advanced sheet still
+   * accepts legacy/custom saves for backwards compatibility. */
+  const playableCharacters = [
+    { id: 'guardia', name: 'Cael', title: 'Guardia del puente', class: 'Guerrero', subclass: 'Guardia', race: 'Humano', gender: 'Hombre', tag: 'Protege y provoca', verb: 'Provocar', star: '−2 CA', color: '#d9b56c', sprite: 'identity-warrior-pixel.webp', portrait: 'portraits/humano-hombre.webp' },
+    { id: 'explorador', name: 'Eiren', title: 'Explorador', class: 'Pícaro', subclass: 'Explorador', race: 'Elfo', gender: 'Hombre', tag: 'Marca objetivos y domina rutas', verb: 'Marcar objetivo', star: '+2 alcance', color: '#c7d98c', sprite: 'identity-rogue-pixel.webp', portrait: 'portraits/elfo-hombre.webp' },
+    { id: 'tejedor', name: 'Soren', title: 'Tejedor de ceniza', class: 'Mago', subclass: 'Tejedor', race: 'Orco', gender: 'Hombre', tag: 'Lanza magia y altera el ritmo', verb: 'Proyectil de ceniza', star: '+1 daño', color: '#d6a17c', sprite: 'identity-mage-ash-pixel.webp', portrait: 'portraits/orco-hombre.webp' },
+    { id: 'berserker', name: 'Kaira', title: 'Berserker de ceniza', class: 'Guerrero', subclass: 'Berserker', race: 'Orco', gender: 'Mujer', tag: 'Golpea fuerte y arriesga', verb: 'Furia de ceniza', star: '+2 daño / −2 CA', color: '#e47f5f', sprite: 'identity-warrior-pixel.webp', portrait: 'portraits/orco-mujer.webp' },
+    { id: 'sombra', name: 'Vesper', title: 'Sombra', class: 'Pícaro', subclass: 'Sombra', race: 'Mediano', gender: 'Mujer', tag: 'Crea aperturas y remata', verb: 'Finta de sombra', star: '+1d8', color: '#8fc8b1', sprite: 'identity-rogue-pixel.webp', portrait: 'portraits/mediano-mujer.webp' },
+    { id: 'arcanista', name: 'Nimra', title: 'Arcanista', class: 'Mago', subclass: 'Arcanista', race: 'Gnomo', gender: 'Mujer', tag: 'Canaliza y controla el campo', verb: 'Llama Arcana', star: '+1 espacio / +1 CD', color: '#b9aaf4', sprite: 'identity-mage-pixel.webp', portrait: 'portraits/gnomo-mujer.webp' }
+  ];
+
   const subclassRules = {
     Guardia: { class: 'Guerrero', label: 'Guardia', ac: 2, damage: 0, initiative: 0, sneakDie: 0, spellSlots: 0, ranged: 0, action: 'provocar', combatName: 'Provocar', combatCost: 1, combatDescription: '−2 CA al objetivo durante el ciclo.', description: '+2 CA mientras mantienes una postura de guardia.' },
     Berserker: { class: 'Guerrero', label: 'Berserker', ac: -2, damage: 2, initiative: 0, sneakDie: 0, spellSlots: 0, ranged: 0, action: 'furia', combatName: 'Furia de ceniza', combatCost: 1, combatDescription: '+2 daño en tu próximo golpe, a cambio de −2 CA.', description: '+2 daño y −2 CA: la furia de ceniza no permite medias tintas.' },
@@ -66,7 +79,7 @@
   const genderData = [['Mujer', 'woman', '✧'], ['Hombre', 'man', '◆'], ['No binario', 'nonbinary', '◇']];
   const classSubclassPairs = Object.entries(subclassData).flatMap(([className, entries]) => entries.map(entry => ({ class: className, subclass: entry[0] })));
 
-  const api = { names, short, skillNames, costs, classes, raceData, subclassData, subclassRules, subclassVerbs, classVerbs, raceVerbs, genderData, classSubclassPairs };
+  const api = { names, short, skillNames, costs, classes, raceData, subclassData, playableCharacters, subclassRules, subclassVerbs, classVerbs, raceVerbs, genderData, classSubclassPairs };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.CenizasCharacterData = api;
 })(typeof window !== 'undefined' ? window : globalThis);

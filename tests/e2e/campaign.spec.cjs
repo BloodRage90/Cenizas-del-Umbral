@@ -20,12 +20,11 @@ test('crea personaje, camina desde el puente y llega a un combate por la interfa
   await clickChoice(page,'Continuar al creador');
 
   const creator=page.locator('#sheet-frame').contentFrame();
-  // The creator opens in simple mode: archetype buttons, #simple-* controls.
-  await expect(creator.locator('#simple-name')).toBeVisible({timeout:15000});
-  await creator.locator('#simple-name').fill('Prueba de campaña');
+  // The creator opens in simple mode: six fixed protagonists.
+  await expect(creator.locator('.simple-fixed-name')).toBeVisible({timeout:15000});
   await creator.locator('[data-simple-archetype="explorador"]').click();
-  await creator.locator('#simple-race').selectOption('Elfo');
-  await creator.locator('#simple-gender').selectOption('Mujer');
+  await expect(creator.locator('.simple-fixed-name strong')).toHaveText('Eiren');
+  await expect(creator.locator('.simple-fixed-traits strong')).toHaveText('Elfo · Hombre');
   await creator.locator('#simple-start').click();
   await expect(creator.locator('#status')).toContainText('Personaje guardado');
   await expect(page.locator('#sheet-modal')).toBeHidden({timeout:10000});
@@ -80,7 +79,7 @@ test('el modo avanzado del creador sigue disponible desde el modo simple',async(
   await clickChoice(page,'Juego nuevo');
   await clickChoice(page,'Continuar al creador');
   const creator=page.locator('#sheet-frame').contentFrame();
-  await expect(creator.locator('#simple-name')).toBeVisible({timeout:15000});
+  await expect(creator.locator('.simple-fixed-name')).toBeVisible({timeout:15000});
   await creator.locator('#advanced-mode').click();
   await expect(creator.locator('#name')).toBeVisible({timeout:15000});
   await expect(creator.locator('#race')).toBeVisible();

@@ -5,7 +5,7 @@ const path = require('node:path');
 
 test('the creator keeps touch targets and content inside the viewport', async ({ page }) => {
   await page.goto('/character.html?creator=1');
-  await expect(page.locator('#simple-name')).toBeVisible({ timeout: 15_000 });
+  await expect(page.locator('.simple-fixed-name')).toBeVisible({ timeout: 15_000 });
 
   const report = await page.evaluate(() => {
     const visible = (element) => {

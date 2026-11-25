@@ -36,23 +36,20 @@ test('the six archetypes keep their combat verb and start on the first click', a
   await page.locator('.simple-creator').waitFor();
   await expect(page.locator('.simple-validated')).not.toContainText('0 espacios');
   const expected = {
-    guardia: 'Provocar',
-    berserker: 'Furia de ceniza',
-    sombra: 'Finta de sombra',
-    explorador: 'Marcar objetivo',
-    arcanista: 'Llama Arcana',
-    tejedor: 'Proyectil de ceniza',
+    guardia: ['Provocar', 'Cael', 'Humano · Hombre'],
+    berserker: ['Furia de ceniza', 'Kaira', 'Orco · Mujer'],
+    sombra: ['Finta de sombra', 'Vesper', 'Mediano · Mujer'],
+    explorador: ['Marcar objetivo', 'Eiren', 'Elfo · Hombre'],
+    arcanista: ['Llama Arcana', 'Nimra', 'Gnomo · Mujer'],
+    tejedor: ['Proyectil de ceniza', 'Soren', 'Orco · Hombre'],
   };
-  for (const [id, verb] of Object.entries(expected)) {
+  for (const [id, [verb, name, identity]] of Object.entries(expected)) {
     await page.locator(`[data-simple-archetype="${id}"]`).click();
     await expect(page.locator('.simple-preview-copy span')).toContainText(verb);
     await expect(page.locator('.simple-preview-copy small')).not.toHaveText('');
-    if (id === 'tejedor') {
-      await page.locator('#simple-race').selectOption('Orco');
-      await expect(page.locator('.simple-validated')).not.toContainText('0 espacios');
-    }
+    await expect(page.locator('.simple-fixed-name strong')).toHaveText(name);
+    await expect(page.locator('.simple-fixed-traits strong')).toHaveText(identity);
   }
-  await page.locator('#simple-name').fill('Primera chispa');
   await page.locator('#simple-start').click();
   await expect(page.locator('#status')).toContainText('Personaje guardado');
 });
