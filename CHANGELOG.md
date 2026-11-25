@@ -7,6 +7,8 @@
 - Maela, Ordan, Iria, Darien, Sereth, Tovin y Elara reconocen una vez la raza y clase elegidas; la marca se migra dentro de `flags` sin invalidar partidas antiguas.
 - El creador ya no superpone el pie antiguo del retrato dinámico, mantiene dos columnas legibles para sus seis tarjetas, no corta las etiquetas del preview y evita repetir el verbo de cada técnica.
 - Nuevas regresiones: `combat-target-picker.cjs`, `npc-identity-lines.cjs` y cobertura ampliada de `hero-visuals.cjs`, `simple-creator.cjs` y `static-report.cjs`.
+- La verificación E2E comprueba también que `index.html`, `character.html` y `chapter.html` no emitan errores de consola en las cuatro resoluciones.
+- «Juego nuevo» conserva una copia de las claves activas (`cenizas-new-game-backup`) antes de limpiar la sesión, por lo que iniciar otra campaña no destruye la anterior.
 
 ### Publicación
 
