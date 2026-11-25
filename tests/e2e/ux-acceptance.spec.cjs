@@ -45,7 +45,7 @@ test('the six archetypes keep their combat verb and start on the first click', a
   for (const [id, verb] of Object.entries(expected)) {
     await page.locator(`[data-simple-archetype="${id}"]`).click();
     await expect(page.locator('.simple-preview-copy span')).toContainText(verb);
-    await expect(page.locator('.simple-preview-copy small')).toContainText(verb);
+    await expect(page.locator('.simple-preview-copy small')).not.toHaveText('');
   }
   await page.locator('#simple-name').fill('Primera chispa');
   await page.locator('#simple-start').click();

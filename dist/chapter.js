@@ -728,7 +728,10 @@ interact=async function(id){
 const priorSay=say;
 say=function(who,text,options=[['Continuar',()=>{}]]){
  let enriched=String(text);
- if(who==='Elara'&&!state.flags.identityGreeting){const rv=CD.raceVerbs?.[character?.race]||{},cv=CD.classVerbs?.[character?.class]||{};if(rv.dialogue||cv.example){enriched+=`\n\n${rv.dialogue||''} ${cv.example||''}`.trim();state.flags.identityGreeting=true;save();}}
+  const speaker=String(who).split(' · ')[0],contextualSpeakers=new Set(['Elara','Maela','Ordan','Iria','Darien','Sereth','Tovin']);
+  state.flags.identityGreetings=state.flags.identityGreetings||{};
+  const alreadyGreeted=state.flags.identityGreetings[speaker]||speaker==='Elara'&&state.flags.identityGreeting;
+  if(contextualSpeakers.has(speaker)&&!alreadyGreeted){const rv=CD.raceVerbs?.[character?.race]||{},cv=CD.classVerbs?.[character?.class]||{};if(rv.dialogue||cv.example){enriched+=`\n\n${rv.dialogue||''} ${cv.example||''}`.trim();state.flags.identityGreetings[speaker]=true;if(speaker==='Elara')state.flags.identityGreeting=true;save();}}
  priorSay(who,enriched,options);
  const dialog=$('story');if(dialog){dialog.onkeydown=e=>{if((e.key==='Enter'||e.key===' ')&&!['INPUT','SELECT','TEXTAREA'].includes(e.target.tagName)){e.preventDefault();dialog.querySelector('#choices button')?.click();}};dialog.onclick=e=>{if(e.target===dialog)dialog.querySelector('#choices button')?.click();};}
 };

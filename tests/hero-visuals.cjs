@@ -10,6 +10,7 @@ const subclasses = [
 ];
 let combinations = 0;
 const variantKeys = new Set();
+const subclassEquipment = new Set();
 
 for (const race of races) for (const gender of genders) for (const [className, subclass] of subclasses) {
     const profile = HV.profile({ class: className, race, gender, subclass });
@@ -22,6 +23,8 @@ for (const race of races) for (const gender of genders) for (const [className, s
     assert.equal(profile.textureKey, profile.variantKey);
     variantKeys.add(profile.variantKey);
     assert.ok(profile.scale > 0);
+    assert.ok(profile.subclassEquipment, `${subclass} declara equipo físico de silueta`);
+    subclassEquipment.add(profile.subclassEquipment);
     combinations++;
 }
 
@@ -33,4 +36,7 @@ assert.notEqual(HV.profile({ class: 'Guerrero', race: 'Orco', gender: 'Hombre', 
   HV.profile({ class: 'Guerrero', race: 'Mediano', gender: 'Hombre', subclass: 'Guardia' }).scale);
 assert.notEqual(HV.profile({ class: 'Pícaro', race: 'Humano', gender: 'Mujer', subclass: 'Sombra' }).genderFeature,
   HV.profile({ class: 'Pícaro', race: 'Humano', gender: 'No binario', subclass: 'Sombra' }).genderFeature);
+assert.equal(subclassEquipment.size, 6, 'los seis arquetipos tienen equipo visual distinto');
+assert(HV.profile({ class: 'Mago', race: 'Humano', gender: 'Hombre', subclass: 'Arcanista' }).subclassEquipment.includes('baston'));
+assert(HV.profile({ class: 'Mago', race: 'Orco', gender: 'Mujer', subclass: 'Tejedor' }).subclassEquipment.includes('ceniza'));
 console.log('PASS: perfil visual cubre las 144 combinaciones de raza, clase, subclase y género.');

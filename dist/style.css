@@ -287,6 +287,18 @@
 }
 .locked-banner{margin:0 0 18px;padding:11px 14px;border:1px solid #8fc8b177;border-left:3px solid #8fc8b1;border-radius:8px;background:#14352a;color:#bfe6ca;font:700 12px/1.4 system-ui;letter-spacing:.02em}.creator-locked .character-visual-preview{filter:saturate(.92)}.creator-locked button:disabled{cursor:default}
 .simple-promise{display:block;margin-top:4px;color:#d7b76a;font-weight:500;line-height:1.35}
+.portrait[data-portrait-mode="raster"] .portrait-caption{display:none}
+.simple-archetypes{grid-template-columns:repeat(2,minmax(0,1fr))}
+.simple-archetype{grid-template-columns:40px minmax(0,1fr);grid-template-rows:auto auto auto auto;align-items:start;overflow:visible;word-break:normal}
+.simple-card-art{grid-column:1;grid-row:1 / span 4}
+.simple-card-icon{grid-column:2;grid-row:1;align-self:start}
+.simple-archetype strong{grid-column:2;grid-row:2;overflow-wrap:break-word;word-break:normal}
+.simple-archetype small{grid-column:2;grid-row:3;overflow-wrap:break-word;word-break:normal}
+.simple-archetype em{grid-column:2;grid-row:4;overflow-wrap:break-word;word-break:normal}
+.preview-raster-copy{padding:4px 6px;border-radius:5px;background:#07120fd9;backdrop-filter:blur(2px);text-align:center}
+.preview-raster-copy strong,.preview-raster-copy small{white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:break-word;word-break:normal;line-height:1.15}
+.preview-raster-copy strong{font-size:clamp(10px,1.6vw,14px)}
+.preview-raster-copy small{font-size:clamp(8px,1.2vw,10px)}
 
 /* Creator controls keep a reliable touch target at every viewport. The
  * landscape rules above may compress typography, never the hit area. */

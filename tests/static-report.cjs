@@ -15,6 +15,7 @@ const characterData=read('dist/character-data.js');
 const heroVisuals=read('dist/hero-visuals.js');
 const systems=read('dist/combat-systems.js');
 const sfx=read('dist/combat-sfx.js');
+const creatorCss=read('dist/style.css');
 
 for(const name of ['renderPortrait','identity','sheet','updateHero','changed','bind'])assert.equal((app.match(new RegExp('function '+name+'\\(','g'))||[]).length,1,'app.js no duplica '+name);
 assert(!app.includes('issues()'),'app.js no conserva la hoja muerta que llamaba a issues()');
@@ -44,6 +45,7 @@ assert(chapter.includes('timing-window')&&chapter.includes('timingWindow')&&chap
 assert(app.includes("portraits/humano-mujer.webp")&&visuals.includes("+'.webp'"),'los retratos se sirven como WebP');
 assert(!fs.existsSync(path.join(root,'dist','scenes','plaza.png'))&&!fs.readdirSync(path.join(root,'dist','scenes')).some(name=>name.endsWith('.png')),'las escenas no mantienen PNG pesados en producción');
 assert(heroVisuals.includes('const raceData')&&heroVisuals.includes('const genderData')&&heroVisuals.includes('function profile'),'el perfil visual centraliza raza, género, clase y subclase');
+assert(heroVisuals.includes('subclassEquipment')&&heroVisuals.includes('escudo-capa')&&heroVisuals.includes('manto-ceniza'),'cada arquetipo declara equipo físico de silueta');
 assert(index.includes('hero-visuals.js')&&html.includes('hero-visuals.js'),'el perfil visual se carga antes de mapa y combate');
 assert(chapter.includes("document.body.dataset.heroClass=character?.class"),'el combate recibe el nombre canónico de la clase');
 assert(html.includes('id="scene" role="region"')&&html.includes('id="battle-stage" role="region"'),'los contenedores interactivos tienen rol');
@@ -54,6 +56,10 @@ assert(chapterCss.includes('orientation:landscape')&&chapterCss.includes('min-he
 assert(read('dist/battle-preferences.js').includes('let auto=true'),'el cierre automático de tiradas está activo por defecto');
 assert(fs.existsSync(path.join(root,'dist','combat-sfx.js'))&&html.includes('combat-sfx.js')&&sfx.includes('effects-volume'),'los efectos tienen módulo y volumen separado');
 assert(chapter.includes('¿Qué llevarás tú cuando cruces el Umbral?')&&chapter.includes('questionAnswer'),'la pregunta recurrente y sus respuestas quedan persistidas');
+assert(chapter.includes('contextualSpeakers')&&chapter.includes('identityGreetings'),'NPC clave reconocen raza y clase una vez por guardado');
+assert(creatorCss.includes('.portrait[data-portrait-mode="raster"] .portrait-caption{display:none}'),'el retrato dinámico no se superpone al pie antiguo');
+assert(creatorCss.includes('.simple-archetypes{grid-template-columns:repeat(2,minmax(0,1fr))}'),'las tarjetas del modo simple conservan ancho legible');
+assert(creatorCss.includes('.preview-raster-copy strong,.preview-raster-copy small{white-space:normal'),'las etiquetas de preview no usan elipsis');
 assert(chapter.includes('serethConfronted')&&chapter.includes('no busca gobernar'),'el Coro tiene una motivación narrativa explícita');
 assert(chapter.includes('bellSounds')&&chapter.includes('bellSilent'),'el motivo de la campana atraviesa la historia y el desenlace');
 assert(chapter.includes('racialMyths')&&chapter.includes('maraDeath'),'las perspectivas raciales y el duelo de Mara tienen una ruta jugable');

@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-11-25 · Objetivos claros y siluetas de arquetipo
+
+- Todos los combates muestran un selector táctil de objetivo; el enemigo elegido y sus PG actuales permanecen visibles, sin depender de acertar al sprite en la arena.
+- Las seis subclases declaran equipo físico propio en el renderer compartido: escudo-capa, hacha de furia, capucha con dagas, arco de rastreo, bastón rúnico y manto de ceniza. La misma variante se usa en creador, exploración y combate; no se cambian los sprites de NPC.
+- Maela, Ordan, Iria, Darien, Sereth, Tovin y Elara reconocen una vez la raza y clase elegidas; la marca se migra dentro de `flags` sin invalidar partidas antiguas.
+- El creador ya no superpone el pie antiguo del retrato dinámico, mantiene dos columnas legibles para sus seis tarjetas, no corta las etiquetas del preview y evita repetir el verbo de cada técnica.
+- Nuevas regresiones: `combat-target-picker.cjs`, `npc-identity-lines.cjs` y cobertura ampliada de `hero-visuals.cjs`, `simple-creator.cjs` y `static-report.cjs`.
+
+### Publicación
+
+- GitHub contiene el código y los commits de esta rama. El Site publicado es independiente: después de subir cambios hay que volver a publicar desde Sites; no se crea otro Site automáticamente.
+
 ## 2026-11-25 · Ritmo inicial y contrato de combate
 
 - La llegada a la plaza se compactó en tres escenas, con «Saltar», avance por Enter/Espacio/toque y autoacercamiento con un límite de 5 s; la cinemática solo se ejecuta en la plaza y queda protegida por `try/catch`.
