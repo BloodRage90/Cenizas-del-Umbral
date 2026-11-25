@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-11-25 · Recurso del Tejedor
+
+- El Tejedor de ceniza conserva ahora un espacio de conjuro base, incluido cuando se elige la raza Orco; su Proyectil de ceniza y Armadura mágica no quedan bloqueados por una build recomendada que mostraba `0 espacios`.
+- `character-rules.cjs` comprueba el recurso en todas las razas compatibles del Tejedor para evitar que el creador marque como válida una combinación sin su recurso principal.
+
 ## 2026-11-25 · Objetivos claros y siluetas de arquetipo
 
 - Todos los combates muestran un selector táctil de objetivo; el enemigo elegido y sus PG actuales permanecen visibles, sin depender de acertar al sprite en la arena.

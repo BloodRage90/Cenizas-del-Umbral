@@ -40,6 +40,11 @@ assert.equal(arcanist.spellDC, 1);
 const weaver = make('Mago', 'Tejedor');
 assert.equal(weaver.missileRange, mage.missileRange + 2);
 assert.equal(weaver.bonus, mage.bonus + 1);
+assert.equal(weaver.spells, mage.spells + 1, 'Tejedor conserva al menos un espacio para su proyectil de ceniza');
+for (const race of ['Gnomo', 'Elfo', 'Orco', 'Humano']) {
+  const profile = make('Mago', 'Tejedor', { race });
+  assert.ok(profile.spells >= 1, `Tejedor ${race} mantiene su recurso principal`);
+}
 
 const b = new R.Battle('whisper', shadow, { ...R.fresh(), flags: { elara: false } }, n => (n === 20 ? 20 : Math.ceil(n / 2)));
 b.s.noBoard = true;
