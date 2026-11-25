@@ -40,12 +40,12 @@
   };
 
   const subclassRules = {
-    Guardia: { class: 'Guerrero', label: 'Guardia', ac: 2, damage: 0, initiative: 0, sneakDie: 0, spellSlots: 0, ranged: 0, description: '+2 CA mientras mantienes una postura de guardia.' },
-    Berserker: { class: 'Guerrero', label: 'Berserker', ac: -2, damage: 2, initiative: 0, sneakDie: 0, spellSlots: 0, ranged: 0, description: '+2 daño y −2 CA: la furia de ceniza no permite medias tintas.' },
-    Sombra: { class: 'Pícaro', label: 'Sombra', ac: 0, damage: 0, initiative: 2, sneakDie: 2, spellSlots: 0, ranged: 0, action: 'finta', description: 'Finta de sombra: asegura el próximo ataque furtivo y suma 1d8 adicional.' },
-    Explorador: { class: 'Pícaro', label: 'Explorador', ac: 1, damage: 0, initiative: 2, sneakDie: 0, spellSlots: 0, ranged: 2, action: 'marcar', description: 'Marca del rastreador: +2 iniciativa, +2 alcance y objetivo vulnerable.' },
-    Arcanista: { class: 'Mago', label: 'Arcanista', ac: 0, damage: 0, initiative: 0, sneakDie: 0, spellSlots: 1, ranged: 0, spellDC: 1, action: 'canalizar', description: '+1 espacio de conjuro y +1 a la CD de conjuros.' },
-    Tejedor: { class: 'Mago', label: 'Tejedor', ac: 0, damage: 1, initiative: 0, sneakDie: 0, spellSlots: 0, ranged: 2, spellDC: 0, action: 'canalizar', description: 'Proyectil de ceniza: +2 alcance y +1 daño mágico.' }
+    Guardia: { class: 'Guerrero', label: 'Guardia', ac: 2, damage: 0, initiative: 0, sneakDie: 0, spellSlots: 0, ranged: 0, action: 'provocar', combatName: 'Provocar', combatCost: 1, combatDescription: '−2 CA al objetivo durante el ciclo.', description: '+2 CA mientras mantienes una postura de guardia.' },
+    Berserker: { class: 'Guerrero', label: 'Berserker', ac: -2, damage: 2, initiative: 0, sneakDie: 0, spellSlots: 0, ranged: 0, action: 'furia', combatName: 'Furia de ceniza', combatCost: 1, combatDescription: '+2 daño en tu próximo golpe, a cambio de −2 CA.', description: '+2 daño y −2 CA: la furia de ceniza no permite medias tintas.' },
+    Sombra: { class: 'Pícaro', label: 'Sombra', ac: 0, damage: 0, initiative: 2, sneakDie: 2, spellSlots: 0, ranged: 0, action: 'finta', combatName: 'Finta de sombra', combatCost: 0, combatDescription: 'Asegura el próximo ataque furtivo y suma 1d8 adicional.', description: 'Finta de sombra: asegura el próximo ataque furtivo y suma 1d8 adicional.' },
+    Explorador: { class: 'Pícaro', label: 'Explorador', ac: 1, damage: 0, initiative: 2, sneakDie: 0, spellSlots: 0, ranged: 2, action: 'marcar', combatName: 'Marcar objetivo', combatCost: 0, combatDescription: '+2 alcance y +2 daño en el siguiente impacto.', description: 'Marca del rastreador: +2 iniciativa, +2 alcance y objetivo vulnerable.' },
+    Arcanista: { class: 'Mago', label: 'Arcanista', ac: 0, damage: 0, initiative: 0, sneakDie: 0, spellSlots: 1, ranged: 0, spellDC: 1, action: 'canalizar', combatName: 'Llama Arcana', combatCost: 1, combatDescription: 'Convierte 1 PI en un espacio de conjuro y +1 a la CD.', description: '+1 espacio de conjuro y +1 a la CD de conjuros.' },
+    Tejedor: { class: 'Mago', label: 'Tejedor', ac: 0, damage: 1, initiative: 0, sneakDie: 0, spellSlots: 0, ranged: 2, spellDC: 0, action: 'missile', combatName: 'Proyectil de ceniza', combatCost: 0, combatDescription: 'Proyectil mágico a distancia con +1 daño de ceniza.', description: 'Proyectil de ceniza: +2 alcance y +1 daño mágico.' }
   };
   const classVerbs = {
     Guerrero: { explore: 'Embate', combat: 'Provocar', cost: 1, promise: 'Aguantas golpes, rompes guardias y generas ventaja para tu equipo.', example: 'Provocar · 1 PI → −2 CA al objetivo → golpe pesado.' },
@@ -62,10 +62,11 @@
     Semielfo: { verb: 'Tender puentes', promise: 'Sostienes dos relatos a la vez y evitas que uno borre al otro.', dialogue: 'La inscripción cambia al oír tu voz y muestra dos caminos.' },
     Semiorco: { verb: 'Imponerse', promise: 'Nombras el daño sin dejar que te conviertan en una caricatura.', dialogue: 'El mercader reconoce tu determinación y ofrece una salida justa.' }
   };
+  const subclassVerbs = Object.fromEntries(Object.entries(subclassRules).map(([id, rule]) => [id, { name: rule.combatName || rule.label, action: rule.action, cost: rule.combatCost || 0, description: rule.combatDescription || rule.description }]));
   const genderData = [['Mujer', 'woman', '✧'], ['Hombre', 'man', '◆'], ['No binario', 'nonbinary', '◇']];
   const classSubclassPairs = Object.entries(subclassData).flatMap(([className, entries]) => entries.map(entry => ({ class: className, subclass: entry[0] })));
 
-  const api = { names, short, skillNames, costs, classes, raceData, subclassData, subclassRules, classVerbs, raceVerbs, genderData, classSubclassPairs };
+  const api = { names, short, skillNames, costs, classes, raceData, subclassData, subclassRules, subclassVerbs, classVerbs, raceVerbs, genderData, classSubclassPairs };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.CenizasCharacterData = api;
 })(typeof window !== 'undefined' ? window : globalThis);

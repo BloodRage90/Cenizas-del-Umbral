@@ -268,6 +268,23 @@
 .simple-archetype{grid-template-columns:40px auto 1fr}.simple-card-art{grid-row:1/4;position:relative;display:block;width:40px;height:56px;align-self:center;border:1px solid var(--simple-accent);border-radius:7px;background:linear-gradient(180deg,#0b1915aa,#0b1915dd),var(--simple-card-portrait) 50% 14%/cover no-repeat;box-shadow:inset 0 0 9px #0008,0 4px 8px #0008;overflow:hidden}.simple-card-art::after{content:"";position:absolute;inset:7px 0 -4px;background:var(--simple-card-sprite) 0 0/200% 200% no-repeat;image-rendering:auto;filter:drop-shadow(0 2px 2px #000b) saturate(1.1)}
 @media(max-width:650px){.simple-card-art{width:32px;height:45px}.simple-archetype{grid-template-columns:32px auto 1fr;gap:0 4px}}
 @media(max-height:520px) and (orientation:landscape){.simple-card-art{width:28px;height:34px}.simple-archetype{grid-template-columns:28px 18px 1fr}.simple-card-icon{width:18px;height:18px;font-size:12px}}
+/* Responsive creator guardrails: text may wrap, but never disappear behind a
+ * fixed card. The action row stays available while the form scrolls. */
+.simple-form,.simple-preview,.simple-archetype,.simple-archetype>*{min-width:0}
+.simple-archetype{align-content:start;overflow:visible;min-height:92px}
+.simple-archetype strong,.simple-archetype small,.simple-archetype em,.simple-preview-label,.simple-preview-copy strong,.simple-preview-copy span,.simple-preview-copy small{white-space:normal;overflow-wrap:anywhere;hyphens:auto;min-width:0}
+.simple-preview-label{line-height:1.25;letter-spacing:.12em}
+.simple-actions{position:sticky;bottom:0;z-index:5;margin-inline:-4px;padding:10px 4px 4px;background:linear-gradient(180deg,transparent,#0c1c18 24% 100%);scrollbar-gutter:stable}
+.simple-creator{padding-bottom:86px}
+@media(max-width:650px){.simple-archetype{min-height:82px}.simple-actions{flex-wrap:wrap}.simple-start{min-width:0}.simple-advanced{min-width:0;white-space:normal}}
+@media(max-height:520px) and (orientation:landscape){.simple-creator{padding-bottom:58px}.simple-archetype{min-height:54px}.simple-archetype strong,.simple-archetype small,.simple-archetype em{line-height:1.15}.simple-actions{padding-top:6px}}
+/* The creator lives in an iframe on short landscape screens. Keep the
+ * primary action pinned to that viewport so a new player never has to hunt
+ * for it after scrolling the build choices. */
+@media(max-height:520px) and (orientation:landscape){
+  .simple-actions{position:fixed;left:10px;right:10px;bottom:0;z-index:30;margin:0;padding:6px 8px 5px;border:1px solid #d9b56c88;border-bottom:0;border-radius:12px 12px 0 0;background:linear-gradient(180deg,#10251eef,#091812fa);box-shadow:0 -8px 24px #020b08aa}
+  .simple-creator{padding-bottom:66px}
+}
 .locked-banner{margin:0 0 18px;padding:11px 14px;border:1px solid #8fc8b177;border-left:3px solid #8fc8b1;border-radius:8px;background:#14352a;color:#bfe6ca;font:700 12px/1.4 system-ui;letter-spacing:.02em}.creator-locked .character-visual-preview{filter:saturate(.92)}.creator-locked button:disabled{cursor:default}
 .simple-promise{display:block;margin-top:4px;color:#d7b76a;font-weight:500;line-height:1.35}
 

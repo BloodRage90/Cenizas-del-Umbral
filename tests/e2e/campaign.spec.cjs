@@ -12,12 +12,6 @@ async function clickChoice(page,name){
   throw new Error(`El botón «${name}» no se habilitó a tiempo.`);
 }
 
-async function walk(page,key,milliseconds){
-  await page.keyboard.down(key);
-  await page.waitForTimeout(milliseconds);
-  await page.keyboard.up(key);
-}
-
 test('crea personaje, camina desde el puente y llega a un combate por la interfaz',async({page})=>{
   await page.goto('/index.html');
   await clickChoice(page,'Juego nuevo');
@@ -46,17 +40,15 @@ test('crea personaje, camina desde el puente y llega a un combate por la interfa
   await page.locator('#continue-adventure').click();
   await page.waitForURL('**/chapter.html');
 
-  // Dismiss the plaza arrival staging via its visible Continue control.
-  // One pause introduces the plaza bell and five more advance the arrival
-  // staging; keep these explicit so the test follows the visible sequence.
-  for(let i=0;i<6;i++)await clickChoice(page,'Continuar');
+  // The compact arrival has a persistent skip affordance. Exercise it once
+  // here; the keyboard/touch advance path is covered by the pacing test.
+  await clickChoice(page,'Saltar');
   await clickChoice(page,'Explorar la plaza');
   await expect(page.locator('#scene canvas')).toBeVisible({timeout:15000});
   await page.waitForTimeout(1200);
 
-  // Walk to Maela, choose the witness route and enter Ordan's workshop.
-  await walk(page,'ArrowLeft',1700);
-  await walk(page,'ArrowUp',900);
+  // The active mission target is surfaced by Interact and auto-approached;
+  // this avoids a brittle pixel-distance walk in a responsive viewport.
   await expect(page.locator('#interact')).toHaveText('Maela',{timeout:10000});
   await page.locator('#interact').click();
   await clickChoice(page,/Proteger a los testigos/);
@@ -66,18 +58,17 @@ test('crea personaje, camina desde el puente y llega a un combate por la interfa
   await clickChoice(page,/Buscar a Ordan/);
   await expect(page.locator('#place')).toContainText('taller');
 
-  await walk(page,'ArrowUp',550);
-  await walk(page,'ArrowLeft',950);
-  await expect(page.locator('#interact')).toBeEnabled({timeout:10000});
+  await expect(page.locator('#interact')).toHaveText('Ordan',{timeout:10000});
   await page.locator('#interact').click();
-  // The workshop encounter is now visible before combat starts.
-  await clickChoice(page,'Enfrentar a Bruto de hongos');
+  // Ordan exposes the first encounter through the authored preparation route.
+  await clickChoice(page,'Prepararme para el encuentro');
+  await clickChoice(page,'Comenzar');
   await expect(page.locator('#battle')).toBeVisible({timeout:15000});
   await expect(page.locator('#turn-order')).toBeVisible();
-  await clickChoice(page,'Tirar dados');
+  await clickChoice(page,'Entendido');
   await clickChoice(page,'Atacar');
-  await clickChoice(page,'Tirar dados');
-  await expect(page.locator('#dice-result')).not.toHaveText('');
+  await expect(page.locator('#battle')).toBeVisible();
+  await expect(page.locator('#battle-prompt')).toContainText(/Objetivo|válvula|encuentro/);
 });
 
 test('el modo avanzado del creador sigue disponible desde el modo simple',async({page})=>{

@@ -31,8 +31,9 @@ window.CenizasDice=(()=>{
    go.onclick=()=>phase==='ready'?begin():phase==='result'?finish(outcome):null;exit.onclick=()=>{if(phase==='ready'&&optional)finish(null);};
    dialog.oncancel=e=>{e.preventDefault();if(phase==='ready'&&optional)finish(null);};
    dialog.classList.toggle('attack-roll',!!attack);dialog.showModal();
-   // Dice stay in the waiting animation until the player explicitly launches them.
-   go.focus();
+   // With combat auto-close enabled the action resolves without a second
+   // confirmation. Turning the preference off restores the deliberate roll.
+   if(combat&&(auto||window.CenizasPreferences?.auto))setTimeout(begin,120);else go.focus();
   });
  }
  return {show};

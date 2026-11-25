@@ -1,5 +1,21 @@
 # Changelog
 
+## 2026-11-25 · Ritmo inicial y contrato de combate
+
+- La llegada a la plaza se compactó en tres escenas, con «Saltar», avance por Enter/Espacio/toque y autoacercamiento con un límite de 5 s; la cinemática solo se ejecuta en la plaza y queda protegida por `try/catch`.
+- Interactuar prioriza el NPC de misión cuando está cerca, los toques en NPCs activan acercamiento suave y las charlas de Nilo, Tessa y Bren terminan tras una segunda vuelta con texto distinto.
+- El movimiento de exploración y el autoacercamiento son más ágiles; el marcador de misión y el destino visible se conservan.
+- El creador simple mantiene su acción principal visible en las cuatro resoluciones, sin texto cortado ni desbordamiento, y el botón «Empezar la aventura» queda fijado en horizontal.
+- Los seis arquetipos comparten ahora un contrato de nombre entre creador y combate: Provocar, Furia de ceniza, Finta de sombra, Marcar objetivo, Llama Arcana y Proyectil de ceniza. Las acciones deshabilitadas muestran el motivo (turno, PI, alcance o espacios).
+- Se añadió Furia de ceniza al motor; la acción deja su rastro en el registro y el próximo golpe recibe el bono anunciado. La vida de creador, exploración y combate mantiene una única fórmula.
+- «Resolver rápido» y «Cierre automático» evitan confirmaciones innecesarias; el tutorial inicial explica «¡BLOQUEA!», «Aislar foco» y PI, y el objetivo/PG restante permanece en la franja de combate.
+- Se eliminaron nombres técnicos de variantes del registro y se añadieron pruebas de contrato de arquetipos, prioridad de interacción y E2E responsive/primer clic.
+- La charla inicial de Elara ya no presenta respuestas únicas disfrazadas: puedes reservarte la carta o compartirla, y la confianza y el diálogo de la siguiente línea quedan guardados.
+
+### Evidencia visual
+
+- Capturas antes/después del creador: `artifacts/ux/before/` y `artifacts/ux/after/` en 1280×720, 844×390, 667×375 y 390×844.
+
 ## 2026-11-24 · Resonancias II — pulso y ceniza
 
 - Se reemplazaron las 25 pistas de la edición anterior por una nueva mezcla original: cuerdas sostenidas, arpegios, ganchos de sintetizador, bajo y percusión con variaciones por sección.

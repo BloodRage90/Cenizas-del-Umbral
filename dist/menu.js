@@ -12,4 +12,8 @@ function newGame(){closeMenu();showIntro(()=>window.CenizasBridge?.startNew?.())
 function continueGame(){closeMenu();window.CenizasBridge?.continueGame?.();}
 $('new-game').onclick=newGame;$('continue-game').onclick=continueGame;$('exit-game').onclick=()=>{status.textContent='Puedes cerrar esta pestaña cuando quieras. Tu progreso guardado permanecerá en este dispositivo.';try{window.close();}catch{/* optional storage/API unavailable; safe fallback */}};
 refresh();window.CenizasMenu={refresh,showIntro};window.addEventListener('storage',refresh);window.addEventListener('pageshow',refresh);
+const syncMenuLayer=()=>document.body?.classList.toggle('menu-active',menu?.dataset.active==='true');
+const closeMenuBase=closeMenu;closeMenu=function(){closeMenuBase();syncMenuLayer();};
+const refreshMenuBase=refresh;refresh=function(){refreshMenuBase();syncMenuLayer();};
+syncMenuLayer();
 })();
