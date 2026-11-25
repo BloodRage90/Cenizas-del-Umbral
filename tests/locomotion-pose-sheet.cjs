@@ -30,7 +30,7 @@ for (const [dx, dy] of [
   [0, -2.5],
 ]) {
   const frames = new Set(walk(2, 2, dx, dy).frames);
-  assert(!frames.has(1) && !frames.has(2), `pose sheet never walks with attack poses (${dx},${dy})`);
+  assert.deepEqual([...frames], [0], `pose sheet stays on its neutral frame while walking (${dx},${dy})`);
 }
 
 assert.equal(walk(2, 2, 2.5, 0).flipX, false, 'rightward travel is not mirrored');
@@ -44,6 +44,11 @@ const resting = walk(2, 2, -2.5, 0);
 for (let i = 0; i < 12; i++) Motion.frame(resting, 0, 0, 16);
 assert.equal(resting.frames.at(-1), 0, 'resting uses the neutral pose');
 assert.equal(resting.flipX, true, 'resting keeps the last facing');
+
+const staleAttack = sprite(2, 2);
+staleAttack.walkFrame = 2;
+Motion.frame(staleAttack, 2.5, 0, 16);
+assert.equal(staleAttack.frames.at(-1), 0, 'a stale combat frame is reset before exploration movement');
 
 // Full 4x4 walk sheets (Elara) keep the original direction-per-row behaviour.
 const elara = walk(4, 4, -2.5, 0);

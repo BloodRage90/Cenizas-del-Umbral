@@ -49,16 +49,18 @@ function frame(sprite,dx,dy,dt=1000/60){
   if(sprite.walkIdle>=80)sprite.walkPhase=0;
  }
  const columns=sprite.walkColumns||4,rows=sprite.walkRows||4;
- // Pose sheets (2x2: idle, wind-up, slash, recover) are right-facing combat art,
- // not walk cycles. Never play the attack poses while walking: rest on frame 0,
- // step between the two neutral poses (0 and 3) and mirror for leftward travel.
+ // Pose sheets (2x2) are combat art, not walk cycles. Their other frames may be
+ // wind-up, slash or recover poses, and the layout is not guaranteed across
+ // character variants. Keep exploration pinned to the neutral frame 0 and use
+ // only a tiny transform bob for locomotion; combat remains the only place that
+ // can select the attack frames.
  if(columns*rows<=4){
   if(distance>.005&&Math.abs(dx)>.005)sprite.facingLeft=dx<0;
   if(typeof sprite.setFlipX==='function'&&sprite.flipX!==!!sprite.facingLeft)sprite.setFlipX(!!sprite.facingLeft);
-  const walking=(sprite.walkIdle||0)<80,poseIndex=walking?(Math.floor(sprite.walkDistance/stride)%2?3:0):0;
+  const walking=(sprite.walkIdle||0)<80,poseIndex=0;
   if(typeof sprite.setScale==='function'){
    sprite.walkBaseScaleX??=sprite.scaleX??1;sprite.walkBaseScaleY??=sprite.scaleY??1;
-   const bob=walking?(poseIndex===3?.02:-.02):0;
+   const bob=walking?(Math.floor(sprite.walkDistance/stride)%2?.02:-.02):0;
    sprite.setScale(sprite.walkBaseScaleX,sprite.walkBaseScaleY*(1+bob));
   }
   if(sprite.walkFrame!==poseIndex){sprite.setFrame(poseIndex);sprite.walkFrame=poseIndex;return true;}

@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-11-25 · Pose neutral al caminar
+
+- Las hojas 2×2 de combate quedan fijadas en el cuadro neutral durante la exploración; los cuadros de preparación, golpe y recuperación solo se usan dentro del combate.
+- El paso conserva una oscilación mínima de transformación y el espejo izquierda/derecha, sin mostrar efectos de ataque ni marcas desprendidas.
+- Al cambiar de variante se restablecen el cuadro, la distancia y el tiempo de reposo para evitar que una pose de combate quede arrastrada a la plaza.
+- Añadidas regresiones para las cuatro direcciones, cuadros obsoletos y las cuatro resoluciones E2E.
+
 ## 2026-11-25 · Movimiento natural y siluetas limpias
 
 - La exploración usa un delta de tiempo acotado y una única conversión de milisegundos a distancia; se eliminó el multiplicador que aceleraba el desplazamiento y el paso base quedó en 112 px/s (118 px/s en el puente).
