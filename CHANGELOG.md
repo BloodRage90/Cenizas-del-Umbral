@@ -13,7 +13,7 @@
 
 ### Publicación
 
-- GitHub contiene el código y los commits de esta rama. El Site publicado es independiente: después de subir cambios hay que volver a publicar desde Sites; no se crea otro Site automáticamente.
+- La rama local `fix/locomotion` contiene el código y los commits de esta iteración. El push a GitHub requiere una sesión autenticada; el Site publicado es independiente y, después de subir cambios, hay que volver a publicar desde Sites sin crear otro Site.
 
 ## 2026-11-25 · Ritmo inicial y contrato de combate
 
