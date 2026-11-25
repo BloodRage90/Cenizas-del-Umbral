@@ -51,3 +51,18 @@ test('the six archetypes keep their combat verb and start on the first click', a
   await page.locator('#simple-start').click();
   await expect(page.locator('#status')).toContainText('Personaje guardado');
 });
+
+test('the entry pages stay free of runtime errors', async ({ page }) => {
+  const errors = [];
+  page.on('console', (message) => {
+    if (message.type() === 'error') errors.push(`console: ${message.text()}`);
+  });
+  page.on('pageerror', (error) => errors.push(`page: ${error.message}`));
+
+  for (const path of ['/index.html', '/character.html?creator=1', '/chapter.html']) {
+    await page.goto(path);
+    await page.waitForTimeout(500);
+  }
+
+  expect(errors, errors.join('\n')).toEqual([]);
+});
