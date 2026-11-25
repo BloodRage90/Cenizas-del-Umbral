@@ -9,6 +9,7 @@
 - Nuevas regresiones: `combat-target-picker.cjs`, `npc-identity-lines.cjs` y cobertura ampliada de `hero-visuals.cjs`, `simple-creator.cjs` y `static-report.cjs`.
 - La verificación E2E comprueba también que `index.html`, `character.html` y `chapter.html` no emitan errores de consola en las cuatro resoluciones.
 - «Juego nuevo» conserva una copia de las claves activas (`cenizas-new-game-backup`) antes de limpiar la sesión, por lo que iniciar otra campaña no destruye la anterior.
+- `archetype-combat-matrix.cjs` resuelve el primer encuentro con Guardia, Berserker, Sombra, Explorador, Arcanista y Tejedor.
 
 ### Publicación
 
