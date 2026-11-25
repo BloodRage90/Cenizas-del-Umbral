@@ -227,6 +227,9 @@ body[data-hero-subclass="Tejedor"] #battle [data-unit="hero"] .combat-art{filter
 #battle #combat-actions [data-tech]{display:grid;gap:3px;text-align:left;border-color:#d7c277;background:linear-gradient(180deg,#3d5e52,#1a3a35)}
 #battle #combat-actions [data-tech] strong{font-size:12px;color:#ffe3a4}
 #battle #combat-actions [data-tech] small{display:block;color:#c8ddd3;font:10px/1.25 system-ui;white-space:normal}
+ #battle .battle-target-picker{display:grid;gap:3px;padding:5px 7px;border:1px solid #9dbeb666;border-radius:10px;background:#0c2528aa;color:#f4df9e;font:700 11px/1.2 system-ui;letter-spacing:.04em}
+ #battle .battle-target-picker select{min-width:0;width:100%;min-height:42px;padding:6px 8px;border:1px solid #c5b170;border-radius:7px;background:#f2e7c8;color:#1c302b;font:600 12px/1.2 system-ui}
+ #battle #battle-target-status{display:block;padding:3px 6px;color:#d9e9df;font:11px/1.25 system-ui;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .battle-mode{display:flex;align-items:center;justify-content:center;gap:5px;color:#cfe2df;font:11px/1.2 system-ui}
 .battle-mode select{min-height:34px;margin:0;padding:3px 6px;font-size:11px}
 .party-picker{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin:14px 0}
