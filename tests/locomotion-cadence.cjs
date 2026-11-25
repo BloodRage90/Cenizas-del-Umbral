@@ -58,6 +58,11 @@ assert(
   `diagonal ${diagonalDistance} vs cardinal ${cardinalDistance}`,
 );
 
+assert.equal(Motion.clampDelta(5000), 32, 'los saltos de reloj se limitan a 32 ms');
+assert.equal(Motion.clampDelta(-20), 0, 'un delta negativo no mueve al personaje');
+assert(Math.abs(Motion.stepDistance(112, 1000) - 3.584) < 0.001, 'la distancia usa segundos una sola vez');
+assert.equal(Motion.stepDistance(112, 5000), 3.584, 'un frame largo no teletransporta al personaje');
+
 const pose = sample(60, 2, 2).sprite;
 assert(
   Math.max(...pose.scales) <= 1.021 && Math.min(...pose.scales) >= 0.979,

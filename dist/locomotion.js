@@ -12,6 +12,12 @@ class Follower{
 // other overlong vectors) are reduced to the requested cardinal speed.
 function normalize(dx,dy){const length=Math.hypot(dx,dy);return length>1?{x:dx/length,y:dy/length}:{x:dx,y:dy};}
 
+// Phaser reports frame deltas in milliseconds. Keep one bounded conversion in
+// this module so a slow/backgrounded frame can never turn into a teleport or a
+// burst of walk animation when the scene resumes.
+function clampDelta(dt,max=32){const value=Number(dt);return Number.isFinite(value)?Math.min(Math.max(value,0),max):1000/60;}
+function stepDistance(speed,dt,max=32){return Math.max(0,Number(speed)||0)*clampDelta(dt,max)/1000;}
+
 // Phaser may report a large loop delta after a tab was backgrounded. The
 // guard drops that delta and skips exactly the first frame after resuming so
 // movement, pose changes and footstep cadence cannot burst on recovery.
@@ -25,9 +31,9 @@ class VisibilityGuard{
 // A full walk cycle spans 112 world pixels. Advance by actual movement,
 // with a cadence ceiling so catch-up motion never turns into frantic footsteps.
 function frame(sprite,dx,dy,dt=1000/60){
- const distance=Math.hypot(dx,dy),elapsed=Math.max(0,Math.min(dt,50));
+ const distance=Math.hypot(dx,dy),elapsed=clampDelta(dt,50);
  if(sprite.anims?.isPlaying)sprite.anims.stop();
- const stride=sprite.walkStride||18.75;
+ const stride=sprite.walkStride||26;
  if(sprite.walkDistance===undefined)sprite.walkDistance=0;
  let direction=sprite.walkDirection??2;
  if(distance>.005){
@@ -64,5 +70,5 @@ function frame(sprite,dx,dy,dt=1000/60){
  return false;
 }
 
-const api={Follower,VisibilityGuard,normalize,frame};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.CenizasLocomotion=api;
+const api={Follower,VisibilityGuard,normalize,clampDelta,stepDistance,frame};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.CenizasLocomotion=api;
 })(typeof window!=='undefined'?window:globalThis);

@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-11-25 · Movimiento natural y siluetas limpias
+
+- La exploración usa un delta de tiempo acotado y una única conversión de milisegundos a distancia; se eliminó el multiplicador que aceleraba el desplazamiento y el paso base quedó en 112 px/s (118 px/s en el puente).
+- El acercamiento automático y los recorridos de escena conservan una cadencia suave, sin teletransportes cuando el navegador recupera una pestaña.
+- Se desactivaron las capas antiguas de gráficos flotantes (triángulos, marcas y emblemas) en exploración; las diferencias de raza, clase y arquetipo permanecen en la variante de sprite anclada al personaje.
+- Añadidas regresiones de delta, velocidad y ausencia de decoraciones desprendidas en `tests/locomotion-cadence.cjs` y `tests/exploration-locomotion.cjs`.
+
 ## 2026-11-25 · Protagonistas fijos del modo rápido
 
 - El modo simple presenta seis protagonistas establecidos: Cael (Guardia), Eiren (Explorador), Soren (Tejedor), Kaira (Berserker), Vesper (Sombra) y Nimra (Arcanista).
