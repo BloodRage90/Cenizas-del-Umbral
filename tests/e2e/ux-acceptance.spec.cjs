@@ -34,6 +34,7 @@ test('creator layout keeps its copy and start action usable', async ({ page }, t
 test('the six archetypes keep their combat verb and start on the first click', async ({ page }) => {
   await page.goto('/character.html?creator=1');
   await page.locator('.simple-creator').waitFor();
+  await expect(page.locator('.simple-validated')).not.toContainText('0 espacios');
   const expected = {
     guardia: 'Provocar',
     berserker: 'Furia de ceniza',

@@ -16,5 +16,6 @@ assert(!app.includes("star:'Provocar ·")&&!app.includes("star:'Furia de ceniza 
 assert(app.includes('autoAllocatePoints()')&&app.includes('simpleBuilds'),'la build simple asigna habilidades y dotes recomendadas');
 assert(app.includes("type:'practice-combat'")&&fs.readFileSync('dist/chapter.js','utf8').includes("s.practice=!!practice"),'el combate de prueba no altera la campaña');
 assert(app.includes('compatible.map')&&app.includes('!compatible.includes(s.race)'),'la raza simple queda limitada a las opciones compatibles');
+assert(app.includes("s.class==='Mago'?`")&&app.includes("st.spellSlots===1?'espacio':'espacios'"),'los espacios solo se muestran para magos y respetan el singular');
 assert(css.includes('max-height:520px')&&css.includes('orientation:landscape'),'el creador simple tiene una composición compacta para móvil horizontal');
 console.log('PASS: creador simple/avanzado conserva identidad, seis arquetipos y build validada.');

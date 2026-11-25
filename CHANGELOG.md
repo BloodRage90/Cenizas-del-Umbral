@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-11-25 · Etiqueta de recursos del creador
+
+- La tarjeta del modo simple solo muestra espacios de conjuro para personajes Mago; Guerrero y Pícaro ya no presentan un `0 espacios` engañoso.
+- La comprobación E2E cubre el estado inicial y el caso Tejedor + Orco.
+
 ## 2026-11-25 · Recurso del Tejedor
 
 - El Tejedor de ceniza conserva ahora un espacio de conjuro base, incluido cuando se elige la raza Orco; su Proyectil de ceniza y Armadura mágica no quedan bloqueados por una build recomendada que mostraba `0 espacios`.
