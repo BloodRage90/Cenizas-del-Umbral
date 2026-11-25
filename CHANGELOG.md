@@ -4,6 +4,7 @@
 
 - El Tejedor de ceniza conserva ahora un espacio de conjuro base, incluido cuando se elige la raza Orco; su Proyectil de ceniza y Armadura mágica no quedan bloqueados por una build recomendada que mostraba `0 espacios`.
 - `character-rules.cjs` comprueba el recurso en todas las razas compatibles del Tejedor para evitar que el creador marque como válida una combinación sin su recurso principal.
+- La regresión E2E del creador selecciona Tejedor + Orco y confirma que la tarjeta no vuelve a mostrar `0 espacios`.
 
 ## 2026-11-25 · Objetivos claros y siluetas de arquetipo
 

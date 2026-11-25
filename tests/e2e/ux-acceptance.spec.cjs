@@ -46,6 +46,10 @@ test('the six archetypes keep their combat verb and start on the first click', a
     await page.locator(`[data-simple-archetype="${id}"]`).click();
     await expect(page.locator('.simple-preview-copy span')).toContainText(verb);
     await expect(page.locator('.simple-preview-copy small')).not.toHaveText('');
+    if (id === 'tejedor') {
+      await page.locator('#simple-race').selectOption('Orco');
+      await expect(page.locator('.simple-validated')).not.toContainText('0 espacios');
+    }
   }
   await page.locator('#simple-name').fill('Primera chispa');
   await page.locator('#simple-start').click();
