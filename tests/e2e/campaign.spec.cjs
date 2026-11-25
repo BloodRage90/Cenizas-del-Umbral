@@ -12,7 +12,8 @@ async function clickChoice(page,name){
   throw new Error(`El botón «${name}» no se habilitó a tiempo.`);
 }
 
-test('crea personaje, camina desde el puente y llega a un combate por la interfaz',async({page})=>{
+test('crea personaje, camina desde el puente y llega a un combate por la interfaz',async({page},testInfo)=>{
+  const journeyStartedAt=Date.now();
   await page.goto('/index.html');
   await clickChoice(page,'Juego nuevo');
   await expect(page.locator('#intro-cinema')).toBeVisible();
@@ -45,6 +46,9 @@ test('crea personaje, camina desde el puente y llega a un combate por la interfa
   await clickChoice(page,'Saltar');
   await clickChoice(page,'Explorar la plaza');
   await expect(page.locator('#scene canvas')).toBeVisible({timeout:15000});
+  const plazaReadyMs=Date.now()-journeyStartedAt;
+  testInfo.annotations.push({type:'timing',description:`Juego nuevo → plaza jugable: ${plazaReadyMs} ms`});
+  expect(plazaReadyMs,`the opening flow took ${plazaReadyMs} ms`).toBeLessThan(45_000);
   await page.waitForTimeout(1200);
 
   // The active mission target is surfaced by Interact and auto-approached;
