@@ -49,15 +49,14 @@ function frame(sprite,dx,dy,dt=1000/60){
   if(sprite.walkIdle>=80)sprite.walkPhase=0;
  }
  const columns=sprite.walkColumns||4,rows=sprite.walkRows||4;
- // Pose sheets (2x2) are combat art, not walk cycles. Their other frames may be
- // wind-up, slash or recover poses, and the layout is not guaranteed across
- // character variants. Keep exploration pinned to the neutral frame 0 and use
- // only a tiny transform bob for locomotion; combat remains the only place that
- // can select the attack frames.
+ // Pose sheets (2x2) are combat art rather than a dedicated walk cycle. Frame 0
+ // is the neutral stance and frame 3 is the recovery/settled stance on every
+ // supplied hero sheet; alternating only those two poses gives the feet a
+ // readable step without ever showing a wind-up or slash frame in exploration.
  if(columns*rows<=4){
   if(distance>.005&&Math.abs(dx)>.005)sprite.facingLeft=dx<0;
   if(typeof sprite.setFlipX==='function'&&sprite.flipX!==!!sprite.facingLeft)sprite.setFlipX(!!sprite.facingLeft);
-  const walking=(sprite.walkIdle||0)<80,stepIndex=Math.floor(sprite.walkDistance/stride),poseIndex=0;
+  const walking=(sprite.walkIdle||0)<80,stepIndex=Math.floor(sprite.walkDistance/stride),poseIndex=walking?(stepIndex%2?Math.min(3,columns*rows-1):0):0;
   const side=stepIndex%2?.1:-.1;
   if(typeof sprite.setScale==='function'){
    sprite.walkBaseScaleX??=sprite.scaleX??1;sprite.walkBaseScaleY??=sprite.scaleY??1;

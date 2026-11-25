@@ -32,8 +32,8 @@ function sample(fps, columns, rows, seconds = 4) {
 }
 
 // Full walk sheets change frames at a stable cadence. Combat pose sheets are
-// intentionally pinned to frame 0 during exploration, so their cadence is the
-// transform bob (covered below), not a frame counter.
+// intentionally alternate only neutral/recover frames during exploration, so
+// their cadence never exposes a wind-up or slash pose.
 for (const [columns, rows] of [[4, 4]]) {
   const samples = [30, 60, 144].map((fps) => sample(fps, columns, rows).changes);
   const average = samples.reduce((a, b) => a + b, 0) / samples.length;
@@ -41,7 +41,9 @@ for (const [columns, rows] of [[4, 4]]) {
     assert(Math.abs(count - average) / average <= 0.1, `cadencia ${columns}x${rows}`);
 }
 
-assert.equal(sample(60, 2, 2).changes, 0, 'las hojas de combate no cambian a poses de ataque al caminar');
+const combatPoseSample = sample(60, 2, 2);
+assert(combatPoseSample.changes > 0, 'las hojas de combate tienen un paso visible al caminar');
+assert(combatPoseSample.sprite.frames.every(frame => frame === 0 || frame === 3), 'las hojas de combate no cambian a poses de ataque al caminar');
 
 function distanceFor(inputX, inputY, fps = 60, milliseconds = 1000) {
   let distance = 0;

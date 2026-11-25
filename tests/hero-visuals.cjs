@@ -39,6 +39,12 @@ assert.notEqual(HV.profile({ class: 'Guerrero', race: 'Orco', gender: 'Hombre', 
 assert.notEqual(HV.profile({ class: 'Pícaro', race: 'Humano', gender: 'Mujer', subclass: 'Sombra' }).genderFeature,
   HV.profile({ class: 'Pícaro', race: 'Humano', gender: 'No binario', subclass: 'Sombra' }).genderFeature);
 assert.equal(subclassEquipment.size, 6, 'los seis arquetipos tienen equipo visual distinto');
+assert.notEqual(HV.profile({ class: 'Guerrero', race: 'Humano', gender: 'Hombre', subclass: 'Guardia' }).filter,
+  HV.profile({ class: 'Guerrero', race: 'Humano', gender: 'Hombre', subclass: 'Berserker' }).filter,
+  'Guardia y Berserker no comparten el mismo tratamiento visual');
+assert.notEqual(HV.profile({ class: 'Pícaro', race: 'Humano', gender: 'Hombre', subclass: 'Sombra' }).filter,
+  HV.profile({ class: 'Pícaro', race: 'Humano', gender: 'Hombre', subclass: 'Explorador' }).filter,
+  'Sombra y Explorador no comparten el mismo tratamiento visual');
 for (const cue of ['escudo-capa', 'hacha-furia', 'capucha-dagas', 'arco-rastreo', 'baston-runa', 'manto-ceniza'])
   assert(visualsSource.includes(cue), `el equipo ${cue} mantiene un ancla visual`);
 assert(visualsSource.includes('Bow and quiver') && visualsSource.includes('twin daggers'), 'explorador y sombra tienen siluetas físicas distintas');

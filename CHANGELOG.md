@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-11-25 · Siluetas reforzadas y paso visible
+
+- Guardia y Berserker ahora se leen como escudo frente a hacha; Sombra y Explorador como dagas frente a arco y carcaj. El equipo queda anclado al cuerpo y acompañado por un tratamiento de color de apoyo.
+- La locomoción alterna solo las poses neutrales 0/3 de las hojas 2×2, con bob e inclinación suaves; nunca muestra preparación ni golpe al caminar.
+- Se añadieron regresiones para filtros de subclase y el ciclo seguro de paso.
+
 ## 2026-11-25 · Siluetas jugables y música de Valdara
 
 - Se retiraron los gráficos de depuración que dibujaban cuadros, runas y marcas separados del personaje; la variante del sprite es ahora la única fuente visual del protagonista.

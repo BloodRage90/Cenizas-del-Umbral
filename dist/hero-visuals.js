@@ -32,12 +32,12 @@
     'No binario': { key: 'nonbinary', accent: '#b9aaf4', feature: 'sash', hair: '#6f516d' }
   };
   const subclassData = {
-    Guardia: { class: 'Guerrero', visual: 'guardian', accent: '#d9b56c', mark: 'shield', equipment: 'escudo-capa' },
-    Berserker: { class: 'Guerrero', visual: 'berserker', accent: '#e47f5f', mark: 'rage', equipment: 'hacha-furia' },
-    Sombra: { class: 'Pícaro', visual: 'shadow', accent: '#8fc8b1', mark: 'crescent', equipment: 'capucha-dagas' },
-    Explorador: { class: 'Pícaro', visual: 'scout', accent: '#c7d98c', mark: 'compass', equipment: 'arco-rastreo' },
-    Arcanista: { class: 'Mago', visual: 'arcane', accent: '#b9aaf4', mark: 'rune', equipment: 'baston-runa' },
-    Tejedor: { class: 'Mago', visual: 'ash-weaver', accent: '#d6a17c', mark: 'ember', equipment: 'manto-ceniza' }
+    Guardia: { class: 'Guerrero', visual: 'guardian', accent: '#d9b56c', mark: 'shield', equipment: 'escudo-capa', filter: 'saturate(.88) contrast(1.08)' },
+    Berserker: { class: 'Guerrero', visual: 'berserker', accent: '#e47f5f', mark: 'rage', equipment: 'hacha-furia', filter: 'saturate(1.24) sepia(.18) hue-rotate(-18deg) contrast(1.12)' },
+    Sombra: { class: 'Pícaro', visual: 'shadow', accent: '#8fc8b1', mark: 'crescent', equipment: 'capucha-dagas', filter: 'brightness(.76) saturate(.78) contrast(1.22)' },
+    Explorador: { class: 'Pícaro', visual: 'scout', accent: '#c7d98c', mark: 'compass', equipment: 'arco-rastreo', filter: 'saturate(1.26) hue-rotate(15deg) brightness(1.03)' },
+    Arcanista: { class: 'Mago', visual: 'arcane', accent: '#b9aaf4', mark: 'rune', equipment: 'baston-runa', filter: 'saturate(1.12) hue-rotate(-14deg) brightness(1.04)' },
+    Tejedor: { class: 'Mago', visual: 'ash-weaver', accent: '#d6a17c', mark: 'ember', equipment: 'manto-ceniza', filter: 'saturate(.7) sepia(.3) brightness(.9) contrast(1.12)' }
   };
   const defaults = { Guerrero: 'Guardia', Pícaro: 'Sombra', Mago: 'Arcanista' };
   // Anchors are expressed in pixels of one source frame. They keep race and
@@ -71,7 +71,8 @@
       class: className, race, gender, subclass,
       classSlug: slug(className), raceSlug: slug(race), genderSlug: genderInfo.key,
       visual: subInfo.visual, mark: subInfo.mark, file: classFile, baseTextureKey,
-      textureKey: key, variantKey: key, scale: raceInfo.scale, filter: raceInfo.filter,
+      textureKey: key, variantKey: key, scale: raceInfo.scale,
+      filter: [raceInfo.filter, subInfo.filter].filter(value => value && value !== 'none').join(' ') || 'none',
       raceFeature: raceInfo.feature, raceAccent: raceInfo.accent, raceSkin: raceInfo.skin,
       genderFeature: genderInfo.feature, genderAccent: genderInfo.accent, genderHair: genderInfo.hair,
       accent: subInfo.accent, subclassEquipment: subInfo.equipment,
@@ -220,24 +221,26 @@
     /* Subclass equipment is deliberately outside the body silhouette so it
      * cannot read as a coloured box. */
     if (spec.mark === 'shield') {
-      polygon(ctx, [[leftHand[0] - 18 * factor, leftHand[1] - 15 * factor], [leftHand[0] + 12 * factor, leftHand[1] - 12 * factor], [leftHand[0] + 14 * factor, leftHand[1] + 13 * factor], [leftHand[0], leftHand[1] + 27 * factor], [leftHand[0] - 15 * factor, leftHand[1] + 14 * factor]], '#d9b56c', '#241a16', 2 * factor);
-      ctx.strokeStyle = '#f9e6a9'; ctx.lineWidth = Math.max(2, factor * 2); ctx.beginPath(); ctx.moveTo(leftHand[0] - 2 * factor, leftHand[1] - 7 * factor); ctx.lineTo(leftHand[0] - 2 * factor, leftHand[1] + 17 * factor); ctx.stroke();
-      ctx.strokeStyle = '#d9b56c'; ctx.beginPath(); ctx.moveTo(bodyX - 28 * factor, shoulderY); ctx.lineTo(bodyX + 20 * factor, hipY); ctx.stroke();
+      const shieldX = leftHand[0] - 8 * factor, shieldY = leftHand[1] + 3 * factor;
+      polygon(ctx, [[shieldX - 30 * factor, shieldY - 26 * factor], [shieldX + 18 * factor, shieldY - 22 * factor], [shieldX + 23 * factor, shieldY + 18 * factor], [shieldX - 5 * factor, shieldY + 40 * factor], [shieldX - 31 * factor, shieldY + 17 * factor]], '#d9b56c', '#241a16', Math.max(3, factor * 3));
+      ctx.strokeStyle = '#f9e6a9'; ctx.lineWidth = Math.max(3, factor * 3); ctx.beginPath(); ctx.moveTo(shieldX - 5 * factor, shieldY - 18 * factor); ctx.lineTo(shieldX - 5 * factor, shieldY + 27 * factor); ctx.stroke();
+      ctx.strokeStyle = '#344c41'; ctx.lineWidth = Math.max(2, factor * 2); ctx.beginPath(); ctx.moveTo(shieldX - 25 * factor, shieldY + 3 * factor); ctx.lineTo(shieldX + 15 * factor, shieldY + 3 * factor); ctx.stroke();
+      ctx.strokeStyle = '#d9b56c'; ctx.lineWidth = Math.max(3, factor * 3); ctx.beginPath(); ctx.moveTo(bodyX - 34 * factor, shoulderY - 4 * factor); ctx.lineTo(bodyX + 24 * factor, hipY + 4 * factor); ctx.stroke();
     } else if (spec.mark === 'rage') {
-      const axeX = rightHand[0] + 8 * factor, axeY = rightHand[1] - 4 * factor;
-      ctx.strokeStyle = '#d7c7a0'; ctx.lineWidth = Math.max(2, factor * 4); ctx.beginPath(); ctx.moveTo(axeX - 8 * factor, axeY + 29 * factor); ctx.lineTo(axeX + 14 * factor, axeY - 24 * factor); ctx.stroke();
-      polygon(ctx, [[axeX + 2 * factor, axeY - 20 * factor], [axeX + 35 * factor, axeY - 29 * factor], [axeX + 25 * factor, axeY - 2 * factor], [axeX + 4 * factor, axeY + 4 * factor]], '#e47f5f', '#241a16', Math.max(2, factor * 2));
-      ctx.strokeStyle = '#e47f5f'; ctx.lineWidth = Math.max(2, factor * 3); ctx.beginPath(); ctx.moveTo(cx - 15 * factor, cy + 8 * factor); ctx.lineTo(cx + 12 * factor, cy + 15 * factor); ctx.stroke();
+      const axeX = rightHand[0] + 12 * factor, axeY = rightHand[1] - 2 * factor;
+      ctx.strokeStyle = '#d7c7a0'; ctx.lineWidth = Math.max(3, factor * 5); ctx.beginPath(); ctx.moveTo(axeX - 10 * factor, axeY + 38 * factor); ctx.lineTo(axeX + 18 * factor, axeY - 30 * factor); ctx.stroke();
+      polygon(ctx, [[axeX + 3 * factor, axeY - 28 * factor], [axeX + 47 * factor, axeY - 40 * factor], [axeX + 34 * factor, axeY - 2 * factor], [axeX + 6 * factor, axeY + 8 * factor]], '#e47f5f', '#241a16', Math.max(3, factor * 3));
+      ctx.strokeStyle = '#f2b27e'; ctx.lineWidth = Math.max(3, factor * 4); ctx.beginPath(); ctx.moveTo(cx - 20 * factor, cy + 5 * factor); ctx.lineTo(cx + 16 * factor, cy + 15 * factor); ctx.stroke();
     } else if (spec.mark === 'crescent') {
-      ctx.fillStyle = '#172630'; ctx.beginPath(); ctx.ellipse(cx, cy + 8 * factor, 21 * factor, 8 * factor, 0, 0, Math.PI * 2); ctx.fill();
-      ctx.strokeStyle = '#e7f5dd'; ctx.lineWidth = Math.max(2, factor * 2); ctx.beginPath(); ctx.moveTo(rightHand[0], rightHand[1]); ctx.lineTo(rightHand[0] + 19 * factor, rightHand[1] + 19 * factor); ctx.moveTo(leftHand[0], leftHand[1]); ctx.lineTo(leftHand[0] - 17 * factor, leftHand[1] + 18 * factor); ctx.stroke();
-      ctx.strokeStyle = '#8fc8b1'; ctx.beginPath(); ctx.arc(cx + 20 * factor, cy - 6 * factor, 11 * factor, -.8, 1.5); ctx.stroke();
+      ctx.fillStyle = '#172630'; ctx.beginPath(); ctx.ellipse(cx, cy + 8 * factor, 27 * factor, 11 * factor, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = '#e7f5dd'; ctx.lineWidth = Math.max(3, factor * 3); ctx.beginPath(); ctx.moveTo(rightHand[0], rightHand[1]); ctx.lineTo(rightHand[0] + 36 * factor, rightHand[1] + 29 * factor); ctx.moveTo(leftHand[0], leftHand[1]); ctx.lineTo(leftHand[0] - 34 * factor, leftHand[1] + 27 * factor); ctx.stroke();
+      ctx.strokeStyle = '#8fc8b1'; ctx.lineWidth = Math.max(3, factor * 3); ctx.beginPath(); ctx.arc(cx + 24 * factor, cy - 10 * factor, 16 * factor, -.8, 1.5); ctx.stroke();
     } else if (spec.mark === 'compass') {
       /* Bow and quiver make the explorer distinct from the dagger-wielding
        * shadow even though both share the rogue base sheet. */
-      ctx.strokeStyle = '#c7d98c'; ctx.lineWidth = Math.max(2, factor * 3); ctx.beginPath(); ctx.arc(bodyX - 30 * factor, shoulderY + 38 * factor, 58 * factor, -1.15, 1.15); ctx.stroke();
-      ctx.strokeStyle = '#d7e7b1'; ctx.lineWidth = Math.max(2, factor * 2); ctx.beginPath(); ctx.moveTo(bodyX - 30 * factor, shoulderY - 17 * factor); ctx.lineTo(bodyX - 30 * factor, hipY + 17 * factor); ctx.moveTo(bodyX - 21 * factor, shoulderY - 4 * factor); ctx.lineTo(bodyX + 16 * factor, hipY + 12 * factor); ctx.stroke();
-      for (let i = 0; i < 3; i++) { const qx = bodyX + (12 + i * 5) * factor, qy = hipY + (4 - i * 2) * factor; ctx.beginPath(); ctx.moveTo(qx, qy); ctx.lineTo(qx + 12 * factor, qy - 21 * factor); ctx.stroke(); }
+      ctx.strokeStyle = '#c7d98c'; ctx.lineWidth = Math.max(3, factor * 4); ctx.beginPath(); ctx.arc(bodyX - 38 * factor, shoulderY + 36 * factor, 76 * factor, -1.15, 1.15); ctx.stroke();
+      ctx.strokeStyle = '#d7e7b1'; ctx.lineWidth = Math.max(2, factor * 3); ctx.beginPath(); ctx.moveTo(bodyX - 38 * factor, shoulderY - 23 * factor); ctx.lineTo(bodyX - 38 * factor, hipY + 20 * factor); ctx.moveTo(bodyX - 28 * factor, shoulderY - 6 * factor); ctx.lineTo(bodyX + 20 * factor, hipY + 15 * factor); ctx.stroke();
+      for (let i = 0; i < 3; i++) { const qx = bodyX + (14 + i * 7) * factor, qy = hipY + (4 - i * 3) * factor; ctx.beginPath(); ctx.moveTo(qx, qy); ctx.lineTo(qx + 17 * factor, qy - 29 * factor); ctx.stroke(); }
     } else if (spec.mark === 'rune') {
       ctx.strokeStyle = '#e2d8ff'; ctx.lineWidth = Math.max(2, factor * 3); ctx.beginPath(); ctx.moveTo(rightHand[0], rightHand[1] + 25 * factor); ctx.lineTo(rightHand[0], rightHand[1] - 67 * factor); ctx.stroke();
       ctx.fillStyle = '#dcd3ff'; ctx.beginPath(); ctx.arc(rightHand[0], rightHand[1] - 73 * factor, 11 * factor, 0, Math.PI * 2); ctx.fill();

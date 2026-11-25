@@ -2,8 +2,8 @@ const assert = require('node:assert/strict');
 const Motion = require('../dist/locomotion.js');
 
 // H-02: the hero sheets are 2x2 combat poses (idle, wind-up, slash, recover),
-// all facing right. Walking must never play the attack poses and must mirror
-// the sprite for leftward travel.
+// all facing right. Walking may use only idle/recover as a safe two-step cycle;
+// it must never show wind-up/slash and must mirror the sprite for leftward travel.
 const sprite = (columns, rows) => ({
   walkColumns: columns,
   walkRows: rows,
@@ -34,7 +34,7 @@ for (const [dx, dy] of [
   [0, -2.5],
 ]) {
   const frames = new Set(walk(2, 2, dx, dy).frames);
-  assert.deepEqual([...frames], [0], `pose sheet stays on its neutral frame while walking (${dx},${dy})`);
+  assert.deepEqual([...frames].sort((a, b) => a - b), [0, 3], `pose sheet alternates safe neutral/recover frames while walking (${dx},${dy})`);
 }
 
 assert.equal(walk(2, 2, 2.5, 0).flipX, false, 'rightward travel is not mirrored');
