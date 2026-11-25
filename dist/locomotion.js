@@ -57,11 +57,17 @@ function frame(sprite,dx,dy,dt=1000/60){
  if(columns*rows<=4){
   if(distance>.005&&Math.abs(dx)>.005)sprite.facingLeft=dx<0;
   if(typeof sprite.setFlipX==='function'&&sprite.flipX!==!!sprite.facingLeft)sprite.setFlipX(!!sprite.facingLeft);
-  const walking=(sprite.walkIdle||0)<80,poseIndex=0;
+  const walking=(sprite.walkIdle||0)<80,stepIndex=Math.floor(sprite.walkDistance/stride),poseIndex=0;
+  const side=stepIndex%2?.1:-.1;
   if(typeof sprite.setScale==='function'){
    sprite.walkBaseScaleX??=sprite.scaleX??1;sprite.walkBaseScaleY??=sprite.scaleY??1;
-   const bob=walking?(Math.floor(sprite.walkDistance/stride)%2?.02:-.02):0;
-   sprite.setScale(sprite.walkBaseScaleX,sprite.walkBaseScaleY*(1+bob));
+   const bob=walking?side*.045:0;
+   const squash=walking?side*.018:0;
+   sprite.setScale(sprite.walkBaseScaleX*(1+squash),sprite.walkBaseScaleY*(1-bob*.35));
+  }
+  if(typeof sprite.setRotation==='function'){
+   const lean=walking?side*.045:0;
+   sprite.setRotation(walking?(sprite.facingLeft?-lean:lean):0);
   }
   if(sprite.walkFrame!==poseIndex){sprite.setFrame(poseIndex);sprite.walkFrame=poseIndex;return true;}
   return false;

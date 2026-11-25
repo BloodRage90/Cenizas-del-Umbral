@@ -3,10 +3,11 @@
 const fs=require('node:fs'),path=require('node:path'),{execFileSync}=require('node:child_process');
 const root=path.resolve(__dirname,'..'),out=path.join(root,'dist/music'),tmp=path.join(root,'.soundtrack-work');
 fs.mkdirSync(tmp,{recursive:true});
-const SR=24000,TAU=Math.PI*2,EDITION='Resonancias II · pulso y ceniza',REVISION='2026-11-music-refresh-1';
+const SR=24000,TAU=Math.PI*2,EDITION='Resonancias II · pulso y ceniza',REVISION='2026-11-music-refresh-2';
 const major=[0,2,4,5,7,9,11],minor=[0,2,3,5,7,8,10],dorian=[0,2,3,5,7,9,10];
 // Each pair is scale degree / duration in beats. Rests are null.
 const themes={
+ valdaracity:[[[0,.5],[2,.5],[4,1],[5,.5],[4,.5],[2,1]],[[6,.5],[5,.5],[4,1],[2,.5],[1,.5],[0,1]],[[2,.5],[4,.5],[5,1],[7,.5],[6,.5],[4,1]],[[3,1],[2,.5],[1,.5],[0,1],[null,1]],[[0,.5],[2,.5],[4,1],[6,.5],[5,.5],[4,1]],[[5,.5],[4,.5],[2,1],[1,.5],[2,.5],[3,1]],[[4,.5],[5,.5],[6,1],[4,.5],[2,.5],[1,1]],[[0,2],[null,.5],[4,.5],[2,1]]],
  city:[[[2,1],[4,.5],[5,.5],[4,1],[1,1]],[[0,1.5],[2,.5],[1,1],[null,1]],[[2,.5],[3,.5],[4,1],[6,1],[5,1]],[[4,2],[2,1],[1,1]],[[0,1],[2,1],[4,1.5],[3,.5]],[[2,.5],[1,.5],[0,1],[1,1],[3,1]],[[2,1],[4,1],[1,1],[6-7,1]],[[0,3],[null,1]]],
  bond:[[[4,1.5],[2,.5],[1,1],[0,1]],[[2,2],[null,.5],[3,.5],[4,1]],[[5,1],[4,1],[2,1],[1,1]],[[0,3],[null,1]],[[2,1],[4,.5],[6,.5],[5,2]],[[4,1.5],[3,.5],[2,1],[0,1]],[[1,1],[2,1],[6-7,1],[1,1]],[[0,3],[null,1]]],
  forest:[[[0,.5],[4,.5],[6,1],[5,.5],[4,.5],[2,1]],[[1,1.5],[3,.5],[2,1],[null,1]],[[4,.5],[6,.5],[7,1],[6,1],[4,1]],[[3,2],[1,1],[null,1]],[[2,.5],[4,.5],[5,1],[4,.5],[2,.5],[0,1]],[[6-7,1],[1,1],[3,1],[2,1]],[[1,.5],[2,.5],[4,1],[3,1],[6-7,1]],[[0,2.5],[null,1.5]]],
@@ -14,8 +15,8 @@ const themes={
 };
 // id, title, tempo, tonic, mode, theme, lead, percussion, chord degrees
 const scores=[
- ['plaza','Valdara · los nombres al sol',100,62,major,'city','flute',1,[0,5,3,4,0,2,3,4]],
- ['exploration','La carta y el camino',108,62,major,'city','flute',1,[0,3,5,4,0,5,3,4]],
+ ['plaza','Valdara · campanas de cobre',116,65,major,'valdaracity','pluck',2,[0,4,5,2,0,3,4,5]],
+ ['exploration','La carta y el camino · nueva ruta',96,57,dorian,'forest','reed',0,[0,5,2,4,1,6,3,4]],
  ['taller','Ordan · madera y bronce',84,55,dorian,'bond','pluck',0,[0,3,2,4,0,5,3,4]],
  ['criptas','El río guarda nombres',76,50,minor,'forest','bell',0,[0,5,3,4,0,2,5,4]],
  ['bosque','Susurros entre las hojas',94,57,dorian,'forest','flute',1,[0,3,6,4,0,5,3,4]],

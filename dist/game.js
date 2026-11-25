@@ -12,6 +12,13 @@ function characterReadyBridge(candidate=character){return typeof candidate?.name
 function heroVisual(c=character){return HV?.profile(c||{race:'Humano',class:'Guerrero',subclass:'Guardia',gender:'No binario'})||{scale:1,accent:'#d9b56c',raceAccent:'#d9b56c',genderAccent:'#b9aaf4',raceFeature:'round',genderFeature:'sash',mark:'shield',textureKey:'hero-warrior',filter:'none'};}
 function drawHeroDesign(target,c){
  if(!target?.hero)return;
+ /* The playable variant texture already contains the character's race and
+  * subclass equipment. Do not add detached Phaser polygons on top of it: the
+  * old feature/mark graphics looked like coloured squares while moving. */
+ target.heroFeatures?.clear().setVisible(false);
+ target.heroMark?.clear().setVisible(false);
+ target.heroAura?.setVisible(true).setAlpha(.22);
+ return;
  const v=heroVisual(c),scale=v.scale||1,accent=Phaser.Display.Color.HexStringToColor(v.accent||'#d9b56c').color,raceAccent=Phaser.Display.Color.HexStringToColor(v.raceAccent||v.accent||'#d9b56c').color,genderAccent=Phaser.Display.Color.HexStringToColor(v.genderAccent||'#b9aaf4').color;
  target.hero.setDisplaySize(92*scale,92*scale).clearTint?.();
  target.hero.setDisplaySize(92*scale,92*scale);
@@ -53,7 +60,7 @@ function quest(){const done=stage>=3,permission=stage>=2;entranceButton();$('que
  };
  if(node===1)stage=Math.max(stage,1);if(node===3)stage=Math.max(stage,2);quest();save();const data=nodes[node]||nodes[0];$('speech-text').textContent=data.text;$('answers').replaceChildren(...data.options.map(([label,next,effect])=>{const b=document.createElement('button');b.type='button';b.textContent='› '+label;b.onclick=()=>{effect?.();save();if(next<0){$('dialogue').close();if(next===-2)setTimeout(()=>scene?.goGate(),0)}else dialogue(next)};return b}));if(!$('dialogue').open)$('dialogue').showModal()}
 class BridgeScene extends Phaser.Scene{
-constructor(){super('Valdara');this.route=[];this.pending=null;this.failed=false}
+constructor(){super('Valdara');this.route=[];this.pending=null;this.failed=false;window.CenizasMusic?.set('plaza',false)}
 preload(){this.load.on('progress',p=>$('load-progress').value=p);this.load.on('loaderror',()=>{this.failed=true;$('load-text').textContent='No pudimos cargar el paisaje. Recarga la página para volver a intentarlo.'});this.load.image('world','valdara.webp');const assets=HV?.assets?.()||{'hero-warrior':'identity-warrior-pixel.webp','hero-rogue':'identity-rogue-pixel.webp','hero-mage':'identity-mage-pixel.webp','hero-mage-ash':'identity-mage-ash-pixel.webp'};Object.entries(assets).forEach(([key,file])=>this.load.image(key,file));this.load.image('guard','guard.webp');this.load.image('trail-sign','trail-sign.webp')}
 prepareHeroTexture(key){const texture=this.textures.get(key);if(!texture||texture.__heroFrames)return;const source=texture.getSourceImage(),columns=source.width<1400?2:4,rows=source.height<1300?2:4;texture.__heroFrames={columns,rows};for(let r=0;r<rows;r++)for(let c=0;c<columns;c++){const x=Math.round(c*source.width/columns),y=Math.round(r*source.height/rows);texture.add(r*columns+c,0,x,y,Math.round((c+1)*source.width/columns)-x,Math.round((r+1)*source.height/rows)-y)}}
 ensureHeroVariant(v){const key=v.textureKey||v.baseTextureKey;if(this.textures.exists(key)){this.prepareHeroTexture(key);return key;}const base=this.textures.get(v.baseTextureKey||'hero-warrior');if(!base)return v.baseTextureKey||'hero-warrior';const source=base.getSourceImage(),columns=source.width<1400?2:4,rows=source.height<1300?2:4,variant=this.textures.createCanvas(key,source.width,source.height);HV?.paintVariantCanvas?.(variant.context,source,v,columns,rows);variant.refresh();this.prepareHeroTexture(key);return key}

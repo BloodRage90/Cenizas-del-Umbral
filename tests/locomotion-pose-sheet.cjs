@@ -9,11 +9,15 @@ const sprite = (columns, rows) => ({
   walkRows: rows,
   frames: [],
   flipX: false,
+  rotation: 0,
   setFrame(index) {
     this.frames.push(index);
   },
   setFlipX(value) {
     this.flipX = value;
+  },
+  setRotation(value) {
+    this.rotation = value;
   },
   anims: { isPlaying: false },
 });
@@ -35,6 +39,7 @@ for (const [dx, dy] of [
 
 assert.equal(walk(2, 2, 2.5, 0).flipX, false, 'rightward travel is not mirrored');
 assert.equal(walk(2, 2, -2.5, 0).flipX, true, 'leftward travel mirrors the sprite');
+assert.notEqual(walk(2, 2, 2.5, 0).rotation, 0, 'walking tilts the neutral pose instead of sliding rigidly');
 
 const vertical = walk(2, 2, -2.5, 0);
 for (let i = 0; i < 30; i++) Motion.frame(vertical, 0, -2.5, 16);
@@ -44,6 +49,7 @@ const resting = walk(2, 2, -2.5, 0);
 for (let i = 0; i < 12; i++) Motion.frame(resting, 0, 0, 16);
 assert.equal(resting.frames.at(-1), 0, 'resting uses the neutral pose');
 assert.equal(resting.flipX, true, 'resting keeps the last facing');
+assert.equal(resting.rotation, 0, 'the pose returns upright when movement stops');
 
 const staleAttack = sprite(2, 2);
 staleAttack.walkFrame = 2;

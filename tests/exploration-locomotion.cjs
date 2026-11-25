@@ -11,6 +11,7 @@ assert.match(chapter, /Traits are baked into the same variant texture/);
 assert.match(chapter, /meta\.columns\*meta\.rows<=4\?0:Math\.min\(this\.hero\.walkFrame/);
 assert.match(bridge, /bridgeDrawHeroDesign\(target,c\);target\.heroFeatures\?\.clear\(\)\.setVisible\(false\)/);
 assert.match(bridge, /meta\.columns\*meta\.rows<=4\?0:Math\.min\(this\.hero\.walkFrame/);
+assert.match(bridge, /CenizasMusic\?\.set\('plaza',false\)/, 'el puente usa la nueva música de Valdara');
 assert.doesNotMatch(bridge, /bridgeUpdate\.call\(this,t,Math\.min\(dt\*1\.48/);
 
 console.log('PASS: el movimiento usa un delta acotado y las decoraciones flotantes quedan ocultas.');

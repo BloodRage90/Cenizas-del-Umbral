@@ -1,43 +1,9 @@
 {
   "edition": "Resonancias II · pulso y ceniza",
-  "revision": "2026-11-music-refresh-1",
+  "revision": "2026-11-music-refresh-2",
   "composition": "Original melodies, layered arrangements and synthesized instruments; no third-party samples.",
   "generator": "scripts/compose-soundtrack.cjs",
   "tracks": [
-    {
-      "id": "plaza",
-      "title": "Valdara · los nombres al sol",
-      "bpm": 100,
-      "seconds": 76.8,
-      "theme": "city",
-      "instruments": [
-        "flute",
-        "strings",
-        "harp",
-        "pad",
-        "bass",
-        "percussion"
-      ],
-      "peakDb": -6.6737960508745875,
-      "rmsDb": -18.786043192927767
-    },
-    {
-      "id": "exploration",
-      "title": "La carta y el camino",
-      "bpm": 108,
-      "seconds": 71.111125,
-      "theme": "city",
-      "instruments": [
-        "flute",
-        "strings",
-        "harp",
-        "pad",
-        "bass",
-        "percussion"
-      ],
-      "peakDb": -6.33064588301332,
-      "rmsDb": -18.786043192927767
-    },
     {
       "id": "taller",
       "title": "Ordan · madera y bronce",
@@ -425,6 +391,39 @@
         "drums"
       ],
       "peakDb": -6.055070067084558,
+      "rmsDb": -18.786043192927767
+    },
+    {
+      "id": "plaza",
+      "title": "Valdara · campanas de cobre",
+      "bpm": 116,
+      "seconds": 66.20691666666667,
+      "theme": "valdaracity",
+      "instruments": [
+        "pluck",
+        "strings",
+        "harp",
+        "pad",
+        "bass",
+        "percussion"
+      ],
+      "peakDb": -5.551307480150278,
+      "rmsDb": -18.786043192927767
+    },
+    {
+      "id": "exploration",
+      "title": "La carta y el camino · nueva ruta",
+      "bpm": 96,
+      "seconds": 80,
+      "theme": "forest",
+      "instruments": [
+        "reed",
+        "strings",
+        "harp",
+        "pad",
+        "bass"
+      ],
+      "peakDb": -6.119924312121644,
       "rmsDb": -18.786043192927767
     }
   ]

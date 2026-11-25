@@ -1,5 +1,7 @@
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
 const HV = require('../dist/hero-visuals.js');
+const visualsSource = fs.readFileSync('dist/hero-visuals.js', 'utf8');
 
 const races = Object.keys(HV.raceData);
 const genders = Object.keys(HV.genderData);
@@ -37,6 +39,10 @@ assert.notEqual(HV.profile({ class: 'Guerrero', race: 'Orco', gender: 'Hombre', 
 assert.notEqual(HV.profile({ class: 'Pícaro', race: 'Humano', gender: 'Mujer', subclass: 'Sombra' }).genderFeature,
   HV.profile({ class: 'Pícaro', race: 'Humano', gender: 'No binario', subclass: 'Sombra' }).genderFeature);
 assert.equal(subclassEquipment.size, 6, 'los seis arquetipos tienen equipo visual distinto');
+for (const cue of ['escudo-capa', 'hacha-furia', 'capucha-dagas', 'arco-rastreo', 'baston-runa', 'manto-ceniza'])
+  assert(visualsSource.includes(cue), `el equipo ${cue} mantiene un ancla visual`);
+assert(visualsSource.includes('Bow and quiver') && visualsSource.includes('twin daggers'), 'explorador y sombra tienen siluetas físicas distintas');
+assert(!visualsSource.includes('bodyX - width * .21'), 'las variantes no dibujan el panel rectangular antiguo');
 assert(HV.profile({ class: 'Mago', race: 'Humano', gender: 'Hombre', subclass: 'Arcanista' }).subclassEquipment.includes('baston'));
 assert(HV.profile({ class: 'Mago', race: 'Orco', gender: 'Mujer', subclass: 'Tejedor' }).subclassEquipment.includes('ceniza'));
 console.log('PASS: perfil visual cubre las 144 combinaciones de raza, clase, subclase y género.');

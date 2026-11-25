@@ -1,5 +1,5 @@
 (()=>{
-const ASSET_VERSION=window.CenizasAssets?.version||'2026-11-music-refresh-1';
+const ASSET_VERSION=window.CenizasAssets?.version||'2026-11-music-refresh-2';
 const tracks={plaza:'Valdara · los nombres al sol',exploration:'La carta y el camino',taller:'Ordan · madera y bronce',criptas:'El río guarda nombres',bosque:'Susurros entre las hojas',lindero:'Antes de cruzar',embarcadero:'Agua de regreso',molino:'Ruedas sobre la garganta',monasterio:'Hospitalidad de ceniza',archivo:'La tinta recuerda',enfermeria:'Elara y Darien · volver',capilla:'Mara · memoria prestada',montana:'La deuda que no elegimos',antesala:'Nadie ocupa tu lugar',umbral:'El Coro Vacío',mystery:'La voz bajo el agua',battle:'Acero y voluntad','forest-battle':'Raíces en fuga','vigilia-battle':'La marcha de las firmas',custodian:'Piedra contra el río',ash:'Ceniza bajo el martillo',finale:'Romper el Coro','training-battle':'Dos pulsos, un paso',epilogue:'La ciudad vuelve a nombrar',intro:'Cenizas del Umbral · El llamado'};
 const channels=[new Audio(),new Audio()];channels.forEach(a=>{a.loop=true;a.preload='none';a.volume=0;});
 let enabled=false,volume=.3,context='exploration',playing='',active=0,unlocked=false,revision=0,timer=null;

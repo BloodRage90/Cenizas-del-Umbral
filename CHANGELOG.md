@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-11-25 · Siluetas jugables y música de Valdara
+
+- Se retiraron los gráficos de depuración que dibujaban cuadros, runas y marcas separados del personaje; la variante del sprite es ahora la única fuente visual del protagonista.
+- Guardia, Berserker, Sombra, Explorador, Arcanista y Tejedor conservan equipo físico distinto (escudo, hacha, dagas, arco, orbe rúnico y bastón de brasas) integrado al cuerpo y compartido entre creador, mapa y combate.
+- El movimiento alterna inclinación, escala y bob de paso sobre la pose neutral, por lo que el personaje ya no se desliza rígido ni reutiliza cuadros de ataque.
+- El puente selecciona la pista nueva de Valdara; se regeneraron plaza y exploración, se actualizó el manifiesto a `Resonancias II · pulso y ceniza` revisión 2 y se renovó el token de caché.
+- Añadidas regresiones visuales para equipo de subclase, ausencia de paneles rectangulares, cadencia de paso y ruta musical del puente.
+
 ## 2026-11-25 · Pose neutral al caminar
 
 - Las hojas 2×2 de combate quedan fijadas en el cuadro neutral durante la exploración; los cuadros de preparación, golpe y recuperación solo se usan dentro del combate.
