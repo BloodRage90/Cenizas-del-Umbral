@@ -18,6 +18,7 @@ const party = [
 ];
 assert(Systems.canUseTech('filoUmbrio', party, 2));
 assert(Systems.canUseTech('llamaArcana', party, 3));
+assert(Systems.canUseTech('elaraCombo', [{ id: 'elara', class: 'Guerrero', hp: 10 }, { class: 'Guerrero', hp: 10 }], 2));
 assert(!Systems.canUseTech('llamaArcana', party.slice(0, 2), 3));
 assert.deepEqual([...Systems.partyClasses([{ class: 'Pícaro', classes: ['Pícaro', 'Mago'], hp: 10 }])].sort(), ['Mago', 'Pícaro']);
 assert.equal(Systems.racialSecret('Orco', 'plaza').verb, 'Intimidar');
@@ -86,6 +87,11 @@ const acBeforeProvoke = provoke.enemy.ac;
 assert.equal(provoke.useTech('provocar'), true, 'el Guerrero tiene un verbo propio con coste PI');
 assert.equal(provoke.s.pi, 0, 'Provocar consume un punto de impulso');
 assert.equal(provoke.enemy.ac, acBeforeProvoke - 2, 'Provocar rompe la CA del objetivo');
+
+const locks = new R.Battle('ash', R.profile(R.defaults), { ...R.fresh(), flags: { elara: false } }, n => n);
+assert.deepEqual(locks.s.locks.map(lock => lock.label), ['Soporte I', 'Soporte II', 'Palanca']);
+locks.s.noBoard = true; locks.s.index = 0; locks.begin();
+assert(locks.act('mechanism')); assert.equal(locks.s.locks.find(lock => lock.id === 'support-1').open, false);
 
 const capped = makePartyBattle();
 capped.s.pi = 5;

@@ -321,3 +321,14 @@ body.show-combat-settings #battle .battle-mode{display:flex}
 #battle #battle-stage{z-index:1}
 #battle #battle-controls,#battle #elara-controls,#battle .battle-header{position:relative;z-index:20;pointer-events:auto}
 #battle #battle-controls::after{pointer-events:none}
+
+/* Enemy lock readout and impulse feedback share the same visual language as
+   the arena. They are attached to the actor, never rendered as free-floating
+   coloured rectangles over the protagonist. */
+#battle .enemy-locks{position:absolute;left:50%;top:-29%;transform:translateX(-50%);display:flex;gap:3px;justify-content:center;max-width:170%;z-index:8;pointer-events:none;white-space:nowrap}
+#battle .enemy-locks[hidden]{display:none}
+#battle .lock-chip{display:inline-flex;align-items:center;min-height:18px;padding:2px 6px;border:1px solid #efc979aa;border-radius:999px;background:#121f2be8;color:#ffe6a4;font:800 9px/1 system-ui;letter-spacing:.04em;box-shadow:0 0 12px #e5b86255}
+#battle .enemy-unit.selected-target .lock-chip{border-color:#f7e7a2;color:#fff2c7;box-shadow:0 0 14px #f0ca7599}
+.pi-orb{position:absolute;z-index:16;color:#b6f1d7;font:700 26px/1 Georgia,serif;text-shadow:0 0 12px #84e8c1,0 0 24px #f5d77a;pointer-events:none;will-change:transform,opacity}
+@media(max-width:650px){#battle .enemy-locks{top:-34%;max-width:190%}.pi-orb{font-size:22px}}
+@media(prefers-reduced-motion:reduce){.pi-orb{animation:none!important}}

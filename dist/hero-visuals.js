@@ -321,7 +321,95 @@
     for (let row = 0; row < rows; row++) for (let column = 0; column < columns; column++) drawCleanEquipment(ctx, column * frameWidth, row * frameHeight, frameWidth, frameHeight, spec);
   }
 
-  const api = { classFiles, raceData, genderData, subclassData, profile, assets, variantKey, render, paintVariantCanvas, heroAnchors, slug };
+  /*
+   * The exploration atlas is deliberately generated from the existing
+   * 4-direction Vigilia sheet.  It gives every protagonist the same readable
+   * front/side/back cadence while keeping class equipment, race silhouettes
+   * and presentation details attached to the pixel art.  Six columns are a
+   * mirrored walk cycle (0,1,2,3,2,1); rows are down, left, right and up.
+   */
+  function drawWalkIdentity(ctx, x, y, width, height, spec, row) {
+    if (!ctx || !spec) return;
+    const u = Math.min(width, height) / 100;
+    const cx = x + width * .5;
+    const headY = y + height * .225;
+    const skin = spec.raceSkin || '#c68b68';
+    const dark = '#241a16';
+    const accent = spec.raceAccent || spec.accent || '#d9b56c';
+    ctx.save();
+    ctx.imageSmoothingEnabled = false;
+    ctx.lineJoin = 'miter';
+    ctx.lineWidth = Math.max(1, 2.1 * u);
+    /* Pixel-sized race cues: ears, beard, tusks and cap are anchored to the
+       head.  Back-facing rows get only the silhouette cue, never a floating
+       emblem. */
+    if (spec.raceFeature === 'ears' || spec.raceFeature === 'half-ears') {
+      const reach = spec.raceFeature === 'ears' ? 17 : 11;
+      polygon(ctx, [[cx - 8 * u, headY], [cx - (26 + reach) * u, headY - 11 * u], [cx - 18 * u, headY + 8 * u]], skin, dark, Math.max(1, 2 * u));
+      polygon(ctx, [[cx + 8 * u, headY], [cx + (26 + reach) * u, headY - 11 * u], [cx + 18 * u, headY + 8 * u]], skin, dark, Math.max(1, 2 * u));
+    } else if (spec.raceFeature === 'beard' && row !== 3) {
+      polygon(ctx, [[cx - 14 * u, headY + 8 * u], [cx + 14 * u, headY + 8 * u], [cx, headY + 28 * u]], '#6d4436', dark, Math.max(1, 2 * u));
+    } else if ((spec.raceFeature === 'tusks' || spec.raceFeature === 'half-tusks') && row !== 3) {
+      const length = spec.raceFeature === 'tusks' ? 8 : 5;
+      polygon(ctx, [[cx - 8 * u, headY + 9 * u], [cx - 3 * u, headY + 9 * u], [cx - 5 * u, headY + (9 + length) * u]], '#f7e3b1', dark, Math.max(1, u));
+      polygon(ctx, [[cx + 8 * u, headY + 9 * u], [cx + 3 * u, headY + 9 * u], [cx + 5 * u, headY + (9 + length) * u]], '#f7e3b1', dark, Math.max(1, u));
+    } else if (spec.raceFeature === 'cap') {
+      polygon(ctx, [[cx - 18 * u, headY - 7 * u], [cx + 18 * u, headY - 7 * u], [cx + 2 * u, headY - 23 * u], [cx - 5 * u, headY - 14 * u]], accent, dark, Math.max(1, 2 * u));
+    }
+    /* Gender presentation is a tiny attached hair/ribbon/sash cue, not a
+       debug marker.  It remains visible on the side rows without changing
+       the hitbox or gameplay stats. */
+    ctx.strokeStyle = spec.genderAccent || '#b9aaf4';
+    ctx.lineWidth = Math.max(1, 2 * u);
+    ctx.beginPath();
+    if (spec.genderFeature === 'ribbon') {
+      ctx.moveTo(cx + 13 * u, headY - 10 * u); ctx.lineTo(cx + 22 * u, headY + 13 * u);
+    } else if (spec.genderFeature === 'braid') {
+      ctx.moveTo(cx - 13 * u, headY - 10 * u); ctx.lineTo(cx - 22 * u, headY + 13 * u);
+    } else {
+      ctx.moveTo(cx - 22 * u, y + height * .38); ctx.lineTo(cx + 22 * u, y + height * .47);
+    }
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function paintWalkCanvas(source, spec, options = {}) {
+    if (!source || typeof document === 'undefined') return null;
+    const sourceWidth = source.naturalWidth || source.width;
+    const sourceHeight = source.naturalHeight || source.height;
+    const sourceColumns = options.sourceColumns || 4;
+    const sourceRows = options.sourceRows || 4;
+    const columns = options.columns || 6;
+    const rows = options.rows || 4;
+    const frameWidth = sourceWidth / sourceColumns;
+    const frameHeight = sourceHeight / sourceRows;
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.round(frameWidth * columns);
+    canvas.height = Math.round(frameHeight * rows);
+    const ctx = canvas.getContext('2d');
+    ctx.imageSmoothingEnabled = false;
+    const cycle = [0, 1, 2, 3, 2, 1];
+    for (let row = 0; row < rows; row++) {
+      for (let column = 0; column < columns; column++) {
+        const sx = cycle[column] * frameWidth;
+        const sy = (row % sourceRows) * frameHeight;
+        const dx = column * frameWidth;
+        const dy = row * frameHeight;
+        ctx.save();
+        try { ctx.filter = spec.filter || 'none'; } catch { /* old WebViews */ }
+        ctx.drawImage(source, sx, sy, frameWidth, frameHeight, dx, dy, frameWidth, frameHeight);
+        ctx.restore();
+        drawWalkIdentity(ctx, dx, dy, frameWidth, frameHeight, spec, row);
+        drawCleanEquipment(ctx, dx, dy, frameWidth, frameHeight, spec);
+      }
+    }
+    canvas.dataset.columns = String(columns);
+    canvas.dataset.rows = String(rows);
+    canvas.dataset.variantKey = spec.variantKey || '';
+    return canvas;
+  }
+
+  const api = { classFiles, raceData, genderData, subclassData, profile, assets, variantKey, render, paintVariantCanvas, paintWalkCanvas, heroAnchors, slug };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.CenizasHeroVisuals = api;
 })(typeof window !== 'undefined' ? window : globalThis);

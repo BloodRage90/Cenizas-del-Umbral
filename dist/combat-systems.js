@@ -35,6 +35,14 @@
       cost: 1,
       multiplier: 1,
       description: 'El Guerrero quiebra la defensa del objetivo: −2 CA hasta el siguiente ciclo.'
+    }),
+    elaraCombo: Object.freeze({
+      id: 'elaraCombo',
+      name: 'Juramento gemelo',
+      requires: ['elara', 'Guerrero'],
+      cost: 2,
+      multiplier: 1.25,
+      description: 'Elara fija al objetivo y el Guardia remata en el mismo pulso.'
     })
   });
 
@@ -79,7 +87,7 @@
     const classes = new Set();
     for (const unit of party) {
       if (!unit || unit.hp <= 0) continue;
-      const declared = Array.isArray(unit.classes) ? unit.classes : [unit.class];
+      const declared = (Array.isArray(unit.classes) ? unit.classes : [unit.class]).concat(unit.id || []);
       for (const name of declared) if (name) classes.add(name);
     }
     return classes;
