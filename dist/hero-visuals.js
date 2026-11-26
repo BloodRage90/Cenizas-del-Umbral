@@ -177,6 +177,39 @@
    * an ember staff is drawn beside the hand that holds it. This keeps the six
    * protagonists readable at the small exploration scale without coloured
    * rectangles over their bodies. */
+  /* Clean, in-world equipment cues. The previous renderer drew race and
+   * presentation geometry on top of every frame; at exploration scale those
+   * strokes became detached triangles and coloured boxes. Keep the source art
+   * intact and add only a few pixel-sized, silhouette-following props. */
+  function drawCleanEquipment(ctx, x, y, width, height, spec) {
+    if (!ctx || !spec) return;
+    const u = Math.min(width, height) / 100;
+    const bodyX = x + width * .56, bodyY = y + height * .52;
+    const handX = x + width * .72, handY = y + height * .58;
+    const accent = spec.accent || '#d9b56c';
+    ctx.save(); ctx.imageSmoothingEnabled = false; ctx.lineCap = 'square'; ctx.lineJoin = 'miter';
+    ctx.strokeStyle = '#241a16'; ctx.lineWidth = Math.max(2, 2.6 * u);
+    if (spec.mark === 'shield') {
+      const sx = x + width * .29, sy = y + height * .6;
+      ctx.fillStyle = '#b8934b'; ctx.beginPath(); ctx.moveTo(sx - 11*u, sy - 15*u); ctx.lineTo(sx + 11*u, sy - 15*u); ctx.lineTo(sx + 10*u, sy + 10*u); ctx.lineTo(sx, sy + 19*u); ctx.lineTo(sx - 10*u, sy + 10*u); ctx.closePath(); ctx.fill(); ctx.stroke();
+      ctx.strokeStyle = '#f3d88d'; ctx.lineWidth = Math.max(1.5, 1.5*u); ctx.beginPath(); ctx.moveTo(sx, sy - 10*u); ctx.lineTo(sx, sy + 11*u); ctx.stroke();
+    } else if (spec.mark === 'rage') {
+      ctx.strokeStyle = '#d8c3a0'; ctx.lineWidth = Math.max(2, 3.5*u); ctx.beginPath(); ctx.moveTo(handX - 6*u, handY + 16*u); ctx.lineTo(handX + 14*u, handY - 24*u); ctx.stroke();
+      ctx.fillStyle = '#d9674f'; ctx.beginPath(); ctx.moveTo(handX + 8*u, handY - 25*u); ctx.lineTo(handX + 26*u, handY - 31*u); ctx.lineTo(handX + 21*u, handY - 12*u); ctx.lineTo(handX + 9*u, handY - 9*u); ctx.closePath(); ctx.fill(); ctx.stroke();
+    } else if (spec.mark === 'crescent') {
+      ctx.strokeStyle = '#e9e2ca'; ctx.lineWidth = Math.max(2, 2.5*u); ctx.beginPath(); ctx.moveTo(handX, handY + 10*u); ctx.lineTo(handX + 24*u, handY - 19*u); ctx.moveTo(x + width*.43, handY + 12*u); ctx.lineTo(x + width*.35, handY - 14*u); ctx.stroke();
+    } else if (spec.mark === 'compass') {
+      ctx.strokeStyle = '#c7d98c'; ctx.lineWidth = Math.max(2, 2.2*u); ctx.beginPath(); ctx.arc(x + width*.3, y + height*.56, 22*u, -1.15, 1.15); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x + width*.3, y + height*.35); ctx.lineTo(x + width*.3, y + height*.78); ctx.stroke();
+    } else if (spec.mark === 'rune' || spec.mark === 'ember') {
+      ctx.strokeStyle = spec.mark === 'rune' ? '#e2d8ff' : '#e7c39d'; ctx.lineWidth = Math.max(2, 2.8*u); ctx.beginPath(); ctx.moveTo(handX, handY + 19*u); ctx.lineTo(handX + 3*u, handY - 35*u); ctx.stroke();
+      ctx.fillStyle = spec.mark === 'rune' ? '#dcd3ff' : '#f2c779'; ctx.beginPath(); ctx.arc(handX + 3*u, handY - 40*u, 5*u, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      if (spec.mark === 'ember') { ctx.fillStyle = '#d76f4c'; for (const [dx,dy] of [[-10,-25],[12,-18],[3,-53]]) { ctx.fillRect(handX + dx*u, handY + dy*u, Math.max(2,3*u), Math.max(2,4*u)); } }
+    }
+    /* A thin cloak seam is the only subclass colour on the body. */
+    ctx.strokeStyle = accent; ctx.lineWidth = Math.max(1.5, 1.8*u); ctx.beginPath(); ctx.moveTo(bodyX - 16*u, bodyY - 12*u); ctx.lineTo(bodyX - 7*u, y + height*.82); ctx.stroke();
+    ctx.restore();
+  }
+
   function drawAnchoredTraits(ctx, x, y, width, height, spec) {
     const anchor = anchorFor(spec), factor = width / anchor.frame;
     const [headX, headY] = anchor.head.map(value => value * factor);
@@ -271,9 +304,9 @@
       const silhouette = spec.silhouette || [1, 1];
       const drawW = size * silhouette[0], drawH = size * silhouette[1];
       ctx.drawImage(source, sx, sy, sw, sh, (size - drawW) / 2, size - drawH, drawW, drawH); ctx.restore();
-      drawAnchoredTraits(ctx, (size - drawW) / 2, size - drawH, drawW, drawH, spec);
+      drawCleanEquipment(ctx, (size - drawW) / 2, size - drawH, drawW, drawH, spec);
     } else {
-      drawAnchoredTraits(ctx, 0, 0, size, size, spec);
+      drawCleanEquipment(ctx, 0, 0, size, size, spec);
     }
     return canvas;
   }
@@ -285,7 +318,7 @@
     ctx.save(); try { ctx.filter = spec.filter || 'none'; } catch { /* old WebViews ignore canvas filters */ }
     ctx.drawImage(source, 0, 0, width, height); ctx.restore();
     const frameWidth = width / columns, frameHeight = height / rows;
-    for (let row = 0; row < rows; row++) for (let column = 0; column < columns; column++) drawAnchoredTraits(ctx, column * frameWidth, row * frameHeight, frameWidth, frameHeight, spec);
+    for (let row = 0; row < rows; row++) for (let column = 0; column < columns; column++) drawCleanEquipment(ctx, column * frameWidth, row * frameHeight, frameWidth, frameHeight, spec);
   }
 
   const api = { classFiles, raceData, genderData, subclassData, profile, assets, variantKey, render, paintVariantCanvas, heroAnchors, slug };

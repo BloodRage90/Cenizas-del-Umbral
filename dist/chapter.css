@@ -302,3 +302,22 @@ body.show-combat-settings #battle .battle-mode{display:flex}
 [data-target]{box-shadow:0 0 0 2px #f5d37c66}
 .action-reason{display:block;margin-top:2px;color:#9fb5a8;font:10px/1.2 system-ui;white-space:normal}
 .combat-actions button:disabled .action-reason{color:#c7a878}
+
+/* Touch-first combat: keep the arena visible and make the command rail a
+   real scroll container instead of clipping its lower actions. */
+@media (orientation:landscape) and (max-width:900px) and (max-height:500px){
+  #battle{grid-template-columns:minmax(0,1fr) minmax(250px,38vw);grid-template-rows:minmax(0,1fr);height:100dvh;min-height:0;overflow:visible;padding:6px max(6px,env(safe-area-inset-right)) max(6px,env(safe-area-inset-bottom)) max(6px,env(safe-area-inset-left));gap:6px}
+  #battle .battle-header{grid-column:1;grid-row:1;align-self:start;max-height:64px;overflow:visible}
+  #battle #battle-stage{grid-column:1;grid-row:1;min-height:0;height:100%;padding-top:70px}
+  #battle #party-status{grid-column:1;grid-row:1;align-self:end;margin-bottom:2px;z-index:4}
+  #battle #elara-controls{grid-column:2;grid-row:1;align-self:start;z-index:5;max-height:54px;overflow:auto}
+  #battle #battle-controls{grid-column:2;grid-row:1;align-self:stretch;height:100%;max-height:none;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scrollbar-gutter:stable;padding:4px 6px 12px}
+  #battle .battle-preference{position:sticky;top:0;z-index:2;background:linear-gradient(#0b1b25 76%,transparent);padding-bottom:5px}
+  #battle #combat-actions{display:grid;grid-template-columns:1fr;gap:6px;min-height:0;overflow:visible}
+  #battle #combat-actions button{min-height:48px;line-height:1.2;white-space:normal;overflow-wrap:anywhere;text-overflow:clip}
+  #battle #combat-actions .action-reason{white-space:normal}
+}
+@media (prefers-reduced-motion:reduce){button,.combat-actions button{transition:none!important}.enemy-telegraph{animation:none!important}}
+#battle #battle-stage{z-index:1}
+#battle #battle-controls,#battle #elara-controls,#battle .battle-header{position:relative;z-index:20;pointer-events:auto}
+#battle #battle-controls::after{pointer-events:none}

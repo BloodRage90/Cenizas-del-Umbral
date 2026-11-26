@@ -1,5 +1,26 @@
 # Changelog
 
+## 2026-11-26 · Combate legible y primera decisión
+
+- El primer encuentro ya no se resuelve con un clic: Eco incipiente, Centinela,
+  Custodio y Guardián tienen más resistencia, sus mecanismos exponen o debilitan
+  al enemigo y la victoria siempre requiere reducir sus PG a cero.
+- El aviso de combate explica de forma persistente qué mecanismo debe resolverse
+  contra el Guardián y el Eco; el texto técnico de variantes ya no aparece en los
+  encuentros del bosque.
+- La arena en horizontal conserva el escenario visible y convierte las acciones en
+  una columna táctil desplazable, con botones de al menos 48 px y sin capas que
+  intercepten los clics. También respeta `prefers-reduced-motion`.
+- Las tiradas de combate con cierre automático se resuelven en 900 ms para reducir
+  la espera sin ocultar el registro; se añadió una regresión de flujo para los seis
+  protagonistas y sus controles.
+- El renderer compartido usa equipo limpio anclado a la silueta (escudo, hacha,
+  dagas, arco, bastón y brasas), sin trazos geométricos desprendidos que parecían
+  cuadrados o triángulos durante el desplazamiento.
+- Capturas responsive actualizadas en `artifacts/ux/after/` para 1280×720,
+  844×390, 667×375 y 390×844.
+- Verificación: 67 pruebas Node y 32 escenarios Playwright en verde.
+
 ## 2026-11-25 · Siluetas reforzadas y paso visible
 
 - Guardia y Berserker ahora se leen como escudo frente a hacha; Sombra y Explorador como dagas frente a arco y carcaj. El equipo queda anclado al cuerpo y acompañado por un tratamiento de color de apoyo.

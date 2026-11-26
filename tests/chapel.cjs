@@ -1,10 +1,10 @@
 const assert=require('node:assert/strict'),R=require('../dist/combat.js');
 const make=()=>new R.Battle('ash',R.profile(R.defaults,4),{flags:{elara:true}},()=>10);
 const turn=(b,id)=>{b.s.index=b.s.order.indexOf(id);b.begin();};
-let b=make();assert.equal(b.enemy.max,42);assert.equal(b.enemy.ac,16);assert.equal(b.enemy.attack,8);assert(b.s.units.some(u=>u.id==='elara'));assert.equal(b.s.warning.type,'radius');
-turn(b,'hero');b.hero.x=0;b.hero.y=2;assert(b.act('mechanism'));assert.equal(b.enemy.attack,7);assert.equal(b.s.result,null);
-turn(b,'elara');b.actor.x=6;b.actor.y=2;assert(b.act('mechanism'));assert.equal(b.enemy.attack,6);assert.equal(b.s.result,'victory','los dos soportes resuelven al Guardián sin una tirada adicional');assert(b.s.cancelNext);
-b=make();b.enemy.hp=0;b.check();assert.equal(b.s.result,null,'body alone does not finish encounter');turn(b,'hero');b.hero.x=0;b.hero.y=2;b.act('mechanism');turn(b,'hero');b.hero.x=6;b.hero.y=2;b.act('mechanism');assert.equal(b.s.result,'victory','los dos soportes bastan para resolver al Guardián');
+let b=make();assert.equal(b.enemy.max,30);assert.equal(b.enemy.ac,15);assert.equal(b.enemy.attack,5);assert(b.s.units.some(u=>u.id==='elara'));assert.equal(b.s.warning.type,'radius');
+turn(b,'hero');b.hero.x=0;b.hero.y=2;assert(b.act('mechanism'));assert.equal(b.enemy.attack,4);assert.equal(b.s.result,null);
+turn(b,'elara');b.actor.x=6;b.actor.y=2;assert(b.act('mechanism'));assert.equal(b.enemy.attack,3);assert.equal(b.s.result,null,'los dos soportes exponen al Guardián sin resolverlo');assert(b.s.cancelNext);
+b=make();b.enemy.hp=0;b.check();assert.equal(b.s.result,null,'body alone does not finish encounter');turn(b,'hero');b.hero.x=0;b.hero.y=2;b.act('mechanism');turn(b,'hero');b.hero.x=6;b.hero.y=2;b.act('mechanism');turn(b,'hero');b.s.noBoard=true;b.act('lever');assert.equal(b.s.result,null,'la palanca expone pero no resuelve por sí sola');for(let i=0;i<8&&!b.s.result;i++){b.s.action=true;b.act('attack');}assert.equal(b.s.result,'victory','la ruta de mecanismos deja al Guardián vulnerable a los ataques');
 b=make();turn(b,'enemy');b.enemyTurn();assert.equal(b.s.warning,null,'pulse has recovery turn');turn(b,'enemy');b.enemyTurn();assert.equal(b.s.warning.type,'radius','hammer turn warns next pulse');
 const saved={...R.fresh(),place:'capilla',level:4,flags:{captivesFreed:true},combat:b.s};assert(R.valid(saved));const resumed=new R.Battle('ash',R.profile(R.defaults,4),saved);assert.deepEqual(resumed.s,b.s);
 console.log('PASS: J02 stats, Elara, both supports, damage route, cooperative lever, pulse cooldown, saved battle.');

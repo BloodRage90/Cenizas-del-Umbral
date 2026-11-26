@@ -18,7 +18,7 @@ window.CenizasDice=(()=>{
    $('dice-tray').replaceChildren(...previews.map((d,index)=>{const wrap=d20('?',Number(d?.sides)||20,index,true);if(d?.label)wrap.querySelector('small').textContent=d.label;return wrap;}));
    const go=$('dice-roll'),exit=$('dice-exit');go.hidden=false;go.disabled=false;go.textContent='Tirar dados';exit.hidden=!optional;exit.textContent='Salir sin tirar';
    function finish(value){window.removeEventListener('battle-auto-change',scheduleAdvance);clearTimeout(timer);dialog.classList.remove('rolling','attack-roll','attack-hit','attack-miss');phase='closed';dialog.close();active=false;done(value);}
-   function scheduleAdvance(){if(phase!=='result')return;clearTimeout(timer);go.hidden=false;if(combat?window.CenizasPreferences.auto:autoAdvance)timer=setTimeout(()=>finish(outcome),combat?5000:3000);else go.focus();}
+   function scheduleAdvance(){if(phase!=='result')return;clearTimeout(timer);go.hidden=false;if(combat?window.CenizasPreferences.auto:autoAdvance)timer=setTimeout(()=>finish(outcome),combat?900:3000);else go.focus();}
    window.addEventListener('battle-auto-change',scheduleAdvance);
    function reveal(){if(phase!=='rolling')return;clearTimeout(timer);phase='result';dialog.classList.remove('rolling');$('dice-tray').replaceChildren();
     for(const [index,d] of (outcome.dice||[]).entries()){const wrap=d20(d.value,d.sides,index);if(d.label)wrap.querySelector('small').textContent=d.label;$('dice-tray').append(wrap);}

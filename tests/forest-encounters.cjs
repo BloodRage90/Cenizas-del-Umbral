@@ -13,9 +13,9 @@ for(const [x,y]of [[1210,737],[1280,700],[1390,650],[1490,580],[1490,540],[1450,
 const state=R.fresh();state.place='lindero';state.level=2;state.flags.elara=true;assert(R.valid(state));
 for(const encounter of encounters){
  const b=new R.Battle('whisper',R.profile(R.defaults,2),state,()=>10);b.s.encounter=encounter;
- assert.equal(b.enemy.max,12);assert.equal(b.enemy.attack,3);assert.equal(b.enemy.damage,4);assert(b.s.units.some(u=>u.id==='elara'));
+ assert.equal(b.enemy.max,16);assert.equal(b.enemy.attack,4);assert.equal(b.enemy.damage,5);assert(b.s.units.some(u=>u.id==='elara'));
  b.s.index=b.s.order.indexOf('hero');b.hero.x=1;b.hero.y=3;assert.equal(b.act('mechanism'),false);
- b.hero.x=5;b.hero.y=2;assert(b.act('mechanism'));assert.equal(b.s.result,'victory');
+ b.hero.x=5;b.hero.y=2;assert(b.act('mechanism'));assert.equal(b.s.result,null);b.s.noBoard=true;for(let i=0;i<12&&!b.s.result;i++){b.s.action=true;b.act('attack');}assert.equal(b.s.result,'victory');
  const restored=new R.Battle('whisper',R.profile(),{combat:b.s});assert.equal(restored.s.encounter.flag,encounter.flag);
 }
 // Use the real trigger selector to verify completed foci never fire again.
