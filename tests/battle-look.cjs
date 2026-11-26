@@ -25,4 +25,17 @@ const header = fs.readFileSync(sheet).subarray(0, 32);
 assert.equal(header.subarray(0, 4).toString(), 'RIFF');
 assert.equal(header.subarray(8, 12).toString(), 'WEBP');
 
+// The six approved combat protagonists are real four-pose strips, not the
+// generic class sheets. Keep this contract close to the renderer so a future
+// cleanup cannot silently collapse them back into one sprite.
+const combatHeroes = ['guardia', 'explorador', 'tejedor', 'berserker', 'sombra', 'arcanista'];
+for (const id of combatHeroes) {
+  const file = path.join(dist, 'combat-heroes', `${id}.png`);
+  assert(fs.existsSync(file), `combat sprite strip exists for ${id}`);
+  const png = fs.readFileSync(file);
+  assert.equal(png.subarray(0, 8).toString('hex'), '89504e470d0a1a0a', `combat sprite strip is PNG for ${id}`);
+}
+assert(/subclassFiles:\{[\s\S]*Guardia:'combat-heroes\/guardia\.png'[\s\S]*Arcanista:'combat-heroes\/arcanista\.png'/.test(visuals), 'battle renderer maps every fixed protagonist to its own strip');
+assert(/grid:\[4,1\],scale:1,noTraits:true/.test(visuals), 'combat strips use four poses without debug overlays');
+
 console.log('PASS: Elara keeps her own combat look and never falls back to the protagonist sheet.');

@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-11-26 · Sprites de combate de los seis protagonistas
+
+- La hoja de poses aprobada se incorporó como seis tiras PNG transparentes en
+  `dist/combat-heroes/`, con cuatro poses por personaje: Guardia, Explorador,
+  Tejedor, Berserker, Sombra y Arcanista.
+- La arena selecciona la tira por subclase fija; ya no usa una única hoja de
+  espadachín para todos ni dibuja marcadores geométricos sobre el cuerpo.
+- Se añadió una prueba E2E que pinta los seis sprites y captura una referencia
+  visual. Se invalidó la caché de `battle-visuals.js` (`combat-heroes-1`).
+
 ## 2026-11-26 · Atlas de marcha, cerrojos y atmósfera
 
 - La plaza y la exploración ya no reutilizan la hoja 2×2 de combate: cada protagonista obtiene

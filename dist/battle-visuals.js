@@ -8,7 +8,22 @@ window.CenizasBattleVisuals=(()=>{
   construct:{file:'custodian.webp',scale:.72,frames:Array(4).fill([0,0,1280,1280,640,1280])},
   // Elara's own combat poses (idle, wind-up, strike, hurt), restored from history (7b5437e). Same 2x2 format as the hero sheets.
   ally:{file:'elara-combat.webp',grid:[2,2],scale:1,noTraits:true},
-  hero:{classFiles:{Guerrero:'identity-warrior-pixel.webp',Pícaro:'identity-rogue-pixel.webp',Mago:'identity-mage-pixel.webp'},grid:[2,2],scale:1},
+  /* The approved combat sheet is split into one transparent four-pose strip
+     per fixed protagonist.  Exploration can keep its six-direction atlas,
+     while battle uses these readable attack / hurt poses instead of the old
+     three generic class sheets. */
+  hero:{
+   classFiles:{Guerrero:'identity-warrior-pixel.webp',Pícaro:'identity-rogue-pixel.webp',Mago:'identity-mage-pixel.webp'},
+   subclassFiles:{
+    Guardia:'combat-heroes/guardia.png',
+    Explorador:'combat-heroes/explorador.png',
+    Tejedor:'combat-heroes/tejedor.png',
+    Berserker:'combat-heroes/berserker.png',
+    Sombra:'combat-heroes/sombra.png',
+    Arcanista:'combat-heroes/arcanista.png'
+   },
+   grid:[4,1],scale:1,noTraits:true
+  },
   enemy:{files:{
    'ash-warden':'enemies/ash-warden.png','rootbound-sentinel':'enemies/rootbound-sentinel.png','bell-moth':'enemies/bell-moth.png','river-wisp':'enemies/river-wisp.png','ember-wolf':'enemies/ember-wolf.png',
    'thorn-goblin':'enemies/thorn-goblin.png','marsh-hag':'enemies/marsh-hag.png','rune-beetle':'enemies/rune-beetle.png','drowned-knight':'enemies/drowned-knight.png','candle-imp':'enemies/candle-imp.png',
@@ -22,8 +37,8 @@ window.CenizasBattleVisuals=(()=>{
  const slug=value=>String(value||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
  const heroSpec=(actor)=>{
    const profile=HV?.profile?.({class:actor?.dataset.class||document.body.dataset.heroClass,race:actor?.dataset.race||document.body.dataset.heroRace,gender:actor?.dataset.gender||document.body.dataset.heroGender,subclass:actor?.dataset.subclass||document.body.dataset.heroSubclass})||{class:'Guerrero',race:'Humano',gender:'No binario',subclass:'Guardia',file:sprites.hero.classFiles.Guerrero,scale:1,filter:'none',raceFeature:'round',genderFeature:'sash',mark:'shield',accent:'#d9b56c',raceAccent:'#d9b56c',genderAccent:'#b9aaf4'};
-   const file=profile.file||sprites.hero.classFiles[profile.class];
-   return {...sprites.hero,...profile,file,key:'hero|'+file+'|'+profile.race+'|'+profile.gender+'|'+profile.subclass};
+   const file=sprites.hero.subclassFiles?.[profile.subclass]||profile.file||sprites.hero.classFiles[profile.class];
+   return {...sprites.hero,...profile,file,grid:[4,1],noTraits:true,key:'hero|'+file+'|'+profile.race+'|'+profile.gender+'|'+profile.subclass};
  };
  const specFor=a=>{
    if(a.dataset.kind==='ally')return sprites.ally;
