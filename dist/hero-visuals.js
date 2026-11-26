@@ -330,7 +330,11 @@
    */
   function drawWalkIdentity(ctx, x, y, width, height, spec, row) {
     if (!ctx || !spec) return;
-    const u = Math.min(width, height) / 100;
+    /* The atlas frames are roughly 300px wide, while the measurements below
+       are authored in character pixels.  The old /100 scale made ears,
+       caps and gender marks three times too large at world scale; they read
+       as detached triangles.  Keep them attached and proportional. */
+    const u = Math.min(width, height) / 300;
     const cx = x + width * .5;
     const headY = y + height * .225;
     const skin = spec.raceSkin || '#c68b68';
@@ -373,6 +377,74 @@
     ctx.restore();
   }
 
+  /* Exploration is viewed at about 100px tall.  These are deliberately
+     physical, high-contrast costume shapes (not UI markers) so the six fixed
+     protagonists remain readable even when the source walk sheet is shared.
+     They are drawn on the body/hand anchors and never float above it. */
+  function drawWalkEquipment(ctx, x, y, width, height, spec, row) {
+    if (!ctx || !spec) return;
+    const u = Math.min(width, height) / 220;
+    const cx = x + width * .52;
+    const headY = y + height * .23;
+    const shoulderY = y + height * .39;
+    const handY = y + height * .56;
+    const hipY = y + height * .69;
+    const footY = y + height * .89;
+    const dark = '#211b1c';
+    const accent = spec.accent || '#d9b56c';
+    const side = row === 1 || row === 2;
+    ctx.save();
+    ctx.imageSmoothingEnabled = false;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+    const outline = Math.max(1, 2 * u);
+
+    if (spec.mark === 'shield') {
+      /* Guardia: shoulder guard + broad shield. */
+      ctx.fillStyle = '#263f5b';
+      polygon(ctx, [[cx - 27*u, shoulderY - 8*u], [cx + 21*u, shoulderY - 4*u], [cx + 31*u, hipY + 16*u], [cx - 34*u, hipY + 18*u]], '#263f5b', dark, outline);
+      const sx = x + width * (side ? .28 : .30), sy = handY + 4*u;
+      polygon(ctx, [[sx - 16*u, sy - 18*u], [sx + 14*u, sy - 18*u], [sx + 16*u, sy + 12*u], [sx, sy + 25*u], [sx - 16*u, sy + 12*u]], '#bd954c', dark, outline);
+      ctx.strokeStyle = '#f5d78a'; ctx.lineWidth = Math.max(1, 1.4*u); ctx.beginPath(); ctx.moveTo(sx, sy - 13*u); ctx.lineTo(sx, sy + 17*u); ctx.stroke();
+    } else if (spec.mark === 'rage') {
+      /* Berserker: torn red mantle and a large, readable axe at the hand. */
+      ctx.fillStyle = '#7e3f35';
+      polygon(ctx, [[cx - 27*u, shoulderY - 9*u], [cx + 24*u, shoulderY - 6*u], [cx + 35*u, hipY + 17*u], [cx + 11*u, hipY + 10*u], [cx - 2*u, hipY + 24*u], [cx - 32*u, hipY + 14*u]], '#7e3f35', dark, outline);
+      const ax = x + width * .76, ay = handY - 2*u;
+      ctx.strokeStyle = '#d9c7a3'; ctx.lineWidth = Math.max(2, 4*u); ctx.beginPath(); ctx.moveTo(ax - 8*u, ay + 30*u); ctx.lineTo(ax + 13*u, ay - 24*u); ctx.stroke();
+      polygon(ctx, [[ax + 4*u, ay - 24*u], [ax + 32*u, ay - 33*u], [ax + 27*u, ay - 5*u], [ax + 8*u, ay + 3*u]], '#d96550', dark, outline);
+    } else if (spec.mark === 'crescent') {
+      /* Sombra: hood/cowl and twin short blades, clearly unlike Explorador. */
+      ctx.fillStyle = '#1d2b36';
+      ctx.beginPath(); ctx.moveTo(cx - 31*u, headY + 8*u); ctx.quadraticCurveTo(cx, headY - 28*u, cx + 31*u, headY + 8*u); ctx.lineTo(cx + 24*u, shoulderY + 15*u); ctx.lineTo(cx - 25*u, shoulderY + 15*u); ctx.closePath(); ctx.fill(); ctx.strokeStyle = dark; ctx.lineWidth = outline; ctx.stroke();
+      ctx.strokeStyle = '#e6f1dc'; ctx.lineWidth = Math.max(1.5, 2.4*u);
+      ctx.beginPath(); ctx.moveTo(cx - 23*u, handY + 14*u); ctx.lineTo(cx - 42*u, handY - 19*u); ctx.moveTo(cx + 20*u, handY + 12*u); ctx.lineTo(cx + 40*u, handY - 22*u); ctx.stroke();
+    } else if (spec.mark === 'compass') {
+      /* Explorador: bow arc and quiver on the back. */
+      ctx.strokeStyle = '#b8cc83'; ctx.lineWidth = Math.max(1.5, 2.5*u); ctx.beginPath(); ctx.arc(cx - 30*u, shoulderY + 23*u, 44*u, -1.18, 1.18); ctx.stroke();
+      ctx.strokeStyle = '#e6e1bc'; ctx.lineWidth = Math.max(1, 1.5*u); ctx.beginPath(); ctx.moveTo(cx - 30*u, shoulderY - 20*u); ctx.lineTo(cx - 30*u, hipY + 21*u); ctx.moveTo(cx - 30*u, shoulderY - 19*u); ctx.lineTo(cx + 7*u, hipY + 17*u); ctx.stroke();
+      ctx.fillStyle = '#6a4838'; polygon(ctx, [[cx + 18*u, shoulderY + 1*u], [cx + 29*u, shoulderY + 3*u], [cx + 26*u, hipY + 23*u], [cx + 15*u, hipY + 20*u]], '#6a4838', dark, outline);
+      ctx.strokeStyle = '#e8d8a3'; ctx.lineWidth = Math.max(1, 1.3*u); for (let i = 0; i < 3; i++) { ctx.beginPath(); ctx.moveTo(cx + (18 + i*4)*u, shoulderY + 2*u); ctx.lineTo(cx + (24 + i*4)*u, shoulderY - 15*u); ctx.stroke(); }
+    } else if (spec.mark === 'rune') {
+      /* Arcanista: violet robe hem and a staff with a single attached orb. */
+      polygon(ctx, [[cx - 28*u, hipY - 6*u], [cx + 28*u, hipY - 6*u], [cx + 39*u, footY + 2*u], [cx - 39*u, footY + 2*u]], '#514a83', dark, outline);
+      const sx = x + width * .74, sy = handY;
+      ctx.strokeStyle = '#d8c9e8'; ctx.lineWidth = Math.max(2, 3*u); ctx.beginPath(); ctx.moveTo(sx, sy + 31*u); ctx.lineTo(sx + 3*u, sy - 38*u); ctx.stroke();
+      ctx.fillStyle = '#c6b3ff'; ctx.beginPath(); ctx.arc(sx + 3*u, sy - 43*u, 8*u, 0, Math.PI*2); ctx.fill(); ctx.strokeStyle = '#f1e8ff'; ctx.lineWidth = Math.max(1, 1.5*u); ctx.stroke();
+    } else if (spec.mark === 'ember') {
+      /* Tejedor: charcoal mantle and ember staff. */
+      polygon(ctx, [[cx - 31*u, shoulderY - 9*u], [cx + 28*u, shoulderY - 6*u], [cx + 34*u, hipY + 19*u], [cx - 38*u, hipY + 19*u]], '#4b3d3a', dark, outline);
+      const sx = x + width * .74, sy = handY;
+      ctx.strokeStyle = '#e3c39d'; ctx.lineWidth = Math.max(2, 3*u); ctx.beginPath(); ctx.moveTo(sx, sy + 30*u); ctx.lineTo(sx + 4*u, sy - 37*u); ctx.stroke();
+      ctx.fillStyle = '#e6a26f'; ctx.beginPath(); ctx.arc(sx + 5*u, sy - 43*u, 8*u, 0, Math.PI*2); ctx.fill(); ctx.strokeStyle = '#f8e0ae'; ctx.lineWidth = Math.max(1, 1.5*u); ctx.stroke();
+      ctx.fillStyle = '#d76f4c'; for (const [dx,dy] of [[-9,-26],[10,-19],[2,-55]]) ctx.fillRect(sx + dx*u, sy + dy*u, Math.max(1, 3*u), Math.max(1, 4*u));
+    }
+    /* A small class-colour seam ties the prop to the torso, rather than
+       leaving an isolated coloured mark over the actor. */
+    ctx.strokeStyle = accent; ctx.lineWidth = Math.max(1, 1.2*u); ctx.beginPath(); ctx.moveTo(cx - 12*u, shoulderY + 4*u); ctx.lineTo(cx - 8*u, hipY + 10*u); ctx.stroke();
+    ctx.restore();
+  }
+
   function paintWalkCanvas(source, spec, options = {}) {
     if (!source || typeof document === 'undefined') return null;
     const sourceWidth = source.naturalWidth || source.width;
@@ -400,7 +472,7 @@
         ctx.drawImage(source, sx, sy, frameWidth, frameHeight, dx, dy, frameWidth, frameHeight);
         ctx.restore();
         drawWalkIdentity(ctx, dx, dy, frameWidth, frameHeight, spec, row);
-        drawCleanEquipment(ctx, dx, dy, frameWidth, frameHeight, spec);
+        drawWalkEquipment(ctx, dx, dy, frameWidth, frameHeight, spec, row);
       }
     }
     canvas.dataset.columns = String(columns);

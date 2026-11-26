@@ -2,10 +2,12 @@
 
 ## 2026-11-26 · Atlas de marcha, cerrojos y atmósfera
 
-- La exploración ya no reutiliza la hoja 2×2 de combate: cada protagonista obtiene
+- La plaza y la exploración ya no reutilizan la hoja 2×2 de combate: cada protagonista obtiene
   una hoja 6×4 generada desde `hero-vigilia.webp`, con frente, laterales y espalda,
   ciclo de seis pasos y reposo animado. El equipo de subclase y los rasgos de raza
   quedan anclados a cada frame, sin triángulos ni cuadros de depuración.
+- Se invalidó la caché del renderer visual (`playable-variants-1`) para que la versión
+  publicada cargue el atlas nuevo en index, capítulo y creador.
 - Los enemigos muestran cerrojos visibles (foco, soportes, ruedas y conducto) que
   desaparecen al resolver el mecanismo. Se añadió `Juramento gemelo`, el combo de
   Elara, con coste de PI y efecto real en el motor.
