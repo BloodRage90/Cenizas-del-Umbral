@@ -34,6 +34,8 @@
 - `pnpm test:e2e` ahora elige un puerto libre, inicia `scripts/serve.cjs` y
   libera el proceso al terminar, evitando el error EADDRINUSE de sesiones
   anteriores.
+- Verificación de esta fase: `node --test tests/*.cjs` → 73/73; `pnpm
+  test:e2e` → 40/40 en los cuatro viewports configurados.
 
 
 ## 2026-11-27 · Sprites visibles en el creador
