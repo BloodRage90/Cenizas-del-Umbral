@@ -12,6 +12,11 @@
   validar las hojas actuales y preparar el reemplazo aprobado sin romper las
   claves de guardado.
 - Regresiones nuevas: `tests/combat-art-layout.cjs` y `tests/hero-art.cjs`.
+- Los seis protagonistas fijos reutilizan su tira aprobada también en
+  exploración (repetida en cuatro filas como marcador de caminata), de modo que
+  el diseño de combate ya no se sustituye por el cuerpo genérico de
+  `hero-vigilia.webp`. El modo avanzado conserva su fallback procedural hasta
+  que se aprueben las hojas 6×4 definitivas.
 
 
 ## 2026-11-27 · Sprites visibles en el creador

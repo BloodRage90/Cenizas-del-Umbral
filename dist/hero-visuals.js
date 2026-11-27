@@ -40,6 +40,11 @@
     Tejedor: { class: 'Mago', visual: 'ash-weaver', accent: '#d6a17c', mark: 'ember', equipment: 'manto-ceniza', filter: 'saturate(.7) sepia(.3) brightness(.9) contrast(1.12)' }
   };
   const defaults = { Guerrero: 'Guardia', Pícaro: 'Sombra', Mago: 'Arcanista' };
+  const fixedCombatFiles = {
+    guardia: 'combat-heroes/guardia.png', explorador: 'combat-heroes/explorador.png',
+    tejedor: 'combat-heroes/tejedor.png', berserker: 'combat-heroes/berserker.png',
+    sombra: 'combat-heroes/sombra.png', arcanista: 'combat-heroes/arcanista.png'
+  };
   // Anchors are expressed in pixels of one source frame. They keep race and
   // presentation details attached to the actual head/hands instead of
   // floating at percentages of the card. The four supplied sheets use the
@@ -67,10 +72,13 @@
     const baseTextureKey = className === 'Mago' && subclass === 'Tejedor' ? 'hero-mage-ash' : classKeys[className];
     const raceInfo = raceData[race], genderInfo = genderData[gender], subInfo = subclassData[subclass];
     const key = variantKey({ className, race, gender, subclass });
+    const fixedId = Object.prototype.hasOwnProperty.call(fixedCombatFiles, character.playableId)
+      ? character.playableId : null;
     return {
       class: className, race, gender, subclass,
       classSlug: slug(className), raceSlug: slug(race), genderSlug: genderInfo.key,
       visual: subInfo.visual, mark: subInfo.mark, file: classFile, baseTextureKey,
+      fixedId, combatFile: fixedId ? fixedCombatFiles[fixedId] : null,
       textureKey: key, variantKey: key, scale: raceInfo.scale,
       filter: [raceInfo.filter, subInfo.filter].filter(value => value && value !== 'none').join(' ') || 'none',
       raceFeature: raceInfo.feature, raceAccent: raceInfo.accent, raceSkin: raceInfo.skin,

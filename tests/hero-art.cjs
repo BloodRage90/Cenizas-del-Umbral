@@ -19,4 +19,11 @@ for (const id of ids) {
   assert(entry.width >= 4 && entry.height >= 1);
 }
 
+const visuals = require('../dist/hero-visuals.js');
+for (const id of ids) {
+  const fixed = visuals.profile({ playableId: id });
+  assert.equal(fixed.fixedId, id);
+  assert.equal(fixed.combatFile, `combat-heroes/${id}.png`);
+}
+
 console.log('PASS: el manifiesto de arte declara las seis hojas y su estado PLACEHOLDER.');
