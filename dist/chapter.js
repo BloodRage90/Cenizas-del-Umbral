@@ -606,31 +606,27 @@ function map(){
 function sheet(){if(battle)return;$('sheet-frame').src='character.html?campaign=1&mode=view';open('sheet');}
 class CampaignScene extends Phaser.Scene{
  constructor(){super('Campaign');}
- prepareHeroTexture(key){const texture=this.textures.get(key);if(!texture||texture.__heroFrames)return;const source=texture.getSourceImage(),grid=texture.__heroGrid||{},columns=grid.columns||((key.endsWith('-walk'))?6:(source.width<1400?2:4)),rows=grid.rows||((key.endsWith('-walk'))?4:(source.height<1300?2:4));texture.__heroFrames={columns,rows};for(let r=0;r<rows;r++)for(let c=0;c<columns;c++){const x=Math.round(c*source.width/columns),y=Math.round(r*source.height/rows);texture.add(r*columns+c,0,x,y,Math.round((c+1)*source.width/columns)-x,Math.round((r+1)*source.height/rows)-y)}}
+ prepareHeroTexture(key){const texture=this.textures.get(key);if(!texture||texture.__heroFrames)return;const source=texture.getSourceImage(),grid=texture.__heroGrid||{},columns=grid.columns||((key.endsWith('-walk'))?5:(source.width<1400?2:4)),rows=grid.rows||((key.endsWith('-walk'))?4:(source.height<1300?2:4));texture.__heroFrames={columns,rows};for(let r=0;r<rows;r++)for(let c=0;c<columns;c++){const x=Math.round(c*source.width/columns),y=Math.round(r*source.height/rows);texture.add(r*columns+c,0,x,y,Math.round((c+1)*source.width/columns)-x,Math.round((r+1)*source.height/rows)-y)}}
  ensureHeroVariant(v){const key=v.textureKey||v.baseTextureKey||'hero-warrior';if(this.textures.exists(key)){this.prepareHeroTexture(key);return key;}const base=this.textures.get(v.baseTextureKey||'hero-warrior');if(!base)return v.baseTextureKey||'hero-warrior';const source=base.getSourceImage(),columns=source.width<1400?2:4,rows=source.height<1300?2:4,variant=this.textures.createCanvas(key,source.width,source.height);HV?.render?.(v,{source,frame:0,size:Math.floor(source.width/columns),columns,rows});HV?.paintVariantCanvas?.(variant.context,source,v,columns,rows);variant.refresh();this.prepareHeroTexture(key);return key}
  ensureHeroWalkVariant(v){
   const key=(v.textureKey||v.baseTextureKey||'hero-warrior')+'-walk';
   if(this.textures.exists(key)){this.prepareHeroTexture(key);return key;}
-  /* Fixed protagonists use their approved combat strip in the world too. The
-     strip is repeated across four facing rows until dedicated 6x4 walk
-     atlases are approved; the silhouette and equipment therefore stay the
-     same in creator, exploration and battle. */
-  if(v.fixedId&&v.combatFile){
-   const source=this.textures.get('hero-combat-'+v.fixedId);
-    if(source){
-     /* The approved strip contains attack poses. Exploration must retain the
-        same silhouette/equipment without leaking wind-up, strike or hurt into
-        the walk cycle, so every direction row is built from the neutral cell.
-        Locomotion adds a tiny cadence bob and mirror; final 6x4 walk art can
-        replace this generated placeholder without changing the texture key. */
-     const image=source.getSourceImage(),frameWidth=Math.floor(image.width/4),frameHeight=image.height,variant=this.textures.createCanvas(key,image.width,image.height*4);
-     variant.__heroGrid={columns:4,rows:4};variant.__heroFrames={columns:4,rows:4};variant.__heroWalkSynthetic=true;variant.context.imageSmoothingEnabled=false;
-     for(let row=0;row<4;row++)for(let column=0;column<4;column++){const x=column*frameWidth,y=row*frameHeight;variant.context.drawImage(image,0,0,frameWidth,frameHeight,x,y,frameWidth,frameHeight);variant.add(row*4+column,0,x,y,frameWidth,frameHeight);}
+  /* Exploration uses an actual four-direction source (front, left, right,
+     back) with five safe walk frames. Class/race/subclass equipment is painted
+     onto that same silhouette; combat keeps the fixed side-view sheet. */
+  const base=this.textures.get('hero-vigilia');
+  if(base&&HV?.paintWalkCanvas){
+   const canvas=HV.paintWalkCanvas(base.getSourceImage(),v,{columns:5,rows:4,sourceColumns:4,sourceRows:4});
+   if(canvas){
+    const variant=this.textures.createCanvas(key,canvas.width,canvas.height);
+    variant.__heroGrid={columns:5,rows:4};variant.__heroFrames={columns:5,rows:4};variant.__heroWalkDirectional=true;variant.context.imageSmoothingEnabled=false;variant.context.drawImage(canvas,0,0);
+    for(let r=0;r<4;r++)for(let c=0;c<5;c++){const x=Math.round(c*canvas.width/5),y=Math.round(r*canvas.height/4);variant.add(r*5+c,0,x,y,Math.round((c+1)*canvas.width/5)-x,Math.round((r+1)*canvas.height/4)-y);}
     variant.refresh();return key;
    }
   }
-  const base=this.textures.get('hero-vigilia');if(!base||!HV?.paintWalkCanvas)return this.ensureHeroVariant(v);const canvas=HV.paintWalkCanvas(base.getSourceImage(),v,{columns:6,rows:4,sourceColumns:4,sourceRows:4});if(!canvas)return this.ensureHeroVariant(v);const variant=this.textures.createCanvas(key,canvas.width,canvas.height);variant.__heroGrid={columns:6,rows:4};variant.__heroFrames={columns:6,rows:4};variant.context.imageSmoothingEnabled=false;variant.context.drawImage(canvas,0,0);for(let r=0;r<4;r++)for(let c=0;c<6;c++){const x=Math.round(c*canvas.width/6),y=Math.round(r*canvas.height/4);variant.add(r*6+c,0,x,y,Math.round((c+1)*canvas.width/6)-x,Math.round((r+1)*canvas.height/4)-y)}variant.refresh();return key}
-  applyHeroSprite(c=character){if(!this.hero)return;const v=HV?.profile?.(c||{})||{textureKey:'hero-warrior',baseTextureKey:'hero-warrior',scale:1,silhouette:[1,1],accent:'#d9b56c',raceAccent:'#d9b56c',genderAccent:'#b9aaf4',raceFeature:'round',genderFeature:'sash',mark:'shield'};const key=this.ensureHeroWalkVariant(v);this.prepareHeroTexture(key);const texture=this.textures.get(key),meta=texture?.__heroFrames||{columns:6,rows:4};if(this.textures.exists(key)&&this.hero.texture.key!==key){this.hero.setTexture(key,0);this.hero.walkFrame=0;this.hero.walkDistance=0;this.hero.walkIdle=0;}this.hero.walkColumns=meta.columns;this.hero.walkRows=meta.rows;this.hero.walkStride=20;this.hero.walkSynthetic=Boolean(texture?.__heroWalkSynthetic);this.hero.heroProfile=v;const silhouette=v.silhouette||[1,1];this.hero.setDisplaySize(110*silhouette[0],110*silhouette[1]);this.hero.walkBaseScaleX=this.hero.scaleX;this.hero.walkBaseScaleY=this.hero.scaleY;this.hero.setRotation(0);this.hero.setFlipX(false);this.hero.clearTint?.();this.heroAura??=this.add.graphics();this.heroFeatures??=this.add.graphics();this.heroMark??=this.add.graphics();const x=this.hero.x,y=this.hero.y,hex=h=>Phaser.Display.Color.HexStringToColor(h||'#d9b56c').color,raceAccent=hex(v.raceAccent||v.accent);this.heroAura.clear().lineStyle(2,raceAccent,.28).strokeEllipse(0,-54,62*silhouette[0],80*silhouette[1]).setPosition(x,y).setDepth(y-.25);this.heroFeatures.clear().setVisible(false);this.heroMark.clear().setVisible(false);}
+  return this.ensureHeroVariant(v);
+ }
+  applyHeroSprite(c=character){if(!this.hero)return;const v=HV?.profile?.(c||{})||{textureKey:'hero-warrior',baseTextureKey:'hero-warrior',scale:1,silhouette:[1,1],accent:'#d9b56c',raceAccent:'#d9b56c',genderAccent:'#b9aaf4',raceFeature:'round',genderFeature:'sash',mark:'shield'};const key=this.ensureHeroWalkVariant(v);this.prepareHeroTexture(key);const texture=this.textures.get(key),meta=texture?.__heroFrames||{columns:5,rows:4};if(this.textures.exists(key)&&this.hero.texture.key!==key){this.hero.setTexture(key,0);this.hero.walkFrame=0;this.hero.walkDistance=0;this.hero.walkIdle=0;}this.hero.walkColumns=meta.columns;this.hero.walkRows=meta.rows;this.hero.walkStride=20;this.hero.walkSynthetic=Boolean(texture?.__heroWalkSynthetic);this.hero.walkDirectional=Boolean(texture?.__heroWalkDirectional);this.hero.heroProfile=v;const silhouette=v.silhouette||[1,1];this.hero.setDisplaySize(110*silhouette[0],110*silhouette[1]);this.hero.walkBaseScaleX=this.hero.scaleX;this.hero.walkBaseScaleY=this.hero.scaleY;this.hero.setRotation(0);this.hero.setFlipX(false);this.hero.clearTint?.();this.heroAura??=this.add.graphics();this.heroFeatures??=this.add.graphics();this.heroMark??=this.add.graphics();const x=this.hero.x,y=this.hero.y,hex=h=>Phaser.Display.Color.HexStringToColor(h||'#d9b56c').color,raceAccent=hex(v.raceAccent||v.accent);this.heroAura.clear().lineStyle(2,raceAccent,.28).strokeEllipse(0,-54,62*silhouette[0],80*silhouette[1]).setPosition(x,y).setDepth(y-.25);this.heroFeatures.clear().setVisible(false);this.heroMark.clear().setVisible(false);}
  preload(){
   const fixedCombatFiles={guardia:'combat-heroes/guardia.png',explorador:'combat-heroes/explorador.png',tejedor:'combat-heroes/tejedor.png',berserker:'combat-heroes/berserker.png',sombra:'combat-heroes/sombra.png',arcanista:'combat-heroes/arcanista.png'};
   Object.entries(fixedCombatFiles).forEach(([id,file])=>this.load.image('hero-combat-'+id,file));

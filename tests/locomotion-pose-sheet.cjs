@@ -61,4 +61,12 @@ const elara = walk(4, 4, -2.5, 0);
 assert([...new Set(elara.frames)].every((frame) => frame >= 4 && frame <= 7), 'left row is row 1');
 assert.equal(elara.flipX, false, 'full walk sheets are not mirrored');
 
+// Fixed protagonists use five safe frames for each of the four directions.
+for (const [dx, dy, start] of [[0, 2.5, 0], [-2.5, 0, 5], [2.5, 0, 10], [0, -2.5, 15]]) {
+  const directional = walk(5, 4, dx, dy);
+  const frames = new Set(directional.frames);
+  assert(frames.size > 1, `five-frame walk cycle advances (${dx},${dy})`);
+  assert([...frames].every((frame) => frame >= start && frame < start + 5), `direction ${start / 5} stays in its row`);
+}
+
 console.log('PASS: pose sheets never walk with attack poses, mirror on leftward travel and rest neutral.');

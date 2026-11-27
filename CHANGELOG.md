@@ -2,6 +2,14 @@
 
 ## 2026-11-27 · Fase 0 — contrato de arte y sprites contenidos
 
+- El contrato visual ahora declara cinco poses lógicas (`idle`, `windup`,
+  `strike`, `hurt`, `critical`) para los seis protagonistas. `critical` usa
+  temporalmente la celda `hurt` hasta aprobar el arte final.
+- La exploración ya no repite una tira de combate en todas las filas: genera un
+  atlas 5×4 con cinco pasos seguros para `down`, `left`, `right` y `up`, usando
+  la silueta direccional y el equipo propio de cada arquetipo. El combate sigue
+  usando las tiras laterales de cada personaje.
+
 - Se añadió una pose persistente de **vida crítica** para protagonistas y
   enemigos: al llegar a 25 % de PG o menos, la unidad adopta una respiración
   encorvada, contorno de peligro y estado `low-health` hasta recuperarse o caer.

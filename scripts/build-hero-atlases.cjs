@@ -32,7 +32,10 @@ for (const id of ids) {
   heroes[id] = {
     file: `combat-heroes/${id}.png`,
     grid: [4, 1],
-    poses: ['idle', 'windup', 'strike', 'hurt'],
+    poses: ['idle', 'windup', 'strike', 'hurt', 'critical'],
+    poseFrames: { critical: 3 },
+    directions: ['down', 'left', 'right', 'up'],
+    walkGrid: [5, 4],
     status: 'placeholder-approved-sheet',
     source: `art/src/${id}/combat.png`,
     width: size.width,

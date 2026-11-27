@@ -9,7 +9,7 @@ window.CenizasBattleVisuals=(()=>{
   // Elara's own combat poses (idle, wind-up, strike, hurt), restored from history (7b5437e). Same 2x2 format as the hero sheets.
   ally:{file:'elara-combat.webp',grid:[2,2],scale:1,noTraits:true},
   /* The approved combat sheet is split into one transparent four-pose strip
-     per fixed protagonist.  Exploration can keep its six-direction atlas,
+     per fixed protagonist. Exploration uses a four-direction atlas,
      while battle uses these readable attack / hurt poses instead of the old
      three generic class sheets. */
   hero:{
@@ -58,7 +58,7 @@ window.CenizasBattleVisuals=(()=>{
  function paint(a){
    const kind=a.dataset.kind,spec=specFor(a);if(!spec)return;
    const img=imageFor(kind,spec);if(!img.complete||!img.naturalWidth){img.addEventListener('load',()=>paint(a),{once:true});return;}
-   const poseFrames={idle:0,windup:1,strike:2,hurt:3,low:3};let index=poseFrames[a.dataset.pose];if(index===undefined)index=0;
+   const poseFrames={idle:0,windup:1,strike:2,hurt:3,critical:3,low:3};let index=poseFrames[a.dataset.pose];if(index===undefined)index=0;
    const canvas=a.querySelector('canvas'),ctx=canvas.getContext('2d');ctx.clearRect(0,0,1024,768);
     if(spec.grid){
       const cols=spec.grid[0],rows=spec.grid[1],frame=index% (cols*rows);
@@ -124,7 +124,7 @@ window.CenizasBattleVisuals=(()=>{
      const label=document.createElement('span');label.className='actor-name';n.append(label);const hp=document.createElement('div');hp.className='actor-health';hp.innerHTML='<span></span>';n.append(hp);layer.append(n);}
    const old=previous.get(u.id),list=u.team==='party'?party:foes,i=list.indexOf(u),left=u.team==='party'?16+i*partyStep:84-i*foeStep,top=u.team==='party'?68+i*3:66+i*4,critical=u.hp>0&&u.max>0&&u.hp/u.max<=.25;
    n.classList.toggle('low-health',critical);
-   const combatArt=n.querySelector('.combat-art');if(combatArt){combatArt.dataset.baseKind=s.kind;combatArt.dataset.variant=s.encounter?.variant||s.variant||'';if(critical&&!['windup','strike'].includes(combatArt.dataset.pose))combatArt.dataset.pose='low';else if(!critical&&combatArt.dataset.pose==='low')combatArt.dataset.pose='idle';paint(combatArt);}
+   const combatArt=n.querySelector('.combat-art');if(combatArt){combatArt.dataset.baseKind=s.kind;combatArt.dataset.variant=s.encounter?.variant||s.variant||'';if(critical&&!['windup','strike'].includes(combatArt.dataset.pose))combatArt.dataset.pose='critical';else if(!critical&&['low','critical'].includes(combatArt.dataset.pose))combatArt.dataset.pose='idle';paint(combatArt);}
    n.style.left=left+'%';n.style.top=top+'%';n.style.setProperty('--depth',(1-i*.035).toFixed(2));n.style.zIndex=10-i;n.classList.toggle('active',u.id===s.order[s.index]);n.classList.toggle('enemy-unit',u.team!=='party');n.classList.toggle('party-unit',u.team==='party');n.classList.toggle('selected-target',u.id===s.targetId);n.classList.toggle('fixed-object',['left','right','enemy'].includes(u.id)&&s.kind==='coro');n.classList.toggle('down',u.hp<=0);let telegraph=n.querySelector('.enemy-telegraph');if(!telegraph){telegraph=document.createElement('span');telegraph.className='enemy-telegraph';telegraph.setAttribute('role','status');telegraph.setAttribute('aria-live','polite');n.append(telegraph);}const telegraphOn=u.team!=='party'&&u.hp>0&&(u.warning||(u.id==='enemy'&&s.warning));telegraph.hidden=!telegraphOn;telegraph.textContent=telegraphOn?(u.warning?.type==='pulse'||s.warning?.type==='pulse'?'DESCARGA ANUNCIADA':'ATAQUE ANUNCIADO'):'';
    n.querySelector('.actor-name').textContent=u.name;n.querySelector('.actor-health span').style.width=Math.max(0,u.hp)/u.max*100+'%';renderLocks(n,u,s);n.setAttribute('role','button');n.setAttribute('aria-label',`${u.name}: ${u.hp} de ${u.max} PG${u.id===s.targetId?' · objetivo seleccionado':''}`);n.title=`${u.name} · ${u.hp}/${u.max} PG`;
    if(old&&(old.x!==u.x||old.y!==u.y)){n.classList.add('moving');clearTimeout(n.motionTimer);n.motionTimer=setTimeout(()=>n.classList.remove('moving'),440);}

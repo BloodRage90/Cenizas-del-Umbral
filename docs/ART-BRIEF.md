@@ -9,20 +9,20 @@ hojas pixel-art definitivas sin cambiar las claves de guardado ni el motor.
 
 Las hojas actuales son reutilizables y funcionales:
 
-En exploración, mientras no exista una hoja 6×4 aprobada, se genera un atlas
-temporal 4×4 que repite únicamente la celda `idle` de cada tira. La locomoción
-añade espejo, cadencia y un balanceo leve; nunca usa `windup`, `strike` ni
-`hurt`. Esto evita que el protagonista parezca atacar al desplazarse y deja
-claro qué parte debe sustituirse por arte final.
+En combate se conserva una tira lateral por protagonista. En exploración se
+genera un atlas direccional 5×4 desde la hoja base de cuatro ángulos: cinco
+pasos seguros (`0,1,2,3,2`) por `down`, `left`, `right` y `up`. El equipo,
+la silueta racial y la presentación del personaje se pintan sobre esa misma
+figura; nunca se filtran `windup`, `strike` ni `hurt` durante el desplazamiento.
 
 | Id | Personaje | Archivo actual | Poses | Estado |
 | --- | --- | --- | --- | --- |
-| guardia | Cael · Guardia del puente | `dist/combat-heroes/guardia.png` | idle, wind-up, strike, hurt | marcador integrado |
-| explorador | Eiren · Explorador | `dist/combat-heroes/explorador.png` | idle, wind-up, strike, hurt | marcador integrado |
-| tejedor | Soren · Tejedor de ceniza | `dist/combat-heroes/tejedor.png` | idle, wind-up, strike, hurt | marcador integrado |
-| berserker | Kaira · Berserker de ceniza | `dist/combat-heroes/berserker.png` | idle, wind-up, strike, hurt | marcador integrado |
-| sombra | Vesper · Sombra | `dist/combat-heroes/sombra.png` | idle, wind-up, strike, hurt | marcador integrado |
-| arcanista | Nimra · Arcanista | `dist/combat-heroes/arcanista.png` | idle, wind-up, strike, hurt | marcador integrado |
+| guardia | Cael · Guardia del puente | `dist/combat-heroes/guardia.png` | idle, wind-up, strike, hurt, critical | marcador integrado |
+| explorador | Eiren · Explorador | `dist/combat-heroes/explorador.png` | idle, wind-up, strike, hurt, critical | marcador integrado |
+| tejedor | Soren · Tejedor de ceniza | `dist/combat-heroes/tejedor.png` | idle, wind-up, strike, hurt, critical | marcador integrado |
+| berserker | Kaira · Berserker de ceniza | `dist/combat-heroes/berserker.png` | idle, wind-up, strike, hurt, critical | marcador integrado |
+| sombra | Vesper · Sombra | `dist/combat-heroes/sombra.png` | idle, wind-up, strike, hurt, critical | marcador integrado |
+| arcanista | Nimra · Arcanista | `dist/combat-heroes/arcanista.png` | idle, wind-up, strike, hurt, critical | marcador integrado |
 
 ## Pose de vida crítica
 
@@ -33,25 +33,29 @@ por lo que aparece inmediatamente al cruzar el umbral y permanece hasta que la
 vida vuelve a superar el 25 % (o la unidad cae). La pose no depende de recibir
 otro golpe.
 
-Las tiras actuales todavía tienen cuatro celdas. Hasta aprobar una quinta celda
-de arte final, `low-health` reutiliza la celda `hurt` como **marcador técnico** y
-la diferencia mediante la animación de respiración y el tratamiento visual. La
-quinta pose definitiva (`critical`) queda pendiente de arte y no se presenta
-como terminada.
+Las tiras de combate heredadas todavía tienen cuatro celdas físicas. El contrato
+expone una quinta pose lógica (`critical`) y, hasta aprobar su celda de arte final,
+reutiliza la celda `hurt` como **marcador técnico**. En exploración cada personaje
+se genera como un atlas 5×4: cinco pasos seguros por cada ángulo (`down`, `left`,
+`right`, `up`) a partir de la hoja direccional base, con su equipo y silueta.
 
 ## Contrato técnico de una hoja
 
 - PNG RGBA con fondo transparente.
-- Cuatro celdas en una fila (`grid: [4, 1]`), todas con el mismo lienzo y
+- Cuatro celdas físicas en una fila (`grid: [4, 1]`) y una quinta pose lógica
+  (`critical` → celda 3 mientras el arte final no esté aprobado), todas con el
+  mismo lienzo y
   punto de apoyo en los pies.
 - 256×256 px por celda como mínimo; 1024×256 px para la tira preferida.
-- Orden de poses: `idle`, `windup`, `strike`, `hurt`. El KO se compone con el
-  estado `down` (rotación y escala del contenedor), no se debe dibujar como una
-  quinta pose falsa.
+- Orden de poses: `idle`, `windup`, `strike`, `hurt`, `critical`. El KO se
+  compone con el estado `down` (rotación y escala del contenedor), no se debe
+  dibujar como una sexta pose falsa.
 - La silueta, arma y equipo deben estar integrados en el personaje. No se
   permiten cuadros, triángulos, cruces, runas o tintes como sustitutos de arte.
-- El mismo archivo se debe poder usar en creador, exploración y combate; si se
-  necesita una hoja de caminar, debe conservar el mismo diseño y pivote.
+- La tira lateral se usa en creador y combate; el atlas direccional de
+  exploración conserva su silueta, equipo, escala y pivote. Cuando se apruebe
+  arte final, puede reemplazar ambos recursos sin cambiar las claves de
+  guardado ni el contrato de poses.
 
 ## Dirección visual por protagonista
 

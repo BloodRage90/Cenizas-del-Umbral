@@ -10,7 +10,10 @@ assert.deepEqual(Object.keys(manifest.heroes).sort(), ids.slice().sort());
 for (const id of ids) {
   const entry = manifest.heroes[id];
   assert.deepEqual(entry.grid, [4, 1]);
-  assert.deepEqual(entry.poses, ['idle', 'windup', 'strike', 'hurt']);
+  assert.deepEqual(entry.poses, ['idle', 'windup', 'strike', 'hurt', 'critical']);
+  assert.deepEqual(entry.poseFrames, { critical: 3 });
+  assert.deepEqual(entry.directions, ['down', 'left', 'right', 'up']);
+  assert.deepEqual(entry.walkGrid, [5, 4]);
   assert.equal(entry.status, 'placeholder-approved-sheet');
   const file = `dist/${entry.file}`;
   assert(fs.existsSync(file), `falta el asset de ${id}`);

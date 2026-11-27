@@ -13,7 +13,21 @@
         "idle",
         "windup",
         "strike",
-        "hurt"
+        "hurt",
+        "critical"
+      ],
+      "poseFrames": {
+        "critical": 3
+      },
+      "directions": [
+        "down",
+        "left",
+        "right",
+        "up"
+      ],
+      "walkGrid": [
+        5,
+        4
       ],
       "status": "placeholder-approved-sheet",
       "source": "art/src/guardia/combat.png",
@@ -30,7 +44,21 @@
         "idle",
         "windup",
         "strike",
-        "hurt"
+        "hurt",
+        "critical"
+      ],
+      "poseFrames": {
+        "critical": 3
+      },
+      "directions": [
+        "down",
+        "left",
+        "right",
+        "up"
+      ],
+      "walkGrid": [
+        5,
+        4
       ],
       "status": "placeholder-approved-sheet",
       "source": "art/src/explorador/combat.png",
@@ -47,7 +75,21 @@
         "idle",
         "windup",
         "strike",
-        "hurt"
+        "hurt",
+        "critical"
+      ],
+      "poseFrames": {
+        "critical": 3
+      },
+      "directions": [
+        "down",
+        "left",
+        "right",
+        "up"
+      ],
+      "walkGrid": [
+        5,
+        4
       ],
       "status": "placeholder-approved-sheet",
       "source": "art/src/tejedor/combat.png",
@@ -64,7 +106,21 @@
         "idle",
         "windup",
         "strike",
-        "hurt"
+        "hurt",
+        "critical"
+      ],
+      "poseFrames": {
+        "critical": 3
+      },
+      "directions": [
+        "down",
+        "left",
+        "right",
+        "up"
+      ],
+      "walkGrid": [
+        5,
+        4
       ],
       "status": "placeholder-approved-sheet",
       "source": "art/src/berserker/combat.png",
@@ -81,7 +137,21 @@
         "idle",
         "windup",
         "strike",
-        "hurt"
+        "hurt",
+        "critical"
+      ],
+      "poseFrames": {
+        "critical": 3
+      },
+      "directions": [
+        "down",
+        "left",
+        "right",
+        "up"
+      ],
+      "walkGrid": [
+        5,
+        4
       ],
       "status": "placeholder-approved-sheet",
       "source": "art/src/sombra/combat.png",
@@ -98,7 +168,21 @@
         "idle",
         "windup",
         "strike",
-        "hurt"
+        "hurt",
+        "critical"
+      ],
+      "poseFrames": {
+        "critical": 3
+      },
+      "directions": [
+        "down",
+        "left",
+        "right",
+        "up"
+      ],
+      "walkGrid": [
+        5,
+        4
       ],
       "status": "placeholder-approved-sheet",
       "source": "art/src/arcanista/combat.png",

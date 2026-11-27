@@ -67,3 +67,42 @@ test('el creador muestra el mismo sprite de combate en cada tarjeta y vista prev
   await expect(preview.locator('.preview-race-feature')).toHaveCSS('display', 'none');
   await page.screenshot({ path: testInfo.outputPath('creator-combat-sprites.png'), fullPage: true });
 });
+
+test('los seis protagonistas tienen cinco pasos en las cuatro direcciones de exploración', async ({ page }) => {
+  await page.goto('/chapter.html', { waitUntil: 'domcontentloaded' });
+  await page.waitForFunction(() => window.CenizasHeroVisuals && window.CenizasLocomotion);
+
+  const proof = await page.evaluate(async () => {
+    const image = new Image();
+    image.src = 'hero-vigilia.webp';
+    await new Promise(resolve => { image.onload = resolve; image.onerror = resolve; });
+    const roster = [
+      ['guardia', 'Guerrero', 'Guardia'], ['explorador', 'Pícaro', 'Explorador'],
+      ['tejedor', 'Mago', 'Tejedor'], ['berserker', 'Guerrero', 'Berserker'],
+      ['sombra', 'Pícaro', 'Sombra'], ['arcanista', 'Mago', 'Arcanista'],
+    ];
+    const atlases = roster.map(([id, className, subclass]) => {
+      const canvas = window.CenizasHeroVisuals.paintWalkCanvas(image,
+        window.CenizasHeroVisuals.profile({ class: className, subclass, race: 'Humano', gender: 'No binario' }),
+        { columns: 5, rows: 4, sourceColumns: 4, sourceRows: 4 });
+      const pixels = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data;
+      return { id, width: canvas.width, height: canvas.height, visible: pixels.some((value, index) => index % 4 === 3 && value > 0) };
+    });
+    const directions = [[0, 2.5], [-2.5, 0], [2.5, 0], [0, -2.5]].map(([dx, dy]) => {
+      const sprite = { walkColumns: 5, walkRows: 4, frames: [], scaleX: 1, scaleY: 1, flipX: false,
+        setFrame(frame) { this.frames.push(frame); }, setScale() {}, setFlipX(value) { this.flipX = value; },
+        setRotation() {}, anims: { isPlaying: false } };
+      for (let i = 0; i < 48; i++) window.CenizasLocomotion.frame(sprite, dx, dy, 16);
+      return [...new Set(sprite.frames)];
+    });
+    return { sourceWidth: image.naturalWidth, sourceHeight: image.naturalHeight, atlases, directions };
+  });
+
+  expect(proof.atlases).toHaveLength(6);
+  for (const atlas of proof.atlases) {
+    expect(atlas.width).toBe(Math.round(proof.sourceWidth / 4 * 5));
+    expect(atlas.height).toBe(proof.sourceHeight);
+    expect(atlas.visible).toBe(true);
+  }
+  expect(proof.directions.every((frames, row) => frames.length > 1 && frames.every(frame => frame >= row * 5 && frame < row * 5 + 5))).toBe(true);
+});

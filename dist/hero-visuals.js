@@ -333,8 +333,8 @@
    * The exploration atlas is deliberately generated from the existing
    * 4-direction Vigilia sheet.  It gives every protagonist the same readable
    * front/side/back cadence while keeping class equipment, race silhouettes
-   * and presentation details attached to the pixel art.  Six columns are a
-   * mirrored walk cycle (0,1,2,3,2,1); rows are down, left, right and up.
+   * and presentation details attached to the pixel art. Five columns are a
+   * safe walk cycle (0,1,2,3,2); rows are down, left, right and up.
    */
   function drawWalkIdentity(ctx, x, y, width, height, spec, row) {
     if (!ctx || !spec) return;
@@ -459,7 +459,7 @@
     const sourceHeight = source.naturalHeight || source.height;
     const sourceColumns = options.sourceColumns || 4;
     const sourceRows = options.sourceRows || 4;
-    const columns = options.columns || 6;
+    const columns = options.columns || 5;
     const rows = options.rows || 4;
     const frameWidth = sourceWidth / sourceColumns;
     const frameHeight = sourceHeight / sourceRows;
