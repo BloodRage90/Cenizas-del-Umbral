@@ -72,6 +72,19 @@ function frame(sprite,dx,dy,dt=1000/60){
   return false;
  }
  const frameDirection=direction%rows;
+ if(sprite.walkSynthetic){
+  if(distance>.005&&Math.abs(dx)>.005)sprite.facingLeft=dx<0;
+  if(typeof sprite.setFlipX==='function'&&sprite.flipX!==!!sprite.facingLeft)sprite.setFlipX(!!sprite.facingLeft);
+  const walking=(sprite.walkIdle||0)<80,stepIndex=Math.floor(sprite.walkDistance/stride),phase=walking?stepIndex%columns:0,index=frameDirection*columns+phase,side=stepIndex%2?.1:-.1;
+  if(typeof sprite.setScale==='function'){
+   sprite.walkBaseScaleX??=sprite.scaleX??1;sprite.walkBaseScaleY??=sprite.scaleY??1;
+   const bob=walking?side*.045:0,squash=walking?side*.018:0;
+   sprite.setScale(sprite.walkBaseScaleX*(1+squash),sprite.walkBaseScaleY*(1-bob*.35));
+  }
+  if(typeof sprite.setRotation==='function')sprite.setRotation(walking?(sprite.facingLeft?-side*.045:side*.045):0);
+  if(sprite.walkFrame!==index){sprite.setFrame(index);sprite.walkFrame=index;return true;}
+  return false;
+ }
  // A stopped character breathes in place with two adjacent idle poses. The
  // source atlas keeps those poses on the same direction row, so no attack or
  // wind-up frame can leak into exploration. While moving, use the full six

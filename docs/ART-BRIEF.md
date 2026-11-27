@@ -9,6 +9,12 @@ hojas pixel-art definitivas sin cambiar las claves de guardado ni el motor.
 
 Las hojas actuales son reutilizables y funcionales:
 
+En exploración, mientras no exista una hoja 6×4 aprobada, se genera un atlas
+temporal 4×4 que repite únicamente la celda `idle` de cada tira. La locomoción
+añade espejo, cadencia y un balanceo leve; nunca usa `windup`, `strike` ni
+`hurt`. Esto evita que el protagonista parezca atacar al desplazarse y deja
+claro qué parte debe sustituirse por arte final.
+
 | Id | Personaje | Archivo actual | Poses | Estado |
 | --- | --- | --- | --- | --- |
 | guardia | Cael · Guardia del puente | `dist/combat-heroes/guardia.png` | idle, wind-up, strike, hurt | marcador integrado |

@@ -11,12 +11,20 @@
 - Se añadió `scripts/build-hero-atlases.cjs` y `dist/hero-atlas.json` para
   validar las hojas actuales y preparar el reemplazo aprobado sin romper las
   claves de guardado.
-- Regresiones nuevas: `tests/combat-art-layout.cjs` y `tests/hero-art.cjs`.
+- Regresiones nuevas: `tests/combat-art-layout.cjs`, `tests/hero-art.cjs` y
+  `tests/locomotion-fixed-sheets.cjs`.
 - Los seis protagonistas fijos reutilizan su tira aprobada también en
-  exploración (repetida en cuatro filas como marcador de caminata), de modo que
-  el diseño de combate ya no se sustituye por el cuerpo genérico de
+  exploración mediante un atlas temporal que repite solo la pose neutral en
+  cuatro direcciones; la cadencia añade espejo y balanceo sin mostrar ataques,
+  de modo que el diseño de combate ya no se sustituye por el cuerpo genérico de
   `hero-vigilia.webp`. El modo avanzado conserva su fallback procedural hasta
   que se aprueben las hojas 6×4 definitivas.
+- El motor incorpora un estado ATB opcional y migrable (`atbMode`/`atb`): el
+  modo Turnos sigue siendo el predeterminado, Activo llena una barra por
+  velocidad y respeta estados `haste`, `slow` y `stun`, sin registrar objetos
+  mecánicos como combatientes.
+- Regresión nueva: `tests/campaign-atb.cjs` cubre llenado, compromiso de acción,
+  estados y restauración de guardados.
 
 
 ## 2026-11-27 · Sprites visibles en el creador
