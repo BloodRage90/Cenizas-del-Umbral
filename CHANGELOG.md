@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-11-27 · Sprites visibles en el creador
+
+- Las seis tarjetas del modo simple ahora muestran las mismas tiras de combate
+  aprobadas que se usan en la arena, con una animación breve de cuatro poses.
+- La vista previa grande usa una sola pose del personaje seleccionado, sin capas
+  geométricas de raza/género que oculten la silueta.
+- Se añadió una prueba E2E para las tarjetas y la vista previa en escritorio,
+  horizontal y móvil.
+
 ## 2026-11-26 · Sprites de combate de los seis protagonistas
 
 - La hoja de poses aprobada se incorporó como seis tiras PNG transparentes en

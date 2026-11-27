@@ -318,3 +318,19 @@ dialog::backdrop{overflow:hidden;overscroll-behavior:contain}
 .preview-character-stage.preview-api-rendered .preview-attack-flash,
 .preview-character-stage.preview-api-rendered .preview-impact-sparks{opacity:0}
 .simple-fixed-name,.simple-fixed-traits{display:grid;gap:3px;padding:10px 12px;border:1px solid #d9b56c55;border-radius:10px;background:#10251d;margin-bottom:10px}.simple-fixed-name span,.simple-fixed-traits span{font:800 10px/1 system-ui;letter-spacing:.14em;color:#d9b56c;text-transform:uppercase}.simple-fixed-name strong,.simple-fixed-traits strong{font:700 22px/1.05 Georgia,serif;color:#f4ebd2}.simple-fixed-name small,.simple-fixed-traits small{font:11px/1.35 system-ui;color:#a9bdb2}
+
+/* Fixed playable roster: the creator must show the same four-pose combat
+ * strip that is used in exploration and battle. Keep each frame square so
+ * the approved artwork is not stretched into a portrait tile. */
+.simple-card-art{height:auto;aspect-ratio:1;}
+.simple-card-art::after{background-size:400% auto;background-position:0 100%;animation:simpleCombatCardCycle 2.4s steps(4,end) infinite;}
+@keyframes simpleCombatCardCycle{0%,20%{background-position:0 100%}25%,45%{background-position:33.333% 100%}50%,70%{background-position:66.667% 100%}75%,100%{background-position:100% 100%}}
+.preview-character-stage.pixel-combat.approved-combat-preview .preview-player-sprite.pixel-sprite.approved-combat-sprite{background-size:400% 100%;background-position:0 0;background-repeat:no-repeat;animation:approvedCombatPreviewCycle 2.4s steps(4,end) infinite;}
+.preview-character-stage.approved-combat-preview .preview-player-portrait,
+.preview-character-stage.approved-combat-preview .preview-race-feature,
+.preview-character-stage.approved-combat-preview .preview-gender-feature,
+.preview-character-stage.approved-combat-preview .preview-player-weapon,
+.preview-character-stage.approved-combat-preview .preview-attack-flash,
+.preview-character-stage.approved-combat-preview .preview-impact-sparks{display:none!important;}
+@keyframes approvedCombatPreviewCycle{0%,20%{background-position:0 0}25%,45%{background-position:33.333% 0}50%,70%{background-position:66.667% 0}75%,100%{background-position:100% 0}}
+@media(prefers-reduced-motion:reduce){.simple-card-art::after,.preview-character-stage.pixel-combat.approved-combat-preview .preview-player-sprite.pixel-sprite.approved-combat-sprite{animation:none;background-position:0 0}}

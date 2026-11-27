@@ -9,6 +9,15 @@ assert.deepEqual(data.playableCharacters.slice(0, 3).map(x => x.gender), ['Hombr
 assert.deepEqual(data.playableCharacters.slice(3).map(x => x.gender), ['Mujer', 'Mujer', 'Mujer']);
 assert.equal(new Set(data.playableCharacters.map(x => x.name)).size, 6, 'los nombres no se repiten');
 assert.ok(app.includes('playableCharacters') && app.includes('fixedPlayableCharacters'), 'el creador usa el catálogo fijo');
+assert.deepEqual(data.playableCharacters.map(x => x.sprite), [
+  'combat-heroes/guardia.png',
+  'combat-heroes/explorador.png',
+  'combat-heroes/tejedor.png',
+  'combat-heroes/berserker.png',
+  'combat-heroes/sombra.png',
+  'combat-heroes/arcanista.png'
+], 'las tarjetas usan los seis sprites de combate aprobados');
+assert.ok(app.includes('approved-combat-preview') && app.includes('combatSpriteFor'), 'la vista previa usa la tira del arquetipo seleccionado');
 for (const character of data.playableCharacters) {
   assert.ok(data.raceData[character.race], `${character.id} declara una raza válida`);
   assert.ok(data.genderData.some(([gender]) => gender === character.gender), `${character.id} declara género válido`);

@@ -49,3 +49,21 @@ test('los seis sprites de combate aprobados se pintan en la arena', async ({ pag
   await expect(page.locator('#combat-sprite-proof figure')).toHaveCount(6);
   await page.screenshot({ path: testInfo.outputPath('combat-hero-sprites.png'), fullPage: true });
 });
+
+test('el creador muestra el mismo sprite de combate en cada tarjeta y vista previa', async ({ page }, testInfo) => {
+  await page.goto('/character.html?creator=1');
+  await page.waitForSelector('.simple-card-art');
+  await expect(page.locator('.simple-card-art')).toHaveCount(6);
+
+  const cardSprites = await page.locator('.simple-card-art').evaluateAll(elements =>
+    elements.map(element => element.style.getPropertyValue('--simple-card-sprite'))
+  );
+  expect(cardSprites).toEqual(heroes.map(hero => `url('combat-heroes/${hero.id}.png')`));
+
+  const preview = page.locator('.simple-preview .preview-character-stage');
+  await expect(preview).toHaveClass(/approved-combat-preview/);
+  await expect(preview.locator('.approved-combat-sprite')).toHaveCount(1);
+  await expect(preview.locator('.approved-combat-sprite')).toHaveCSS('background-size', '400% 100%');
+  await expect(preview.locator('.preview-race-feature')).toHaveCSS('display', 'none');
+  await page.screenshot({ path: testInfo.outputPath('creator-combat-sprites.png'), fullPage: true });
+});
