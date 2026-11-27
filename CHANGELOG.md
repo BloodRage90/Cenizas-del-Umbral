@@ -31,6 +31,9 @@
 - La prueba de páginas de entrada usa `domcontentloaded` para `chapter.html` y
   deja que Phaser continúe su carga asíncrona; así el smoke test no confunde la
   precarga de escenas con un bloqueo de navegación.
+- `pnpm test:e2e` ahora elige un puerto libre, inicia `scripts/serve.cjs` y
+  libera el proceso al terminar, evitando el error EADDRINUSE de sesiones
+  anteriores.
 
 
 ## 2026-11-27 · Sprites visibles en el creador

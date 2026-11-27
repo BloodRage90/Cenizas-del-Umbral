@@ -9,7 +9,7 @@
     "test:static": "node tests/static-report.cjs",
     "lint": "eslint scripts tests",
     "format:check": "prettier --check scripts tests",
-    "test:e2e": "playwright test",
+    "test:e2e": "node scripts/run-e2e.cjs",
     "test:e2e:desktop": "playwright test --project=desktop",
     "test:e2e:mobile": "playwright test --project=landscape-844 --project=landscape-667 --project=mobile-390"
   },
