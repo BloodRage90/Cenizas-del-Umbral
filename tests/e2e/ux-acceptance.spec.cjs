@@ -62,7 +62,10 @@ test('the entry pages stay free of runtime errors', async ({ page }) => {
   page.on('pageerror', (error) => errors.push(`page: ${error.message}`));
 
   for (const path of ['/index.html', '/character.html?creator=1', '/chapter.html']) {
-    await page.goto(path);
+    // Phaser continues loading the active scene after the document is usable.
+    // Use the DOM-ready boundary so a heavy asset cache cannot hang this smoke
+    // check while we are only auditing runtime errors.
+    await page.goto(path, { waitUntil: 'domcontentloaded', timeout: 30_000 });
     await page.waitForTimeout(500);
   }
 
