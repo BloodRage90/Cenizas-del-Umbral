@@ -2,6 +2,16 @@
 
 ## 2026-11-27 · Fase 0 — contrato de arte y sprites contenidos
 
+- Se documentó `docs/ART-DIAGNOSIS.md` con el flujo procedural que debe retirarse
+  antes de integrar atlas definitivos; las tiras de combate siguen siendo canon de
+  solo lectura.
+- Se añadió `scripts/extract-palette.cjs` y seis paletas diagnósticas derivadas del
+  cuadro `IDLE` de combate. El manifiesto continúa en estado
+  `PLACEHOLDER_ART_PENDING_APPROVAL` hasta que se apruebe la nueva hoja.
+- Se añadió `art/approval.html` con la matriz por protagonista: 4 direcciones × 6
+  pasos y estados de combate, marcando explícitamente las celdas que aún no tienen
+  arte físico definitivo.
+
 - El contrato visual ahora declara cinco poses lógicas (`idle`, `windup`,
   `strike`, `hurt`, `critical`) para los seis protagonistas. `critical` usa
   temporalmente la celda `hurt` hasta aprobar el arte final.

@@ -1,0 +1,139 @@
+{
+  "id": "sombra",
+  "source": "dist/combat-heroes/sombra.png",
+  "sourceSha256": "6525fb33b2906d2279fac53e4bf5ff2531cac2dfe99d1ad69fe5ca211c597d62",
+  "sourceFrame": "idle",
+  "sourceGrid": [
+    4,
+    1
+  ],
+  "paletteLimit": 24,
+  "palette": [
+    {
+      "color": "#282028",
+      "count": 476,
+      "ratio": 0.0249
+    },
+    {
+      "color": "#181018",
+      "count": 423,
+      "ratio": 0.0221
+    },
+    {
+      "color": "#282030",
+      "count": 422,
+      "ratio": 0.0221
+    },
+    {
+      "color": "#100810",
+      "count": 421,
+      "ratio": 0.022
+    },
+    {
+      "color": "#201820",
+      "count": 384,
+      "ratio": 0.0201
+    },
+    {
+      "color": "#382838",
+      "count": 341,
+      "ratio": 0.0178
+    },
+    {
+      "color": "#080808",
+      "count": 339,
+      "ratio": 0.0177
+    },
+    {
+      "color": "#383030",
+      "count": 338,
+      "ratio": 0.0177
+    },
+    {
+      "color": "#302828",
+      "count": 328,
+      "ratio": 0.0171
+    },
+    {
+      "color": "#503850",
+      "count": 312,
+      "ratio": 0.0163
+    },
+    {
+      "color": "#382840",
+      "count": 305,
+      "ratio": 0.0159
+    },
+    {
+      "color": "#403040",
+      "count": 301,
+      "ratio": 0.0157
+    },
+    {
+      "color": "#302830",
+      "count": 298,
+      "ratio": 0.0156
+    },
+    {
+      "color": "#584058",
+      "count": 279,
+      "ratio": 0.0146
+    },
+    {
+      "color": "#302838",
+      "count": 278,
+      "ratio": 0.0145
+    },
+    {
+      "color": "#483838",
+      "count": 274,
+      "ratio": 0.0143
+    },
+    {
+      "color": "#201828",
+      "count": 248,
+      "ratio": 0.013
+    },
+    {
+      "color": "#504040",
+      "count": 243,
+      "ratio": 0.0127
+    },
+    {
+      "color": "#403038",
+      "count": 233,
+      "ratio": 0.0122
+    },
+    {
+      "color": "#282020",
+      "count": 230,
+      "ratio": 0.012
+    },
+    {
+      "color": "#403030",
+      "count": 225,
+      "ratio": 0.0118
+    },
+    {
+      "color": "#101010",
+      "count": 220,
+      "ratio": 0.0115
+    },
+    {
+      "color": "#483848",
+      "count": 213,
+      "ratio": 0.0111
+    },
+    {
+      "color": "#403838",
+      "count": 209,
+      "ratio": 0.0109
+    }
+  ],
+  "hairColor": {
+    "color": "#705068",
+    "region": "idle cell · upper 48%",
+    "method": "dominant non-transparent chromatic cluster"
+  },
+  "status": "diagnostic-only"
+}

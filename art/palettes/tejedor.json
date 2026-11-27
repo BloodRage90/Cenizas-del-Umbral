@@ -1,0 +1,139 @@
+{
+  "id": "tejedor",
+  "source": "dist/combat-heroes/tejedor.png",
+  "sourceSha256": "e8b2373acb0bc93e6a5fe1a255f217365d92aff5487d61591a51513742800809",
+  "sourceFrame": "idle",
+  "sourceGrid": [
+    4,
+    1
+  ],
+  "paletteLimit": 24,
+  "palette": [
+    {
+      "color": "#181010",
+      "count": 464,
+      "ratio": 0.0195
+    },
+    {
+      "color": "#302828",
+      "count": 445,
+      "ratio": 0.0187
+    },
+    {
+      "color": "#100808",
+      "count": 442,
+      "ratio": 0.0185
+    },
+    {
+      "color": "#201818",
+      "count": 389,
+      "ratio": 0.0163
+    },
+    {
+      "color": "#080808",
+      "count": 360,
+      "ratio": 0.0151
+    },
+    {
+      "color": "#382828",
+      "count": 358,
+      "ratio": 0.015
+    },
+    {
+      "color": "#282020",
+      "count": 354,
+      "ratio": 0.0149
+    },
+    {
+      "color": "#483838",
+      "count": 344,
+      "ratio": 0.0144
+    },
+    {
+      "color": "#685050",
+      "count": 312,
+      "ratio": 0.0131
+    },
+    {
+      "color": "#403030",
+      "count": 310,
+      "ratio": 0.013
+    },
+    {
+      "color": "#302020",
+      "count": 258,
+      "ratio": 0.0108
+    },
+    {
+      "color": "#383030",
+      "count": 258,
+      "ratio": 0.0108
+    },
+    {
+      "color": "#101010",
+      "count": 251,
+      "ratio": 0.0105
+    },
+    {
+      "color": "#100810",
+      "count": 245,
+      "ratio": 0.0103
+    },
+    {
+      "color": "#281818",
+      "count": 245,
+      "ratio": 0.0103
+    },
+    {
+      "color": "#504040",
+      "count": 243,
+      "ratio": 0.0102
+    },
+    {
+      "color": "#604848",
+      "count": 232,
+      "ratio": 0.0097
+    },
+    {
+      "color": "#201010",
+      "count": 224,
+      "ratio": 0.0094
+    },
+    {
+      "color": "#584848",
+      "count": 221,
+      "ratio": 0.0093
+    },
+    {
+      "color": "#201820",
+      "count": 217,
+      "ratio": 0.0091
+    },
+    {
+      "color": "#503830",
+      "count": 215,
+      "ratio": 0.009
+    },
+    {
+      "color": "#403038",
+      "count": 202,
+      "ratio": 0.0085
+    },
+    {
+      "color": "#181818",
+      "count": 197,
+      "ratio": 0.0083
+    },
+    {
+      "color": "#483028",
+      "count": 189,
+      "ratio": 0.0079
+    }
+  ],
+  "hairColor": {
+    "color": "#685050",
+    "region": "idle cell · upper 48%",
+    "method": "dominant non-transparent chromatic cluster"
+  },
+  "status": "diagnostic-only"
+}

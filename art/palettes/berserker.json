@@ -1,0 +1,139 @@
+{
+  "id": "berserker",
+  "source": "dist/combat-heroes/berserker.png",
+  "sourceSha256": "83e6ebe053d37765a3424a1d2b403f971df4d8f5b309eb0f6d552cbf09f185d5",
+  "sourceFrame": "idle",
+  "sourceGrid": [
+    4,
+    1
+  ],
+  "paletteLimit": 24,
+  "palette": [
+    {
+      "color": "#100808",
+      "count": 479,
+      "ratio": 0.0196
+    },
+    {
+      "color": "#181010",
+      "count": 478,
+      "ratio": 0.0196
+    },
+    {
+      "color": "#281818",
+      "count": 473,
+      "ratio": 0.0194
+    },
+    {
+      "color": "#201818",
+      "count": 427,
+      "ratio": 0.0175
+    },
+    {
+      "color": "#382828",
+      "count": 414,
+      "ratio": 0.017
+    },
+    {
+      "color": "#382020",
+      "count": 387,
+      "ratio": 0.0158
+    },
+    {
+      "color": "#302020",
+      "count": 386,
+      "ratio": 0.0158
+    },
+    {
+      "color": "#402020",
+      "count": 363,
+      "ratio": 0.0149
+    },
+    {
+      "color": "#080808",
+      "count": 342,
+      "ratio": 0.014
+    },
+    {
+      "color": "#282020",
+      "count": 288,
+      "ratio": 0.0118
+    },
+    {
+      "color": "#403030",
+      "count": 276,
+      "ratio": 0.0113
+    },
+    {
+      "color": "#302828",
+      "count": 256,
+      "ratio": 0.0105
+    },
+    {
+      "color": "#100810",
+      "count": 255,
+      "ratio": 0.0104
+    },
+    {
+      "color": "#201010",
+      "count": 249,
+      "ratio": 0.0102
+    },
+    {
+      "color": "#402828",
+      "count": 228,
+      "ratio": 0.0093
+    },
+    {
+      "color": "#301818",
+      "count": 224,
+      "ratio": 0.0092
+    },
+    {
+      "color": "#884038",
+      "count": 219,
+      "ratio": 0.009
+    },
+    {
+      "color": "#483030",
+      "count": 210,
+      "ratio": 0.0086
+    },
+    {
+      "color": "#181018",
+      "count": 193,
+      "ratio": 0.0079
+    },
+    {
+      "color": "#281820",
+      "count": 186,
+      "ratio": 0.0076
+    },
+    {
+      "color": "#482020",
+      "count": 185,
+      "ratio": 0.0076
+    },
+    {
+      "color": "#503838",
+      "count": 185,
+      "ratio": 0.0076
+    },
+    {
+      "color": "#683030",
+      "count": 183,
+      "ratio": 0.0075
+    },
+    {
+      "color": "#201018",
+      "count": 182,
+      "ratio": 0.0075
+    }
+  ],
+  "hairColor": {
+    "color": "#a04848",
+    "region": "idle cell · upper 48%",
+    "method": "dominant non-transparent chromatic cluster"
+  },
+  "status": "diagnostic-only"
+}

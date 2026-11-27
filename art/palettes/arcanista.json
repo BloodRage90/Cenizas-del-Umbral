@@ -1,0 +1,139 @@
+{
+  "id": "arcanista",
+  "source": "dist/combat-heroes/arcanista.png",
+  "sourceSha256": "9af0124314f6ae4cf7c9acf35e03001de498cc57b184d21fbbf26f20ae48ff4e",
+  "sourceFrame": "idle",
+  "sourceGrid": [
+    4,
+    1
+  ],
+  "paletteLimit": 24,
+  "palette": [
+    {
+      "color": "#080808",
+      "count": 327,
+      "ratio": 0.0142
+    },
+    {
+      "color": "#181010",
+      "count": 300,
+      "ratio": 0.013
+    },
+    {
+      "color": "#101010",
+      "count": 288,
+      "ratio": 0.0125
+    },
+    {
+      "color": "#282830",
+      "count": 277,
+      "ratio": 0.012
+    },
+    {
+      "color": "#282020",
+      "count": 275,
+      "ratio": 0.0119
+    },
+    {
+      "color": "#201818",
+      "count": 266,
+      "ratio": 0.0116
+    },
+    {
+      "color": "#302828",
+      "count": 251,
+      "ratio": 0.0109
+    },
+    {
+      "color": "#202028",
+      "count": 232,
+      "ratio": 0.0101
+    },
+    {
+      "color": "#100808",
+      "count": 231,
+      "ratio": 0.01
+    },
+    {
+      "color": "#181818",
+      "count": 228,
+      "ratio": 0.0099
+    },
+    {
+      "color": "#382828",
+      "count": 208,
+      "ratio": 0.009
+    },
+    {
+      "color": "#181018",
+      "count": 197,
+      "ratio": 0.0086
+    },
+    {
+      "color": "#202020",
+      "count": 196,
+      "ratio": 0.0085
+    },
+    {
+      "color": "#303038",
+      "count": 194,
+      "ratio": 0.0084
+    },
+    {
+      "color": "#181820",
+      "count": 191,
+      "ratio": 0.0083
+    },
+    {
+      "color": "#282828",
+      "count": 177,
+      "ratio": 0.0077
+    },
+    {
+      "color": "#404048",
+      "count": 177,
+      "ratio": 0.0077
+    },
+    {
+      "color": "#403030",
+      "count": 174,
+      "ratio": 0.0076
+    },
+    {
+      "color": "#201820",
+      "count": 174,
+      "ratio": 0.0076
+    },
+    {
+      "color": "#101018",
+      "count": 173,
+      "ratio": 0.0075
+    },
+    {
+      "color": "#080810",
+      "count": 173,
+      "ratio": 0.0075
+    },
+    {
+      "color": "#100810",
+      "count": 172,
+      "ratio": 0.0075
+    },
+    {
+      "color": "#383030",
+      "count": 168,
+      "ratio": 0.0073
+    },
+    {
+      "color": "#383840",
+      "count": 166,
+      "ratio": 0.0072
+    }
+  ],
+  "hairColor": {
+    "color": "#604840",
+    "region": "idle cell · upper 48%",
+    "method": "dominant non-transparent chromatic cluster"
+  },
+  "status": "diagnostic-only"
+}

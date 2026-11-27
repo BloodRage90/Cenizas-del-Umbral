@@ -7,6 +7,15 @@ tiras PNG transparentes para los protagonistas fijos y no se inventan nuevos
 assets en este bloque. Este documento fija el contrato para reemplazarlas por
 hojas pixel-art definitivas sin cambiar las claves de guardado ni el motor.
 
+La hoja de combate es la fuente de verdad para Cael, Eiren, Soren, Kaira,
+Vesper y Nimra. La exploración procedural actual no es arte final: comparte
+cabeza y torso, añade capas vectoriales y repite pasos. La Fase 2a genera primero
+hojas conceptuales de frente/perfil/espalda para aprobar identidad; solo después
+se producirán los atlas 4×6 de caminar/reposo y las poses físicas `hurt`,
+`critical` y `down`. Las referencias conceptuales son externas al runtime y no
+se han integrado. Soren requiere limpiar el fondo de la referencia generada y
+Nimra requiere separar sus efectos mágicos antes de producir RGBA definitivo.
+
 Las hojas actuales son reutilizables y funcionales:
 
 En combate se conserva una tira lateral por protagonista. En exploración se
