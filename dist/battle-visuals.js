@@ -58,7 +58,7 @@ window.CenizasBattleVisuals=(()=>{
  function paint(a){
    const kind=a.dataset.kind,spec=specFor(a);if(!spec)return;
    const img=imageFor(kind,spec);if(!img.complete||!img.naturalWidth){img.addEventListener('load',()=>paint(a),{once:true});return;}
-   let index=['idle','windup','strike','hurt'].indexOf(a.dataset.pose);if(index<0)index=0;
+   const poseFrames={idle:0,windup:1,strike:2,hurt:3,low:3};let index=poseFrames[a.dataset.pose];if(index===undefined)index=0;
    const canvas=a.querySelector('canvas'),ctx=canvas.getContext('2d');ctx.clearRect(0,0,1024,768);
     if(spec.grid){
       const cols=spec.grid[0],rows=spec.grid[1],frame=index% (cols*rows);
@@ -122,8 +122,9 @@ window.CenizasBattleVisuals=(()=>{
    if(!n){n=document.createElement('div');n.className='battle-actor';n.dataset.unit=u.id;n.tabIndex=0;
      n.append(art(u.id,s.kind,s.encounter?.variant||s.variant,u));const badge=portraitFor(u);if(badge){const portrait=document.createElement('img');portrait.className='actor-portrait';portrait.src=badge;portrait.alt='Retrato de '+(document.body.dataset.heroRace||'Humano')+' '+(document.body.dataset.heroGender||'No binario');portrait.loading='eager';portrait.decoding='async';portrait.onerror=()=>portrait.remove();n.append(portrait);}
      const label=document.createElement('span');label.className='actor-name';n.append(label);const hp=document.createElement('div');hp.className='actor-health';hp.innerHTML='<span></span>';n.append(hp);layer.append(n);}
-   const old=previous.get(u.id),list=u.team==='party'?party:foes,i=list.indexOf(u),left=u.team==='party'?16+i*partyStep:84-i*foeStep,top=u.team==='party'?68+i*3:66+i*4;
-   const combatArt=n.querySelector('.combat-art');if(combatArt){combatArt.dataset.baseKind=s.kind;combatArt.dataset.variant=s.encounter?.variant||s.variant||'';paint(combatArt);}
+   const old=previous.get(u.id),list=u.team==='party'?party:foes,i=list.indexOf(u),left=u.team==='party'?16+i*partyStep:84-i*foeStep,top=u.team==='party'?68+i*3:66+i*4,critical=u.hp>0&&u.max>0&&u.hp/u.max<=.25;
+   n.classList.toggle('low-health',critical);
+   const combatArt=n.querySelector('.combat-art');if(combatArt){combatArt.dataset.baseKind=s.kind;combatArt.dataset.variant=s.encounter?.variant||s.variant||'';if(critical&&!['windup','strike'].includes(combatArt.dataset.pose))combatArt.dataset.pose='low';else if(!critical&&combatArt.dataset.pose==='low')combatArt.dataset.pose='idle';paint(combatArt);}
    n.style.left=left+'%';n.style.top=top+'%';n.style.setProperty('--depth',(1-i*.035).toFixed(2));n.style.zIndex=10-i;n.classList.toggle('active',u.id===s.order[s.index]);n.classList.toggle('enemy-unit',u.team!=='party');n.classList.toggle('party-unit',u.team==='party');n.classList.toggle('selected-target',u.id===s.targetId);n.classList.toggle('fixed-object',['left','right','enemy'].includes(u.id)&&s.kind==='coro');n.classList.toggle('down',u.hp<=0);let telegraph=n.querySelector('.enemy-telegraph');if(!telegraph){telegraph=document.createElement('span');telegraph.className='enemy-telegraph';telegraph.setAttribute('role','status');telegraph.setAttribute('aria-live','polite');n.append(telegraph);}const telegraphOn=u.team!=='party'&&u.hp>0&&(u.warning||(u.id==='enemy'&&s.warning));telegraph.hidden=!telegraphOn;telegraph.textContent=telegraphOn?(u.warning?.type==='pulse'||s.warning?.type==='pulse'?'DESCARGA ANUNCIADA':'ATAQUE ANUNCIADO'):'';
    n.querySelector('.actor-name').textContent=u.name;n.querySelector('.actor-health span').style.width=Math.max(0,u.hp)/u.max*100+'%';renderLocks(n,u,s);n.setAttribute('role','button');n.setAttribute('aria-label',`${u.name}: ${u.hp} de ${u.max} PG${u.id===s.targetId?' · objetivo seleccionado':''}`);n.title=`${u.name} · ${u.hp}/${u.max} PG`;
    if(old&&(old.x!==u.x||old.y!==u.y)){n.classList.add('moving');clearTimeout(n.motionTimer);n.motionTimer=setTimeout(()=>n.classList.remove('moving'),440);}

@@ -24,6 +24,21 @@ claro qué parte debe sustituirse por arte final.
 | sombra | Vesper · Sombra | `dist/combat-heroes/sombra.png` | idle, wind-up, strike, hurt | marcador integrado |
 | arcanista | Nimra · Arcanista | `dist/combat-heroes/arcanista.png` | idle, wind-up, strike, hurt | marcador integrado |
 
+## Pose de vida crítica
+
+Cuando una unidad queda con **25 % de PG o menos**, el combate activa el estado
+persistente `low-health`: la silueta respira con dificultad, se inclina y la
+barra de vida recibe un contorno de peligro. El estado se evalúa en cada render,
+por lo que aparece inmediatamente al cruzar el umbral y permanece hasta que la
+vida vuelve a superar el 25 % (o la unidad cae). La pose no depende de recibir
+otro golpe.
+
+Las tiras actuales todavía tienen cuatro celdas. Hasta aprobar una quinta celda
+de arte final, `low-health` reutiliza la celda `hurt` como **marcador técnico** y
+la diferencia mediante la animación de respiración y el tratamiento visual. La
+quinta pose definitiva (`critical`) queda pendiente de arte y no se presenta
+como terminada.
+
 ## Contrato técnico de una hoja
 
 - PNG RGBA con fondo transparente.

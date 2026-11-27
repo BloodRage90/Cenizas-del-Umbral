@@ -2,6 +2,14 @@
 
 ## 2026-11-27 · Fase 0 — contrato de arte y sprites contenidos
 
+- Se añadió una pose persistente de **vida crítica** para protagonistas y
+  enemigos: al llegar a 25 % de PG o menos, la unidad adopta una respiración
+  encorvada, contorno de peligro y estado `low-health` hasta recuperarse o caer.
+  Las tiras actuales reutilizan temporalmente la celda `hurt`; la quinta celda
+  `critical` de arte final sigue marcada como pendiente en `docs/ART-BRIEF.md`.
+- Regresión nueva: `tests/combat-low-health.cjs` valida el umbral, la clase
+  visual, el fallback de celda y el respeto por movimiento reducido.
+
 - Se corrigió el layout de la arena: las tiras de combate ya no se dibujan al
   200%/150% ni se salen del marco; el canvas queda contenido y conserva la
   proporción con `object-fit: contain`.
