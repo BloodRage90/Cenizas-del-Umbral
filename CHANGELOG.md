@@ -1,5 +1,19 @@
 # Changelog
 
+## 2026-11-27 · Fase 0 — contrato de arte y sprites contenidos
+
+- Se corrigió el layout de la arena: las tiras de combate ya no se dibujan al
+  200%/150% ni se salen del marco; el canvas queda contenido y conserva la
+  proporción con `object-fit: contain`.
+- Se añadió `docs/ART-BRIEF.md` con el contrato de las seis hojas, poses,
+  siluetas y estado **PLACEHOLDER**. No se inventó arte final ni se tocaron los
+  NPC.
+- Se añadió `scripts/build-hero-atlases.cjs` y `dist/hero-atlas.json` para
+  validar las hojas actuales y preparar el reemplazo aprobado sin romper las
+  claves de guardado.
+- Regresiones nuevas: `tests/combat-art-layout.cjs` y `tests/hero-art.cjs`.
+
+
 ## 2026-11-27 · Sprites visibles en el creador
 
 - Las seis tarjetas del modo simple ahora muestran las mismas tiras de combate

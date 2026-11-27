@@ -1,0 +1,110 @@
+{
+  "version": 1,
+  "generatedAt": "2026-11-27T12:49:42.374Z",
+  "status": "PLACEHOLDER_ART_PENDING_APPROVAL",
+  "note": "No se sustituyen hojas ni se generan variantes finales sin aprobación de arte.",
+  "heroes": {
+    "guardia": {
+      "file": "combat-heroes/guardia.png",
+      "grid": [
+        4,
+        1
+      ],
+      "poses": [
+        "idle",
+        "windup",
+        "strike",
+        "hurt"
+      ],
+      "status": "placeholder-approved-sheet",
+      "source": "art/src/guardia/combat.png",
+      "width": 1024,
+      "height": 256
+    },
+    "explorador": {
+      "file": "combat-heroes/explorador.png",
+      "grid": [
+        4,
+        1
+      ],
+      "poses": [
+        "idle",
+        "windup",
+        "strike",
+        "hurt"
+      ],
+      "status": "placeholder-approved-sheet",
+      "source": "art/src/explorador/combat.png",
+      "width": 1024,
+      "height": 256
+    },
+    "tejedor": {
+      "file": "combat-heroes/tejedor.png",
+      "grid": [
+        4,
+        1
+      ],
+      "poses": [
+        "idle",
+        "windup",
+        "strike",
+        "hurt"
+      ],
+      "status": "placeholder-approved-sheet",
+      "source": "art/src/tejedor/combat.png",
+      "width": 1024,
+      "height": 256
+    },
+    "berserker": {
+      "file": "combat-heroes/berserker.png",
+      "grid": [
+        4,
+        1
+      ],
+      "poses": [
+        "idle",
+        "windup",
+        "strike",
+        "hurt"
+      ],
+      "status": "placeholder-approved-sheet",
+      "source": "art/src/berserker/combat.png",
+      "width": 1024,
+      "height": 256
+    },
+    "sombra": {
+      "file": "combat-heroes/sombra.png",
+      "grid": [
+        4,
+        1
+      ],
+      "poses": [
+        "idle",
+        "windup",
+        "strike",
+        "hurt"
+      ],
+      "status": "placeholder-approved-sheet",
+      "source": "art/src/sombra/combat.png",
+      "width": 1024,
+      "height": 256
+    },
+    "arcanista": {
+      "file": "combat-heroes/arcanista.png",
+      "grid": [
+        4,
+        1
+      ],
+      "poses": [
+        "idle",
+        "windup",
+        "strike",
+        "hurt"
+      ],
+      "status": "placeholder-approved-sheet",
+      "source": "art/src/arcanista/combat.png",
+      "width": 1024,
+      "height": 256
+    }
+  }
+}
