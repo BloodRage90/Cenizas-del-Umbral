@@ -42,7 +42,6 @@ for (const id of ids) {
 
 const manifest = {
   version: 1,
-  generatedAt: new Date().toISOString(),
   status: 'PLACEHOLDER_ART_PENDING_APPROVAL',
   note: 'No se sustituyen hojas ni se generan variantes finales sin aprobación de arte.',
   heroes,
